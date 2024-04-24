@@ -1,15 +1,14 @@
 import "./assets/styles/main.scss";
-import reactLogo from "./assets/react.svg";
-import AppHeader from "./cmps/AppHeader";
-import FeedPage from "./pages/FeedPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <AppHeader />
-      <FeedPage />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/*" element="LandingPage" />
+        <Route path="/login" element="LoginPage" />
+        <Route path="/feed" element="FeedPage" />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

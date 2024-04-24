@@ -1,0 +1,8 @@
+/* Main CSS file to import for all CSS files of the project */
+
+// ** Setup **
+@import 'setup/typography';
+@import 'setup/variables';
+
+// ** Basics **
+@import 'basics/base';

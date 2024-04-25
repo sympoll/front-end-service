@@ -6,6 +6,7 @@ import FeedPage from "./pages/FeedPage";
 
 export default function App() {
   return (
+    // can add silent login here to auto try to sign in, and if not previously signed in within a certain time, auto redirect to the login page
     <BrowserRouter>
       <Routes>
         <Route path="/*" element={<LandingPage />} />

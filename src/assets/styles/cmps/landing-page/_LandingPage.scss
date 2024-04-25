@@ -1,0 +1,28 @@
+div {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    row-gap: 10px;
+    font-size: 18px;
+}
+
+.landing-page-container {
+    display: grid;
+    padding-top: 10%;
+    row-gap: 20px;
+}
+
+.logo-img {
+    display: block;
+    max-width: 80%;
+    height: auto;
+    width: 40%;
+    margin: auto;
+}
+
+
+.button {
+    height: 30px;
+    width: 100px;
+}

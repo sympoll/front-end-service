@@ -4,5 +4,18 @@
 @import 'setup/typography';
 @import 'setup/variables';
 
+
 // ** Basics **
 @import 'basics/base';
+
+
+// ** Components **
+
+// * Sidebar *
+@import 'cmps/sidebar/Sidebar';
+
+// * Landing Page *
+@import 'cmps/landing-page/LandingPage';
+
+// * Feed *
+@import 'cmps/feed/FeedIndex';

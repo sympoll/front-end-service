@@ -9,10 +9,10 @@ export default function LandingPage() {
   return (
     <section className="landing-page-container">
       <img className="logo-img" src={logo} alt="pic" />
-      <div>Welcome to Sympoll, where decisions are made...</div>
+      <div>Welcome to Sympoll™, where decisions are made...</div>
       <div>
         <Button onClick={() => navigate("/login")}>Log In</Button>
-        <Button onClick={() => navigate("/")}>Sign Up</Button>
+        <Button onClick={() => navigate("/signup")}>Sign Up</Button>
         <Button onClick={() => navigate("/feed")}>
           Temporary - Move to feed
         </Button>

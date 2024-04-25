@@ -11,12 +11,15 @@
 
 // ** Components **
 
+// * App Header *
+@import 'cmps/app-header/AppHeader';
+
 // * Sidebar *
 @import 'cmps/sidebar/Sidebar';
 
 // * Landing Page *
 @import 'cmps/landing-page/LandingPageBtn';
-@import 'cmps/landing-page/LandingPage';
+@import 'cmps/landing-page/LandingPageIndex';
 
 // * Feed *
 @import 'cmps/feed/FeedIndex';

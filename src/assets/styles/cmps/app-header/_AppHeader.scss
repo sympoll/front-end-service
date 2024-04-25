@@ -1,0 +1,9 @@
+.app-header-container {
+    display: flex;
+    height: fit-content;
+    min-height: 6vh;
+    justify-content: center;
+    align-items: center;
+    background-color: $mainBgColor1;
+    color: $mainBgColor0;
+}

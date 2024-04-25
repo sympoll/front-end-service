@@ -1,4 +1,4 @@
-div {
+.landing-page-content {
     display: grid;
     justify-content: center;
     justify-items: center;
@@ -13,7 +13,7 @@ div {
     row-gap: 20px;
 }
 
-.logo-img {
+.landing-page-logo-img {
     display: block;
     max-width: 80%;
     height: auto;

@@ -1,6 +1,6 @@
 Button {
     align-items: center;
-    background-color: #e48f17;
+    background-color: $mainColor-normal;
     border: 0;
     border-radius: 100px;
     box-sizing: border-box;
@@ -29,12 +29,12 @@ Button {
   
   Button:hover,
   Button:focus { 
-    background-color: #c97f17;
+    background-color: $mainColor-dark0;
     color: #ffffff;
   }
   
   Button:active {
-    background: #9e6515;
+    background: $mainColor-dark1;
     color: rgb(255, 255, 255, .7);
   }
   

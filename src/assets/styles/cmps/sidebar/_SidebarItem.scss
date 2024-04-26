@@ -1,0 +1,26 @@
+.sidebar-item-container {
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    width: 100%;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    column-gap: 10px;
+}
+
+.sidebar-item-container:hover {
+    cursor: pointer;
+    background-color: $mainBgColor3;
+}
+
+#sidebar-item-icon {
+    flex: 30%;
+    display: grid;
+    place-items: center;
+}
+
+#sidebar-item-title {
+    flex: 70%;
+}

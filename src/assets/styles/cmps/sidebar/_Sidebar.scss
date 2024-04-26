@@ -1,7 +1,10 @@
-  // Change to sidebar:
-  .side-bar-container {
-    background-color: #a7a7a7;
-    display: flex;
-    justify-content: space-evenly;
-    padding: 5px;
+  .sidebar-container {
+    background-color: $mainBgColor2;
+    color: white;
+    height: 100vh;
+    width: 200px;
   }
+
+  .sidebar-container #active {
+    background-color: $mainBgColor4;
+}

@@ -4,7 +4,6 @@ import LandingPage from "./pages/LandingPage";
 import LogInPage from "./pages/LogInPage";
 import SignUpPage from "./pages/SignUpPage";
 import FeedPage from "./pages/FeedPage";
-import AppHeader from "./cmps/app-header/AppHeader";
 
 export default function App() {
   return (
@@ -15,6 +14,7 @@ export default function App() {
         <Route path="/login" element={<LogInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/feed/*" element={<FeedPage />} />
       </Routes>
     </BrowserRouter>
   );

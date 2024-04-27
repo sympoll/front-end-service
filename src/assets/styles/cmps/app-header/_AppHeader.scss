@@ -1,0 +1,18 @@
+.app-header-container {
+    display: flex;
+    height: fit-content;
+    min-height: 7vh;
+    justify-content: center;
+    align-items: center;
+    background-color: $mainBgColor1;
+    color: $mainBgColor0;
+    font-size: 30px;
+    font-family: $secondaryFont;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#app-header-title:hover {
+    cursor: pointer;
+}
+

@@ -1,0 +1,33 @@
+.landing-page-content {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    font-size: 18px;
+    font-family: $secondaryFont;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.landing-page-buttons {
+    display: grid;
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    row-gap: 10px;
+}
+
+.landing-page-container {
+    display: grid;
+    padding-top: 10%;
+}
+
+.landing-page-logo-img {
+    display: block;
+    max-width: 80%;
+    height: auto;
+    width: 40%;
+    margin: auto;
+}

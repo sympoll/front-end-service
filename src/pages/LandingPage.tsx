@@ -12,7 +12,7 @@ export default function LandingPage() {
       <div className="landing-page-content">
         Welcome to Sympoll™, where decisions are made...
       </div>
-      <div className="landing-page-content">
+      <div className="landing-page-buttons">
         <Button onClick={() => navigate("/login")}>Log In</Button>
         <Button onClick={() => navigate("/signup")}>Sign Up</Button>
         <Button onClick={() => navigate("/feed")}>

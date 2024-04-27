@@ -13,7 +13,7 @@ export default function SidebarItem({ title, Icon, path }: SidebarItemProps) {
   // If currently in the given path, set the sidebar item's ID as active.
   const navigate = useNavigate();
   const location = useLocation();
-  const getID = matchPath(path, location.pathname) ? "active" : "";
+  const getID = matchPath(path, location.pathname) ? "sidebar-item-active" : "";
 
   return (
     <li
@@ -21,6 +21,10 @@ export default function SidebarItem({ title, Icon, path }: SidebarItemProps) {
       id={getID}
       onClick={() => navigate(path)}
     >
+      <div
+        className="sidebar-activated-item-highlight"
+        id={"highlight-" + getID}
+      ></div>
       <div id="sidebar-item-icon">{<Icon />}</div>
       <div id="sidebar-item-title">{title}</div>
     </li>

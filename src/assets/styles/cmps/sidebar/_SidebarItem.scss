@@ -6,8 +6,8 @@
     height: 50px;
     justify-content: center;
     align-items: center;
-    padding: 10px;
     column-gap: 10px;
+    font-size: 16px;
 }
 
 .sidebar-item-container:hover {
@@ -23,4 +23,18 @@
 
 #sidebar-item-title {
     flex: 70%;
+}
+
+.sidebar-activated-item-highlight{
+    display: none;
+    width: 8px;
+    background-color: $mainBgColor5;
+    height: 100%;
+}
+
+#highlight-sidebar-item-active {
+    display: block;
+    width: 8px;
+    background-color: $mainBgColor5;
+    height: 100%;
 }

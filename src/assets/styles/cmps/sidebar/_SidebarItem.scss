@@ -12,7 +12,7 @@
 
 .sidebar-item-container:hover {
     cursor: pointer;
-    background-color: $mainBgColor3;
+    background-color: $hoverSidebarColor;
 }
 
 #sidebar-item-icon {
@@ -27,14 +27,11 @@
 
 .sidebar-activated-item-highlight{
     display: none;
-    width: 8px;
-    background-color: $mainBgColor5;
+    width: 4px;
+    background-color: $activeHighlightSidebarColor;
     height: 100%;
 }
 
 #highlight-sidebar-item-active {
     display: block;
-    width: 8px;
-    background-color: $mainBgColor5;
-    height: 100%;
 }

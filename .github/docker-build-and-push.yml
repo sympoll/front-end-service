@@ -36,5 +36,5 @@ jobs:
           file: Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/sympoll-db:${{ steps.date.outputs.DATE }}
+            ghcr.io/${{ github.repository }}/sympoll-front-end:${{ steps.date.outputs.DATE }}
       

@@ -6,10 +6,16 @@ on:
     paths-ignore:
       - '**/README.md'
       - '.github/workflows/**'
+      - '**/.gitignore'
 
 jobs: 
   build-and-push:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
 
     steps:
       - name: Checkout repository

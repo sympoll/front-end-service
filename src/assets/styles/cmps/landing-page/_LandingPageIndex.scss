@@ -1,8 +1,6 @@
 .landing-page-content {
+    @include center;
     display: grid;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
     margin-top: 10px;
     margin-bottom: 50px;
     font-size: 18px;
@@ -12,10 +10,8 @@
 }
 
 .landing-page-buttons {
+    @include center;
     display: grid;
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
     row-gap: 10px;
 }
 

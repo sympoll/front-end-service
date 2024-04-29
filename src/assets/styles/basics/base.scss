@@ -9,3 +9,9 @@
     font-family: $mainFont;
     background-color: $mainBgColor0;
   }
+
+  @mixin center {
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+  }

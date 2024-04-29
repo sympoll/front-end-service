@@ -10,11 +10,10 @@ export default function App() {
     // can add silent login here to auto try to sign in, and if not previously signed in within a certain time, auto redirect to the landing page
     <BrowserRouter>
       <Routes>
-        <Route path="/*" element={<LandingPage />} />
-        <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/feed" element={<FeedPage />} />
-        <Route path="/feed/*" element={<FeedPage />} />
+        <Route path="/*" element="LandingPage" />
+        <Route path="/login" element="LoginPage" />
+        <Route path="/feed" element="FeedPage" />
+        <Route path="/feeds" element="FeedPage" />
       </Routes>
     </BrowserRouter>
   );

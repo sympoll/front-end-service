@@ -1,0 +1,11 @@
+.members-sidebar-container {
+    @include set-grid-location(2, 3);
+    background-color: $mainSidebarColor;
+    color: white;
+    padding: 15px;
+}
+
+.members-sidebar-title {
+    display: block;
+    margin-bottom: 8px;
+}

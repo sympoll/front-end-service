@@ -15,3 +15,13 @@
     justify-items: center;
     align-items: center;
   }
+
+  @mixin page-grid {
+    display: grid;
+    grid-template-columns: 200px auto;
+  }
+
+  @mixin set-grid-location($row, $column) {
+    grid-row: $row;
+    grid-column: $column;
+  }

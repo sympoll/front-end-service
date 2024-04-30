@@ -1,0 +1,6 @@
+.feed-container {
+    @include set-grid-location(2, 2);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}

@@ -1,8 +1,9 @@
   .sidebar-container {
+    @include set-grid-location(2, 1);
     background-color: $mainSidebarColor;
     color: white;
     height: 100vh;
-    width: 200px;
+    width: 100%;
   }
 
   .sidebar-container #sidebar-item-active {

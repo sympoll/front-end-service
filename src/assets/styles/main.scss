@@ -5,8 +5,10 @@
 @import 'setup/variables';
 
 
+
 // ** Basics **
 @import 'basics/base';
+
 
 
 // ** Components **
@@ -20,7 +22,8 @@
 
 // * Landing Page *
 @import 'cmps/landing-page/LandingPageBtn';
-@import 'cmps/landing-page/LandingPageIndex';
+@import 'cmps/landing-page/LandingPage';
 
 // * Feed *
-@import 'cmps/feed/FeedIndex';
+@import 'cmps/feed/Feed';
+@import 'cmps/feed/FeedPage';

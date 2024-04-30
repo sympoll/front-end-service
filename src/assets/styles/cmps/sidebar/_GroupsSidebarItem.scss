@@ -1,4 +1,4 @@
-.sidebar-item-container {
+.groups-sidebar-item-container {
     @include center;
     display: flex;
     flex-direction: row;
@@ -9,28 +9,28 @@
     font-size: 16px;
 }
 
-.sidebar-item-container:hover {
+.groups-sidebar-item-container:hover {
     cursor: pointer;
     background-color: $hoverSidebarColor;
 }
 
-#sidebar-item-icon {
+#groups-sidebar-item-icon {
     flex: 30%;
     display: grid;
     place-items: center;
 }
 
-#sidebar-item-title {
+#groups-sidebar-item-title {
     flex: 70%;
 }
 
-.sidebar-activated-item-highlight{
+.groups-sidebar-activated-item-highlight{
     display: none;
     background-color: $activeHighlightSidebarColor;
     width: 4px;
     height: 100%;
 }
 
-#highlight-sidebar-item-active {
+#highlight-groups-sidebar-item-active {
     display: block;
 }

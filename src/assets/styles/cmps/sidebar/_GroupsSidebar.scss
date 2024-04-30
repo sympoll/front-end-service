@@ -1,9 +1,9 @@
-  .sidebar-container {
+  .groups-sidebar-container {
     @include set-grid-location(2, 1);
     background-color: $mainSidebarColor;
     color: white;
   }
 
-  .sidebar-container #sidebar-item-active {
+  .groups-sidebar-container #groups-sidebar-item-active {
     background-color: $activeSidebarColor;
 }

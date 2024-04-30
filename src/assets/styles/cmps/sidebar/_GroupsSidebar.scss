@@ -1,7 +1,10 @@
 .groups-sidebar-container {
   @include set-grid-location(2, 1);
+  display: grid;
+  align-content: flex-start;
   background-color: $mainSidebarColor;
   color: white;
+  row-gap: 5px;
 }
 
 .groups-sidebar-container #groups-sidebar-item-active {

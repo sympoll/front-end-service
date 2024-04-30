@@ -12,9 +12,9 @@ export default function MembersSidebar() {
   return (
     <ul className="members-sidebar-container">
       <div className="members-sidebar-title">Group Members:</div>
-      <MembersSidebarItem name="Roneni" Icon={PersonIcon} path="" />
-      <MembersSidebarItem name="Roy" Icon={PersonIcon} path="" />
-      <MembersSidebarItem name="Idan" Icon={PersonIcon} path="" />
+      <MembersSidebarItem name="Roneni" Icon={PersonIcon} path="/roneni" />
+      <MembersSidebarItem name="Roy" Icon={PersonIcon} path="/roy" />
+      <MembersSidebarItem name="Idan" Icon={PersonIcon} path="/idan" />
     </ul>
   );
 }

@@ -1,11 +1,16 @@
 .members-sidebar-container {
     @include set-grid-location(2, 3);
+    display: grid;
+    align-content: flex-start;
     background-color: $mainSidebarColor;
     color: white;
     padding: 15px;
 }
 
 .members-sidebar-title {
-    display: block;
+    display: flex;
+    justify-content: center;
+    height: 34px;
     margin-bottom: 8px;
+    border-bottom: 1px solid grey;
 }

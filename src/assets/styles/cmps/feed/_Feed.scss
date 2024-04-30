@@ -10,11 +10,14 @@
 }
 
 @mixin feed-item {
-    display: flex;
+    display: grid;
     background-color: $secondaryBgColor0;
     border-radius: 10px;
-    justify-content: center;
-    padding: 20px;
+    justify-content: start;
+    grid-template-rows: 20px auto;
+    grid-template-columns: 100%;
+    row-gap: 6px;
+    padding: 10px;
     width: 400px;
     min-height: 100px;
     height: fit-content;

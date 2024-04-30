@@ -1,0 +1,11 @@
+.poll-item {
+    @include feed-item;
+}
+
+#poll-item-title {
+    width: 100%;
+}
+
+#poll-item-content {
+    width: 100%;
+}

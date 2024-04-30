@@ -1,6 +1,22 @@
 .feed-container {
     @include set-grid-location(2, 2);
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-rows: min-content;
+    grid-template-columns: min-content;
     justify-content: center;
+    align-content: flex-start;
+    margin-top: 40px;
+    grid-gap: 20px;
+}
+
+@mixin feed-item {
+    display: flex;
+    background-color: $secondaryBgColor0;
+    border-radius: 10px;
+    justify-content: center;
+    padding: 20px;
+    width: 400px;
+    min-height: 100px;
+    height: fit-content;
+    word-wrap: break-word;
 }

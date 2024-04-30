@@ -19,6 +19,8 @@
   @mixin page-grid {
     display: grid;
     grid-template-columns: 200px auto;
+    grid-template-rows: 50px;
+    height: 100vh;
   }
 
   @mixin set-grid-location($row, $column) {

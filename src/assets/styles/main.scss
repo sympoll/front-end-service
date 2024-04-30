@@ -27,6 +27,9 @@
 @import 'cmps/landing-page/LandingPage';
 
 // * Feed *
-@import 'cmps/feed/Feed';
-@import 'cmps/feed/Poll';
-@import 'cmps/feed/FeedPage';
+@import 'cmps/feed-page/Feed';
+@import 'cmps/feed-page/Poll';
+@import 'cmps/feed-page/FeedPage';
+
+// * Not Found Page *
+@import 'cmps/not-found-page/NotFoundPage'

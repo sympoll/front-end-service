@@ -9,9 +9,9 @@ export default function LandingPage() {
   return (
     <section className="landing-page-container">
       <img className="landing-page-logo-img" src={logo} alt="pic" />
-      <div className="landing-page-content">
+      <p className="landing-page-content">
         Welcome to Sympoll™, where decisions are made...
-      </div>
+      </p>
       <div className="landing-page-buttons">
         <Button onClick={() => navigate("/login")}>Log In</Button>
         <Button onClick={() => navigate("/signup")}>Sign Up</Button>

@@ -1,0 +1,34 @@
+.not-found-page-container { 
+    @include center;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    font-family: $errorFont;
+    height: 100vh;
+}
+
+.not-found-page-container Button {
+    margin: 20px;
+}
+
+.not-found-page-title0 {
+    display: flex;
+    justify-content: center;
+    background-image: url(/src/assets/imgs/404NotFoundGif.gif);
+    background-repeat: no-repeat;
+    height: 400px;
+    width: 100vw;
+    background-position: center;
+    font-size:80px;
+ }
+ 
+.not-found-page-title1 {
+    font-size:30px;
+}
+
+.not-found-page-content{ 
+    @include center;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}

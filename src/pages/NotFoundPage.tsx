@@ -7,12 +7,17 @@ export default function NotFoundPage() {
 
   return (
     <section className="not-found-page-container">
-      <div className="not-found-page-title0">404</div>
+      <div className="not-found-page-title-container">
+        <div className="not-found-page-title0">404</div>
+        <p className="not-found-page-title1">Page Not Found</p>
+      </div>
 
       <div className="not-found-page-content">
-        <div className="not-found-page-title1">Hmmm...</div>
+        <div className="not-found-page-content-item0">Hmmm...</div>
 
-        <p>It looks like one of the developers fell asleep</p>
+        <p className="not-found-page-content-item1">
+          It looks like one of the developers fell asleep
+        </p>
 
         <Button onClick={() => navigate("/")}>Go to Home</Button>
       </div>

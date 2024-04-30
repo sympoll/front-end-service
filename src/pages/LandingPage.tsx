@@ -8,7 +8,7 @@ export default function LandingPage() {
 
   return (
     <section className="landing-page-container">
-      <img className="landing-page-logo-img" src={logo} alt="pic" />
+      <img className="landing-page-logo-img" src={logo} alt="sympoll-logo" />
       <p className="landing-page-content">
         Welcome to Sympoll™, where decisions are made...
       </p>

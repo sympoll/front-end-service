@@ -5,6 +5,7 @@ on:
       - main
     paths-ignore:
       - '**/README.md'
+      - '.github/workflows/**'
       - '**/.gitignore'
 
 jobs: 

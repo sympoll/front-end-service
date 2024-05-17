@@ -2,13 +2,13 @@
     width: 100%;
     height: 100%;
     border-radius: 6px;
-    background-color: $mainColor-light0;
+    background-color: $inactive-vote-color;
 }
 
 .voting-bar-fill {
     height: 100%;
     border-radius: 6px;
-    background-color: $mainColor-light1;
+    background-color: $active-vote-color;
     transition: width 0.5s ease-out;
 }
 

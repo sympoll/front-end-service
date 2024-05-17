@@ -9,7 +9,7 @@ interface PollProps {
 }
 
 export default function Poll({ title, content, mode }: PollProps) {
-  // Convert the voting container into a component
+  // Add states for the voting action
   return (
     <section className="poll-item">
       <div id="poll-item-title">{title}</div>

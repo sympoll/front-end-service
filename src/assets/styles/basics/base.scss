@@ -1,42 +1,47 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    -webkit-tap-highlight-color: transparent;
-  }
-  
-  body {
-    font-family: $mainFont;
-    background-color: $mainBgColor0;
-  }
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  @mixin center {
-    justify-content: center;
-    justify-items: center;
-    align-items: center;
-  }
+body {
+  font-family: $mainFont;
+  background-color: $mainBgColor0;
+  max-height: 100vh;
+}
 
-  @mixin page-grid {
-    display: grid;
-    grid-template-columns: 200px auto 200px;
-    grid-template-rows: 50px;
-    height: 100vh;
-  }
+@mixin center {
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+}
 
-  @mixin set-grid-location($row, $column) {
-    grid-row: $row;
-    grid-column: $column;
-  }
+@mixin page-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: 50px 1fr;
+}
 
-  /* Use for fading out components (for example removing a poll from the feed) */
-  @mixin fade($type) {
-    @if $type== "hide" {
-      visibility: hidden;
-      opacity: 0;
-      transition: visibility 1s, opacity 1s;
-    } @else if $type== "show" {
-      visibility: visible;
-      opacity: 1;
-      transition: visibility 1s, opacity 1s;
-    }
+@mixin set-grid-location($row, $column) {
+  grid-row: $row;
+  grid-column: $column;
+}
+
+/* Use for fading out components (for example removing a poll from the feed) */
+@mixin fade($type) {
+  @if $type== "hide" {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 1s, opacity 1s;
+  } @else if $type== "show" {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 1s, opacity 1s;
   }
+}
+
+@mixin sticky-top($top) {
+  position: sticky;
+  top: $top;
+}

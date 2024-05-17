@@ -1,17 +1,18 @@
 .app-header-container {
-    @include center;
-    grid-column: 1 / 4;
-    grid-row: 1;
-    display: flex;
-    background-color: $mainBgColor1;
-    color: $mainBgColor0;
-    font-size: 30px;
-    font-family: $secondaryFont;
-    font-weight: 400;
-    font-style: normal;
+  @include sticky-top(0);
+  @include center;
+  grid-column: 1 / 4;
+  grid-row: 1;
+  display: flex;
+  background-color: $mainBgColor1;
+  color: $mainBgColor0;
+  font-size: 30px;
+  font-family: $secondaryFont;
+  font-weight: 400;
+  font-style: normal;
+  z-index: 10;
 }
 
 #app-header-title:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
-

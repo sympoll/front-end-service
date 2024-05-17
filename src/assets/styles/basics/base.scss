@@ -27,3 +27,16 @@
     grid-row: $row;
     grid-column: $column;
   }
+
+  /* Use for fading out components (for example removing a poll from the feed) */
+  @mixin fade($type) {
+    @if $type== "hide" {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 1s, opacity 1s;
+    } @else if $type== "show" {
+      visibility: visible;
+      opacity: 1;
+      transition: visibility 1s, opacity 1s;
+    }
+  }

@@ -10,3 +10,9 @@
 #poll-item-content {
     width: 100%;
 }
+
+#poll-item-voting-container {
+    display: grid;
+    margin-top: 10px;
+    grid-gap: 5px;
+}

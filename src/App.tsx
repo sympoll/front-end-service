@@ -2,7 +2,6 @@ import "./assets/styles/main.scss";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
 import LogInPage from "./pages/LogInPage";
-import SignUpPage from "./pages/SignUpPage";
 import FeedPage from "./pages/FeedPage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -13,7 +12,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LogInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/*" element={<FeedPage />} />
         <Route path="/*" element={<NotFoundPage />} />

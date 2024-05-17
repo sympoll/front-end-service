@@ -5,12 +5,29 @@
   gap: 20px;
 }
 
-.login-page-title {
+.login-form-container {
+  @include flex-column;
+  height: 700px;
+  width: 500px;
+  border-radius: 10px;
+  background-color: $mainBgColor2;
+  opacity: 0.9;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.login-form {
+  @include center;
+  @include flex-column;
+  gap: 20px;
+}
+
+.login-form-title {
   font-size: 160%;
 }
 
-.login-page-buttons {
+.login-form-forgot-info {
   @include center;
   display: grid;
-  row-gap: 10px;
+  row-gap: 6px;
 }

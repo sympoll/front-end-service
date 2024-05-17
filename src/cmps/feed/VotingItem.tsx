@@ -12,7 +12,7 @@ export default function VotingItem({ desc, mode }: VotingItemProps) {
 
   return (
     <div className="voting-item-container">
-      <VotingCheckbox mode={mode} />
+      <VotingCheckbox mode={mode} setProgress={setProgress} />
       <VotingBar desc={desc} progress={progress} />
     </div>
   );

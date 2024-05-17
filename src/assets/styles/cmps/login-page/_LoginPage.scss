@@ -1,0 +1,16 @@
+.login-page-container {
+  @include flex-column;
+  @include center;
+  height: 100vh;
+  gap: 20px;
+}
+
+.login-page-title {
+  font-size: 160%;
+}
+
+.login-page-buttons {
+  @include center;
+  display: grid;
+  row-gap: 10px;
+}

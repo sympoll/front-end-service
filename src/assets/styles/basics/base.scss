@@ -28,6 +28,11 @@ body {
   grid-column: $column;
 }
 
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Use for fading out components (for example removing a poll from the feed) */
 @mixin fade($type) {
   @if $type== "hide" {

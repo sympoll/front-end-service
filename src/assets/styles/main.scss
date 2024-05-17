@@ -1,38 +1,37 @@
 /* Main CSS file to import for all CSS files of the project */
 
 // ** Setup **
-@import 'setup/typography';
-@import 'setup/variables';
-
-
+@import "setup/typography";
+@import "setup/variables";
 
 // ** Basics **
-@import 'basics/base';
-
-
+@import "basics/base";
 
 // ** Components **
 
 // * App Header *
-@import 'cmps/app-header/AppHeader';
+@import "cmps/app-header/AppHeader";
 
 // * Sidebar *
-@import 'cmps/sidebar/GroupsSidebarItem';
-@import 'cmps/sidebar/GroupsSidebar';
-@import 'cmps/sidebar/MembersSidebarItem';
-@import 'cmps/sidebar/MembersSidebar';
+@import "cmps/sidebar/GroupsSidebarItem";
+@import "cmps/sidebar/GroupsSidebar";
+@import "cmps/sidebar/MembersSidebarItem";
+@import "cmps/sidebar/MembersSidebar";
 
 // * Landing Page *
-@import 'cmps/landing-page/LandingPageBtn';
-@import 'cmps/landing-page/LandingPage';
+@import "cmps/landing-page/LandingPageBtn";
+@import "cmps/landing-page/LandingPage";
 
 // * Feed *
-@import 'cmps/feed-page/VotingCheckbox';
-@import 'cmps/feed-page/VotingBar';
-@import 'cmps/feed-page/VotingItem';
-@import 'cmps/feed-page/Feed';
-@import 'cmps/feed-page/Poll';
-@import 'cmps/feed-page/FeedPage';
+@import "cmps/feed-page/VotingCheckbox";
+@import "cmps/feed-page/VotingBar";
+@import "cmps/feed-page/VotingItem";
+@import "cmps/feed-page/Feed";
+@import "cmps/feed-page/Poll";
+@import "cmps/feed-page/FeedPage";
 
 // * Not Found Page *
-@import 'cmps/not-found-page/NotFoundPage'
+@import "cmps/not-found-page/NotFoundPage";
+
+// * Login Page *
+@import "cmps/login-page/LoginPage";

@@ -3,5 +3,21 @@
     height: 20px;
     border-radius: 6px;
     background-color: $mainColor-light0;
-    padding-left: 12px;
+}
+
+.voting-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background-color: $mainColor-light1;
+    transition: width 0.5s ease-out;
+}
+
+.voting-bar-desc {
+    display: flex;
+    width: fit-content;
+    height: 100%;
+    margin-left: 12px;
+    font-size: 80%;
+    align-items: center;
+    position: absolute;
 }

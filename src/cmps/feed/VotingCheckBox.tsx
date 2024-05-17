@@ -1,5 +1,10 @@
 import React from "react";
+import { CheckboxChoiceType } from "./Enums";
 
-export default function VotingCheckBox() {
-  return <div>VotingCheckBox</div>;
+interface VotingCheckboxProps {
+  mode: CheckboxChoiceType;
+}
+
+export default function VotingCheckbox({ mode }: VotingCheckboxProps) {
+  return <div>VotingCheckbox</div>;
 }

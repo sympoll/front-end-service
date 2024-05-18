@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Poll from "./Poll";
-import { CheckboxChoiceType } from "./Enums";
+import Poll from "./poll/Poll";
+import { CheckboxChoiceType } from "./poll/CheckboxChoiceType";
 import { getDemoPollsData } from "../../services/poll.service";
 import { VotingItemData } from "../../models/VotingitemData.model";
 

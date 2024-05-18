@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import VotingCheckbox from "./VotingCheckbox";
 import VotingBar from "./VotingBar";
-import { CheckboxChoiceType } from "./Enums";
+import { CheckboxChoiceType } from "./CheckboxChoiceType";
 
 interface VotingItemProps {
   id: string;

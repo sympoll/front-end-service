@@ -1,4 +1,4 @@
 export enum CheckboxChoiceType {
-  Single,
-  Multiple,
-}
+    Single,
+    Multiple,
+  }

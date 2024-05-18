@@ -1,4 +1,4 @@
-import { CheckboxChoiceType } from "../cmps/feed/Enums"
+import { CheckboxChoiceType } from "../cmps/feed/poll/CheckboxChoiceType"
 
 export function getDemoPollsData(){
     return [

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import VotingItem from "./VotingItem";
-import { CheckboxChoiceType } from "./Enums";
+import { CheckboxChoiceType } from "./CheckboxChoiceType";
 import {
   VotingItemData,
   VotingItemProgress,
-} from "../../models/VotingitemData.model";
+} from "../../../models/VotingitemData.model";
 
 interface PollProps {
   title: string;

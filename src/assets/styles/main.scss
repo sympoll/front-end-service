@@ -6,6 +6,7 @@
 
 // ** Basics **
 @import "basics/base";
+@import "basics/Button";
 
 // ** Components **
 
@@ -19,7 +20,6 @@
 @import "cmps/sidebar/MembersSidebar";
 
 // * Landing Page *
-@import "cmps/landing-page/LandingPageBtn";
 @import "cmps/landing-page/LandingPage";
 
 // * Feed *

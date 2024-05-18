@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Button from "../cmps/global/Button";
 import { Link, useNavigate } from "react-router-dom";
 
 const SPACE = " ";

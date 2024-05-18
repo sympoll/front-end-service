@@ -4,15 +4,26 @@ import VotingBar from "./VotingBar";
 import { CheckboxChoiceType } from "./Enums";
 
 interface VotingItemProps {
+  id: string;
   desc: string;
   mode: CheckboxChoiceType;
+  progress: number;
+  handleNewProgress: Function;
 }
-export default function VotingItem({ desc, mode }: VotingItemProps) {
-  const [progress, setProgress] = useState(0);
-
+export default function VotingItem({
+  id,
+  desc,
+  mode,
+  progress,
+  handleNewProgress,
+}: VotingItemProps) {
   return (
     <div className="voting-item-container">
-      <VotingCheckbox mode={mode} setProgress={setProgress} />
+      <VotingCheckbox
+        votingItemId={id}
+        mode={mode}
+        handleNewProgress={handleNewProgress}
+      />
       <VotingBar desc={desc} progress={progress} />
     </div>
   );

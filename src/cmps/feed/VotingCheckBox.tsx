@@ -1,28 +1,29 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { CheckboxChoiceType } from "./Enums";
 
 interface VotingCheckboxProps {
-  mode: CheckboxChoiceType;
-  setProgress: Dispatch<SetStateAction<number>>;
+  votingItemId: string;
+  mode: CheckboxChoiceType | null;
+  handleNewProgress: Function;
 }
 
 export default function VotingCheckbox({
+  votingItemId,
   mode,
-  setProgress,
+  handleNewProgress,
 }: VotingCheckboxProps) {
   const [checked, setChecked] = useState<boolean>(false);
 
   const handleCheckboxChange = () => {
     setChecked(!checked);
-
-    // IMPORTANT- change this to set the progress according to the total number of votes instead!
-    checked ? setProgress(0) : setProgress(100);
+    handleNewProgress(votingItemId, !checked);
   };
 
   return (
     <div className="voting-checkbox-container">
       <div className="cbx">
         <input
+          id={votingItemId}
           checked={checked}
           type="checkbox"
           onChange={handleCheckboxChange}

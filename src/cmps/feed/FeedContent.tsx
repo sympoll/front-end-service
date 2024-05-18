@@ -1,24 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Poll from "./Poll";
 import { CheckboxChoiceType } from "./Enums";
+import { getDemoPollsData } from "../../services/poll.service";
+import { VotingItemData } from "../../models/VotingitemData.model";
+
+interface PollData {
+  id: string;
+  title: string;
+  content: string;
+  mode: CheckboxChoiceType;
+  votingItems: VotingItemData[];
+}
+
 export default function FeedContent() {
+  const [polls, setPolls] = useState<PollData[]>([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setPolls(getDemoPollsData());
+    }, 1000);
+  });
+
+  if (!polls.length) return <div>No polls yet</div>;
   return (
     <div className="feed-content-container">
-      <Poll
-        title="Poll Title 1"
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis vehicula placerat."
-        mode={CheckboxChoiceType.Single}
-      />
-      <Poll
-        title="Poll Title 2"
-        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis vehicula placerat. Nunc bibendum mauris ac sollicitudin commodo. Maecenas ullamcorper."
-        mode={CheckboxChoiceType.Multiple}
-      />
-      <Poll
-        title="Poll Title 3"
-        content="Nam convallis vehicula placerat. Nunc bibendum mauris ac sollicitudin commodo. Maecenas ullamcorper."
-        mode={CheckboxChoiceType.Single}
-      />
+      {polls.map((poll) => (
+        <Poll
+          key={poll.id}
+          title={poll.title}
+          content={poll.content}
+          mode={poll.mode}
+          votingItems={poll.votingItems}
+        />
+      ))}
     </div>
   );
 }

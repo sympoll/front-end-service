@@ -16,8 +16,18 @@ interface PollProps {
 export default function Poll({ title, content, mode, votingItems }: PollProps) {
   const [votingItemData, setVotingItemData] =
     useState<VotingItemData[]>(votingItems);
-  const [progresses, setProgresses] = useState<VotingItemProgress[]>([]);
 
+  /* Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
+  initialized using votingItemData states array */
+  const [progresses, setProgresses] = useState<VotingItemProgress[]>(
+    votingItemData.map((item) => ({
+      id: item.id,
+      progress: getProgress(item.id),
+    }))
+  );
+
+  /* On checkbox click,
+  progress and voting count is updated */
   function handleNewProgress(id: string, isInc: boolean) {
     const updatedVotingItem = votingItemData.find((item) => item.id === id);
 
@@ -36,6 +46,8 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
     }
   }
 
+  /* Finds the voting item state,
+  calculates and returns the progress from its vote count */
   function getProgress(id: string) {
     let totalCount = 0;
 
@@ -46,20 +58,10 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
     const item = votingItemData.find((item) => item.id === id);
 
     if (item) {
-      console.log(item.voteCount, totalCount);
-
       return (item.voteCount / (totalCount ? totalCount : 1)) * 100;
     }
     return 0;
   }
-
-  useEffect(() => {
-    const initialProgresses = votingItemData.map((item) => ({
-      id: item.id,
-      progress: getProgress(item.id),
-    }));
-    setProgresses(initialProgresses);
-  }, []);
 
   return (
     <section className="poll-item">

@@ -15,8 +15,8 @@ export default function VotingCheckbox({
   const [checked, setChecked] = useState<boolean>(false);
 
   const handleCheckboxChange = () => {
-    setChecked(!checked);
-    handleNewProgress(votingItemId, !checked);
+    setChecked((prevChecked) => (prevChecked = !checked));
+    handleNewProgress(votingItemId, checked);
   };
 
   return (

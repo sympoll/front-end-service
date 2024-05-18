@@ -33,7 +33,8 @@ body {
   flex-direction: column;
 }
 
-/* Use for fading out components (for example removing a poll from the feed) */
+/* Use for fading out components
+(for example removing a poll from the feed) */
 @mixin fade($type) {
   @if $type== "hide" {
     visibility: hidden;
@@ -49,4 +50,26 @@ body {
 @mixin sticky-top($top) {
   position: sticky;
   top: $top;
+}
+
+/* Main Pages Settings */
+
+@mixin main-page-container {
+  @include page-grid;
+  min-height: 100%;
+  height: 100vh;
+}
+
+@mixin mid-page-content-container {
+  @include set-grid-location(2, 2);
+  display: grid;
+  grid-template-rows: min-content;
+  grid-template-columns: min-content;
+  justify-content: center;
+  align-content: flex-start;
+  min-height: fit-content;
+  padding-top: 30px;
+  z-index: 1;
+  overflow: auto;
+  row-gap: 24px;
 }

@@ -26,7 +26,7 @@
 @import "cmps/feed-page/VotingCheckbox";
 @import "cmps/feed-page/VotingBar";
 @import "cmps/feed-page/VotingItem";
-@import "cmps/feed-page/Feed";
+@import "cmps/feed-page/FeedContent";
 @import "cmps/feed-page/Poll";
 @import "cmps/feed-page/FeedPage";
 
@@ -35,3 +35,6 @@
 
 // * Login Page *
 @import "cmps/login-page/LoginPage";
+
+// * Profile Page *
+@import "cmps/profile-page/ProfilePage";

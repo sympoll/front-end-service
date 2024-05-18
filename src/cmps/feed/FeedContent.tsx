@@ -1,9 +1,9 @@
 import React from "react";
 import Poll from "./Poll";
 import { CheckboxChoiceType } from "./Enums";
-export default function Feed() {
+export default function FeedContent() {
   return (
-    <div className="feed-container">
+    <div className="feed-content-container">
       <Poll
         title="Poll Title 1"
         content="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam convallis vehicula placerat."

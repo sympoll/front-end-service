@@ -4,6 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import LogInPage from "./pages/LogInPage";
 import FeedPage from "./pages/FeedPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ProfilePage from "./pages/ProfilePage";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/*" element={<FeedPage />} />
         <Route path="/*" element={<NotFoundPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

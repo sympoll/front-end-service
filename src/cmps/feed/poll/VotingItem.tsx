@@ -4,27 +4,29 @@ import VotingBar from "./VotingBar";
 import { CheckboxChoiceType } from "./CheckboxChoiceType";
 
 interface VotingItemProps {
-  id: string;
+  votingItemID: string;
   desc: string;
   mode: CheckboxChoiceType;
+  voteCount: number;
   progress: number;
   handleNewProgress: Function;
 }
 export default function VotingItem({
-  id,
+  votingItemID,
   desc,
   mode,
+  voteCount,
   progress,
   handleNewProgress,
 }: VotingItemProps) {
   return (
     <div className="voting-item-container">
       <VotingCheckbox
-        votingItemId={id}
+        votingItemId={votingItemID}
         mode={mode}
         handleNewProgress={handleNewProgress}
       />
-      <VotingBar desc={desc} progress={progress} />
+      <VotingBar desc={desc} voteCount={voteCount} progress={progress} />
     </div>
   );
 }

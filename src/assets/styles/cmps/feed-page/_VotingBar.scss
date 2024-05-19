@@ -1,23 +1,36 @@
 .voting-bar-container {
-    width: 100%;
-    height: 100%;
-    border-radius: 6px;
-    background-color: $inactive-vote-color;
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  background-color: $inactive-vote-color;
 }
 
 .voting-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    background-color: $active-vote-color;
-    transition: width 0.5s ease-out;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 6px;
+  background-color: $active-vote-color;
+  transition: width 0.5s ease-out;
 }
 
-.voting-bar-desc {
-    display: flex;
-    height: 100%;
-    width: fit-content;
-    margin-left: 10px;
-    font-size: 80%;
-    align-items: center;
-    position: absolute;
+.voting-bar-info-container {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  padding: 0 10px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.voting-bar-desc,
+.voting-bar-vote-count {
+  font-size: 80%;
+  white-space: nowrap;
 }

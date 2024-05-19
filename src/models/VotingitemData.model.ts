@@ -1,10 +1,10 @@
 export interface VotingItemData {
-    id: string;
+    votingItemID: string;
     desc: string;
     voteCount: number;
 }
 
 export interface VotingItemProgress {
-    id: string;
+    votingItemID: string;
     progress: number;
 }

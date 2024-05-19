@@ -7,6 +7,7 @@ import {
 } from "../../../models/VotingitemData.model";
 
 interface PollProps {
+  pollID: string;
   title: string;
   content: string;
   mode: CheckboxChoiceType;
@@ -14,22 +15,24 @@ interface PollProps {
 }
 
 export default function Poll({ title, content, mode, votingItems }: PollProps) {
-  const [votingItemData, setVotingItemData] =
+  const [votingItemsData, setVotingItemsData] =
     useState<VotingItemData[]>(votingItems);
 
   /* Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
-  initialized using votingItemData states array */
+  initialized using votingItemsData states array */
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
-    votingItemData.map((item) => ({
-      id: item.id,
-      progress: getProgress(item.id),
+    votingItemsData.map((vItemData) => ({
+      votingItemID: vItemData.votingItemID,
+      progress: getProgress(vItemData.votingItemID),
     }))
   );
 
   /* On checkbox click,
   progress and voting count is updated */
-  function handleNewProgress(id: string, isInc: boolean) {
-    const updatedVotingItem = votingItemData.find((item) => item.id === id);
+  function handleNewProgress(votingItemID: string, isInc: boolean) {
+    const updatedVotingItem = votingItemsData.find(
+      (vItemData) => vItemData.votingItemID === votingItemID
+    );
 
     if (updatedVotingItem) {
       isInc
@@ -38,8 +41,11 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
 
       let newProgresses: VotingItemProgress[] = [];
 
-      votingItemData.forEach((item) => {
-        newProgresses.push({ id: item.id, progress: getProgress(item.id) });
+      votingItemsData.forEach((vItemData) => {
+        newProgresses.push({
+          votingItemID: vItemData.votingItemID,
+          progress: getProgress(vItemData.votingItemID),
+        });
       });
 
       setProgresses(newProgresses);
@@ -48,17 +54,19 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
 
   /* Finds the voting item state,
   calculates and returns the progress from its vote count */
-  function getProgress(id: string) {
+  function getProgress(votingItemID: string) {
     let totalCount = 0;
 
-    votingItemData.forEach((item) => {
-      totalCount += item.voteCount;
+    votingItemsData.forEach((vItemData) => {
+      totalCount += vItemData.voteCount;
     });
 
-    const item = votingItemData.find((item) => item.id === id);
+    const vItem = votingItemsData.find(
+      (vItemData) => vItemData.votingItemID === votingItemID
+    );
 
-    if (item) {
-      return (item.voteCount / (totalCount ? totalCount : 1)) * 100;
+    if (vItem) {
+      return (vItem.voteCount / (totalCount ? totalCount : 1)) * 100;
     }
     return 0;
   }
@@ -68,12 +76,22 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
       <div id="poll-item-title">{title}</div>
       <div id="poll-item-content">{content}</div>
       <div id="poll-item-voting-container">
-        {votingItems.map((item) => (
+        {votingItems.map((vItem) => (
           <VotingItem
-            id={item.id}
-            desc={item.desc}
+            key={vItem.votingItemID}
+            votingItemID={vItem.votingItemID}
+            desc={vItem.desc}
             mode={mode}
-            progress={progresses.find((i) => i.id === item.id)?.progress || 0}
+            voteCount={
+              votingItemsData.find(
+                (vItemData) => vItemData.votingItemID === vItem.votingItemID
+              )?.voteCount || 0
+            }
+            progress={
+              progresses.find(
+                (pItem) => pItem.votingItemID === vItem.votingItemID
+              )?.progress || 0
+            }
             handleNewProgress={handleNewProgress}
           />
         ))}

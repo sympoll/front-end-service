@@ -5,7 +5,7 @@ import { getDemoPollsData } from "../../services/poll.service";
 import { VotingItemData } from "../../models/VotingitemData.model";
 
 interface PollData {
-  id: string;
+  pollID: string;
   title: string;
   content: string;
   mode: CheckboxChoiceType;
@@ -21,12 +21,14 @@ export default function FeedContent() {
     }, 1000);
   });
 
+  // TODO: change div css to a loading icon and text
   if (!polls.length) return <div>No polls yet</div>;
   return (
     <div className="feed-content-container">
       {polls.map((poll) => (
         <Poll
-          key={poll.id}
+          key={poll.pollID}
+          pollID={poll.pollID}
           title={poll.title}
           content={poll.content}
           mode={poll.mode}

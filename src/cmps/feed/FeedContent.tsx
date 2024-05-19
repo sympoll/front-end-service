@@ -16,13 +16,32 @@ export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
 
   useEffect(() => {
+    // Timeout to simulate loading time of the feed, delete after connecting to DB
     setTimeout(() => {
       setPolls(getDemoPollsData());
     }, 1000);
   });
 
-  // TODO: change div css to a loading icon and text
-  if (!polls.length) return <div>No polls yet</div>;
+  if (!polls.length) {
+    return (
+      <div className="feed-content-loading-container">
+        <div className="feed-content-loading-message">
+          Feed is loading
+          <span className="dots">
+            <span className="dot1">.</span>
+            <span className="dot2">.</span>
+            <span className="dot3">.</span>
+          </span>
+        </div>
+        <div className="feed-content-loading-icon">
+          <div className="lds-ripple">
+            <div></div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="feed-content-container">
       {polls.map((poll) => (

@@ -8,3 +8,8 @@ export interface VotingItemProgress {
     votingItemID: string;
     progress: number;
 }
+
+export interface VotingItemIsChecked {
+    votingItemID: string;
+    isChecked: boolean;
+}

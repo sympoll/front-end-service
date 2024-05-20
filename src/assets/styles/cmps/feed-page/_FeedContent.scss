@@ -2,6 +2,20 @@
   @include mid-page-content-container;
 }
 
+@mixin feed-item {
+  display: grid;
+  background-color: $secondaryBgColor0;
+  border-radius: 10px;
+  justify-content: start;
+  grid-template-rows: 20px auto;
+  grid-template-columns: 100%;
+  row-gap: 6px;
+  padding: 10px;
+  width: 400px;
+  height: fit-content;
+  word-wrap: break-word;
+}
+
 .feed-content-loading-container {
   @include flex-column;
   height: fit-content;
@@ -26,8 +40,8 @@
 
   .dots {
     position: absolute;
-    right: -1.15em; /* Adjust this value as needed */
-    width: 1em; /* Ensure the width remains constant */
+    right: -1.15em;
+    width: 1em;
     text-align: left;
 
     & > span {
@@ -68,18 +82,4 @@
   100% {
     opacity: 0;
   }
-}
-
-@mixin feed-item {
-  display: grid;
-  background-color: $secondaryBgColor0;
-  border-radius: 10px;
-  justify-content: start;
-  grid-template-rows: 20px auto;
-  grid-template-columns: 100%;
-  row-gap: 6px;
-  padding: 10px;
-  width: 400px;
-  height: fit-content;
-  word-wrap: break-word;
 }

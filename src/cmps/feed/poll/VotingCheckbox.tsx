@@ -3,20 +3,17 @@ import { CheckboxChoiceType } from "./CheckboxChoiceType";
 
 interface VotingCheckboxProps {
   votingItemId: string;
-  mode: CheckboxChoiceType | null;
+  isChecked: boolean;
   handleNewProgress: Function;
 }
 
 export default function VotingCheckbox({
   votingItemId,
-  mode,
+  isChecked,
   handleNewProgress,
 }: VotingCheckboxProps) {
-  const [checked, setChecked] = useState<boolean>(false);
-
   const handleCheckboxChange = () => {
-    setChecked((prevChecked) => (prevChecked = !checked));
-    handleNewProgress(votingItemId, mode, !checked);
+    handleNewProgress(votingItemId, !isChecked);
   };
 
   return (
@@ -24,7 +21,7 @@ export default function VotingCheckbox({
       <div className="cbx">
         <input
           id={votingItemId}
-          checked={checked}
+          checked={isChecked}
           type="checkbox"
           onChange={handleCheckboxChange}
         />

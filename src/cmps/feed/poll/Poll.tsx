@@ -35,12 +35,7 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
 
   /* On checkbox click,
   progress and voting count is updated */
-  function handleNewProgress(
-    // UNCHECK THE UNWANTED CHECKBOXES IN THE SINGLE MODE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    inputID: string,
-    inputMode: CheckboxChoiceType,
-    inputIsInc: boolean
-  ) {
+  function handleNewProgress(inputID: string, inputIsInc: boolean) {
     let newProgresses: VotingItemProgress[] = [];
     let newIsCheckedStates: VotingItemIsChecked[] = [];
 
@@ -60,20 +55,31 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
             isChecked: false,
           });
         }
-      } // Remove previous checked states
-      else if (inputMode === CheckboxChoiceType.Single) {
-        const i = isCheckedStates.find(
-          (i) => i.votingItemID === item.votingItemID
+      } else {
+        // Uncheck previous checked checkboxes
+        const checkedState = isCheckedStates.find(
+          (checkedState) => checkedState.votingItemID === item.votingItemID
         );
-        if (inputIsInc && i && i.isChecked) {
-          item.voteCount += -1;
-        }
 
-        newIsCheckedStates.push({
-          votingItemID: item.votingItemID,
-          isChecked: false,
-        });
+        if (mode === CheckboxChoiceType.Single) {
+          // Push unchecked states for all other checkboxes (that were not changed on this call)
+          if (inputIsInc && checkedState && checkedState.isChecked) {
+            item.voteCount += -1;
+          }
+
+          newIsCheckedStates.push({
+            votingItemID: item.votingItemID,
+            isChecked: false,
+          });
+        } else {
+          // Push unchanged checked state
+          newIsCheckedStates.push({
+            votingItemID: item.votingItemID,
+            isChecked: checkedState?.isChecked || false,
+          });
+        }
       }
+
       newProgresses.push({
         votingItemID: item.votingItemID,
         progress: getProgress(item),
@@ -113,7 +119,6 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
             key={vItem.votingItemID}
             votingItemID={vItem.votingItemID}
             desc={vItem.desc}
-            mode={mode}
             voteCount={
               votingItemsData.find(
                 (vItemData) => vItemData.votingItemID === vItem.votingItemID
@@ -123,6 +128,11 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
               progresses.find(
                 (pItem) => pItem.votingItemID === vItem.votingItemID
               )?.progress || 0
+            }
+            isChecked={
+              isCheckedStates.find(
+                (cItem) => cItem.votingItemID === vItem.votingItemID
+              )?.isChecked || false
             }
             handleNewProgress={handleNewProgress}
           />

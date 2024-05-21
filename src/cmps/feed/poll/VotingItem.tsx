@@ -6,24 +6,24 @@ import { CheckboxChoiceType } from "./CheckboxChoiceType";
 interface VotingItemProps {
   votingItemID: string;
   desc: string;
-  mode: CheckboxChoiceType;
   voteCount: number;
   progress: number;
+  isChecked: boolean;
   handleNewProgress: Function;
 }
 export default function VotingItem({
   votingItemID,
   desc,
-  mode,
   voteCount,
   progress,
+  isChecked,
   handleNewProgress,
 }: VotingItemProps) {
   return (
     <div className="voting-item-container">
       <VotingCheckbox
         votingItemId={votingItemID}
-        mode={mode}
+        isChecked={isChecked}
         handleNewProgress={handleNewProgress}
       />
       <VotingBar desc={desc} voteCount={voteCount} progress={progress} />

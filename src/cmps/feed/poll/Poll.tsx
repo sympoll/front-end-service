@@ -29,14 +29,13 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
       votingItemID: vItemData.votingItemID,
-      progress: getProgress(vItemData),
+      progress: getProgress(vItemData.votingItemID),
     }))
   );
 
   /* On checkbox click,
   progress and voting count is updated */
   function handleNewProgress(inputID: string, inputIsInc: boolean) {
-    let newProgresses: VotingItemProgress[] = [];
     let newIsCheckedStates: VotingItemIsChecked[] = [];
 
     votingItemsData.map((item) => {
@@ -79,26 +78,32 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
           });
         }
       }
-
-      newProgresses.push({
-        votingItemID: item.votingItemID,
-        progress: getProgress(item),
-      });
     });
-    setProgresses(newProgresses);
+    // Update progress states based on the vote counts
+    setProgresses(
+      votingItemsData.map((item) => ({
+        votingItemID: item.votingItemID,
+        progress: getProgress(item.votingItemID),
+      }))
+    );
+    // Update the checked states
     setIsCheckedStates(newIsCheckedStates);
   }
 
   /* Finds the voting item state,
   calculates and returns the progress from its vote count */
-  function getProgress(votingItem: VotingItemData) {
+  function getProgress(votingItemID: string) {
     let totalCount = 0;
+    let changedItem: VotingItemData | undefined;
 
     votingItemsData.forEach((vItemData) => {
+      if (vItemData.votingItemID === votingItemID) changedItem = vItemData; // Find newly changed voting item
       totalCount += vItemData.voteCount;
     });
 
-    return (votingItem.voteCount / (totalCount ? totalCount : 1)) * 100;
+    if (changedItem)
+      return (changedItem.voteCount / (totalCount ? totalCount : 1)) * 100;
+    return 0;
   }
 
   function getIsChecked(votingItemID: string) {

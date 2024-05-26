@@ -116,9 +116,14 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
 
   return (
     <section className="poll-item">
-      <div id="poll-item-title">{title}</div>
-      <div id="poll-item-content">{content}</div>
-      <div id="poll-item-voting-container">
+      <div className="poll-item-title">{title}</div>
+      <div className="poll-item-content">{content}</div>
+      <div className="poll-item-voting-container">
+        <div className="poll-item-choice-messege">
+          {mode === CheckboxChoiceType.Single
+            ? "Select one"
+            : "Select one or more"}
+        </div>
         {votingItems.map((vItem) => (
           <VotingItem
             key={vItem.votingItemID}

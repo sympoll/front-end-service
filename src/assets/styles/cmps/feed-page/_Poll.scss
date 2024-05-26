@@ -1,19 +1,25 @@
 .poll-item {
-    @include feed-item;
+  @include feed-item;
 }
 
-#poll-item-title {
-    width: 100%;
-    font-weight: bold;
+.poll-item-title {
+  width: 100%;
+  font-weight: bold;
 }
 
-#poll-item-content {
-    width: 100%;
+.poll-item-content {
+  width: 100%;
 }
 
-#poll-item-voting-container {
-    display: grid;
-    margin-top: 10px;
-    margin-bottom: 8px;
-    grid-gap: 10px;
+.poll-item-voting-container {
+  display: grid;
+  margin-top: 10px;
+  margin-bottom: 8px;
+  grid-gap: 10px;
+}
+
+.poll-item-choice-messege {
+  color: $grayedOutFontColor;
+  font-size: 90%;
+  font-weight: 600;
 }

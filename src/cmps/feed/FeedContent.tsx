@@ -22,6 +22,8 @@ export default function FeedContent() {
     }, 1000);
   });
 
+  // TODO: Add if statement for cases where the group specified does not exist in the DB
+
   if (!polls.length) {
     return (
       <div className="feed-content-loading-container">

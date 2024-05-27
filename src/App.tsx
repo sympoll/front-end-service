@@ -13,7 +13,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/feed" element={<FeedPage />} />
         <Route path="/feed/*" element={<FeedPage />} />
         <Route path="/*" element={<NotFoundPage />} />
         <Route path="/profile" element={<ProfilePage />} />

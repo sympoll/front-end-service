@@ -53,3 +53,83 @@
     }
   }
 }
+
+.show-password-container {
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  transform: scale(0.8);
+}
+
+.show-password-container #show-password-label {
+  margin-left: 12px;
+}
+
+.show-password-container #show-password-checkbox {
+  visibility: hidden;
+  display: none;
+}
+
+.show-password-container .toggle {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transform: translate3d(0, 0, 0);
+}
+
+.show-password-container .toggle:before {
+  content: "";
+  position: relative;
+  top: 1px;
+  left: 1px;
+  width: 40px;
+  height: 22px;
+  display: block;
+  background: #c8ccd4;
+  border-radius: 12px;
+  transition: background 0.2s ease;
+}
+
+.show-password-container .toggle span {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  display: block;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(154, 153, 153, 0.75);
+  transition: all 0.2s ease;
+}
+
+.show-password-container .toggle span svg {
+  margin: 7px;
+  fill: none;
+}
+
+.show-password-container .toggle span svg path {
+  stroke: #c8ccd4;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 0;
+  transition: all 0.5s linear;
+}
+
+.show-password-container input[type="checkbox"]:checked + .toggle:before {
+  background: $mainBgColor0;
+}
+
+.show-password-container input[type="checkbox"]:checked + .toggle span {
+  transform: translateX(18px);
+}
+
+.show-password-container input[type="checkbox"]:checked + .toggle span path {
+  stroke: $mainBgColor0;
+  stroke-dasharray: 25;
+  stroke-dashoffset: 25;
+}

@@ -13,18 +13,30 @@ export default function LogInPage() {
   const [email, setEmail] = useState(EMPTY_STR);
   const [password, setPassword] = useState(EMPTY_STR);
   const [passwordConfirm, setPasswordConfirm] = useState(EMPTY_STR);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleModeToggle = () => {
     setIsSignIn(!isSignIn);
+
+    // Clear inputs
+    setUsername(EMPTY_STR);
+    setEmail(EMPTY_STR);
+    setPassword(EMPTY_STR);
+    setPasswordConfirm(EMPTY_STR);
+    setShowPassword(false);
+  };
+
+  const handleShowPasswordCheck = () => {
+    setShowPassword(!showPassword);
   };
 
   const handleLogIn = (event: React.FormEvent) => {
-    // Add login logic
+    // TODO: Add login logic
   };
 
   const handleSignUp = (event: React.FormEvent) => {
-    // Add sign up logic
+    // TODO: Add sign up logic
   };
 
   const preventSpaceKeyPress = (
@@ -68,7 +80,7 @@ export default function LogInPage() {
             />
           )}
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             onKeyDown={preventSpaceKeyPress}
             maxLength={MAX_PASS_LEN}
             placeholder="Password..."
@@ -79,7 +91,7 @@ export default function LogInPage() {
           />
           {!isSignIn && (
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               onKeyDown={preventSpaceKeyPress}
               maxLength={MAX_PASS_LEN}
               placeholder="Confirm Password..."
@@ -89,6 +101,22 @@ export default function LogInPage() {
               }}
             />
           )}
+          <div className="show-password-container">
+            <input
+              id="show-password-checkbox"
+              type="checkbox"
+              checked={showPassword}
+              onChange={handleShowPasswordCheck}
+            />
+            <label htmlFor="show-password-checkbox" className="toggle">
+              <span>
+                <svg width="10px" height="10px" viewBox="0 0 10 10">
+                  <path d="M5,1 L5,1 C2.790861,1 1,2.790861 1,5 L1,5 C1,7.209139 2.790861,9 5,9 L5,9 C7.209139,9 9,7.209139 9,5 L9,5 C9,2.790861 7.209139,1 5,1 L5,9 L5,1 Z"></path>
+                </svg>
+              </span>
+              <div id="show-password-label">Show Password</div>
+            </label>
+          </div>
 
           <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
         </form>

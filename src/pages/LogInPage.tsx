@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SPACE = " ";
@@ -16,15 +16,20 @@ export default function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleModeToggle = () => {
-    setIsSignIn(!isSignIn);
-
-    // Clear inputs
+  const clearInputs = () => {
     setUsername(EMPTY_STR);
     setEmail(EMPTY_STR);
     setPassword(EMPTY_STR);
     setPasswordConfirm(EMPTY_STR);
     setShowPassword(false);
+  };
+
+  useEffect(() => {
+    clearInputs();
+  }, [isSignIn]);
+
+  const handleModeToggle = () => {
+    setIsSignIn(!isSignIn);
   };
 
   const handleShowPasswordCheck = () => {

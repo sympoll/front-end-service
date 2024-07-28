@@ -12,12 +12,19 @@ export default function LandingPage() {
     method: "GET",
     // other options
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+      return response.json();
+    })
     .then((data) => {
-      test = data;
+      test = "1. " + JSON.stringify(data);
+      console.log(test); // Log the result for debugging
     })
     .catch((error) => {
-      (test = "Error:"), error;
+      test = "2. Error: " + error.message;
+      console.error(test); // Log the error for debugging
     });
 
   // END TEST

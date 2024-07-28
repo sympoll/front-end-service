@@ -10,25 +10,16 @@ export default function LandingPage() {
   const [test, setTest] = useState("Fetching data...");
 
   useEffect(() => {
+    // AXIOS insead of fetch
     fetch(`${backendUrl}/api/poll/health`, {
       method: "GET",
       // other options
-    })
-      .then((response) => {
-        setTest("Raw response: " + response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.text(); // Expect a plain text response
-      })
-      .then((data) => {
-        setTest(data); // Set the state to the plain text response
-        console.log("Parsed data:", data); // Log the parsed data for debugging
-      })
-      .catch((error) => {
-        setTest("Error: " + error.message);
-        console.error("Fetch error:", error); // Log the error for debugging
-      });
+    }).then((response) => {
+      setTest("Raw response: " + response);
+      if (!response.ok) {
+        throw new Error("Network response was not ok " + response.statusText);
+      }
+    });
   }, []);
   // END TEST
 

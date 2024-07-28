@@ -16,19 +16,20 @@ export default function LandingPage() {
     })
       .then((response) => {
         setTest("Raw response: " + response);
-        // if (!response.ok) {
-        //   throw new Error("Network response was not ok " + response.statusText);
-        // }
-        // if (
-        //   response.headers.get("content-type")?.includes("application/json")
-        // ) {
-        //   return response.json();
-        // } else {
-        //   throw new Error("Expected JSON response");
-        // }
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        if (
+          response.headers.get("content-type")?.includes("application/json")
+        ) {
+          return response.json();
+        } else {
+          throw new Error("Expected JSON response");
+        }
       })
       .then((data) => {
-        setTest("1. " + JSON.stringify(data));
+        setTest((prevData) => (prevData = data));
+
         console.log("Parsed data:", data); // Log the parsed data for debugging
       })
       .catch((error) => {

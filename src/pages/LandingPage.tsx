@@ -15,17 +15,17 @@ export default function LandingPage() {
       // other options
     })
       .then((response) => {
-        console.log("Raw response:", response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        if (
-          response.headers.get("content-type")?.includes("application/json")
-        ) {
-          return response.json();
-        } else {
-          throw new Error("Expected JSON response");
-        }
+        setTest("Raw response: " + response);
+        // if (!response.ok) {
+        //   throw new Error("Network response was not ok " + response.statusText);
+        // }
+        // if (
+        //   response.headers.get("content-type")?.includes("application/json")
+        // ) {
+        //   return response.json();
+        // } else {
+        //   throw new Error("Expected JSON response");
+        // }
       })
       .then((data) => {
         setTest("1. " + JSON.stringify(data));

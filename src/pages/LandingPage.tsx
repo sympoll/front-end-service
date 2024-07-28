@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
@@ -7,25 +7,28 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function LandingPage() {
   // TEST:
-  let test;
-  fetch(`${backendUrl}/api/poll/health`, {
-    method: "GET",
-    // other options
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText);
-      }
-      return response.json();
+  const [test, setTest] = useState("Fetching data...");
+
+  useEffect(() => {
+    fetch(`${backendUrl}/api/poll/health`, {
+      method: "GET",
+      // other options
     })
-    .then((data) => {
-      test = "1. " + JSON.stringify(data);
-      console.log(test); // Log the result for debugging
-    })
-    .catch((error) => {
-      test = "2. Error: " + error.message;
-      console.error(test); // Log the error for debugging
-    });
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setTest("1. " + JSON.stringify(data));
+        console.log(test); // Log the result for debugging
+      })
+      .catch((error) => {
+        setTest("2. Error: " + error.message);
+        console.error(test); // Log the error for debugging
+      });
+  }, []);
 
   // END TEST
 

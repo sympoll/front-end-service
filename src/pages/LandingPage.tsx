@@ -19,25 +19,17 @@ export default function LandingPage() {
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
-        if (
-          response.headers.get("content-type")?.includes("application/json")
-        ) {
-          return response.json();
-        } else {
-          throw new Error("Expected JSON response");
-        }
+        return response.text(); // Expect a plain text response
       })
       .then((data) => {
-        setTest((prevData) => (prevData = data));
-
+        setTest(data); // Set the state to the plain text response
         console.log("Parsed data:", data); // Log the parsed data for debugging
       })
       .catch((error) => {
-        setTest("2. Error: " + error.message);
+        setTest("Error: " + error.message);
         console.error("Fetch error:", error); // Log the error for debugging
       });
   }, []);
-
   // END TEST
 
   const navigate = useNavigate();

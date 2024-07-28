@@ -7,7 +7,7 @@ const MAX_PASS_LEN = 20;
 const MAX_USERNAME_LEN = 20;
 const MAX_EMAIL_LEN = 20;
 
-export default function LogInPage() {
+export default function LoginPage() {
   const [isSignIn, setIsSignIn] = useState(true); // true = log in mode, false = sign up mode
   const [username, setUsername] = useState(EMPTY_STR);
   const [email, setEmail] = useState(EMPTY_STR);

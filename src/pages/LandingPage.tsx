@@ -15,18 +15,25 @@ export default function LandingPage() {
       // other options
     })
       .then((response) => {
+        console.log("Raw response:", response);
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
-        return response.json();
+        if (
+          response.headers.get("content-type")?.includes("application/json")
+        ) {
+          return response.json();
+        } else {
+          throw new Error("Expected JSON response");
+        }
       })
       .then((data) => {
         setTest("1. " + JSON.stringify(data));
-        console.log(test); // Log the result for debugging
+        console.log("Parsed data:", data); // Log the parsed data for debugging
       })
       .catch((error) => {
         setTest("2. Error: " + error.message);
-        console.error(test); // Log the error for debugging
+        console.error("Fetch error:", error); // Log the error for debugging
       });
   }, []);
 

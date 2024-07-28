@@ -3,7 +3,25 @@ import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
 export default function LandingPage() {
+  // TEST:
+  let test;
+  fetch(`${backendUrl}/api/poll/health`, {
+    method: "GET",
+    // other options
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      test = data;
+    })
+    .catch((error) => {
+      (test = "Error:"), error;
+    });
+
+  // END TEST
+
   const navigate = useNavigate();
 
   return (
@@ -18,6 +36,7 @@ export default function LandingPage() {
           Temporary - Move to feed
         </Button>
       </div>
+      <h1>THIS IS A TEST: "{test}"</h1>
     </section>
   );
 }

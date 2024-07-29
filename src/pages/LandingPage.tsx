@@ -2,49 +2,22 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 console.log("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded
 
 export default function LandingPage() {
   // TEST:
-  const [test, setTest] = useState("Fetching data...");
-
-  useEffect(() => {
-    const fetchHealthCheck = async () => {
-      try {
-        console.log("Making request to:", `${backendUrl}/api/poll/health`);
-        const response = await fetch(`${backendUrl}/api/poll/health`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        });
-
-        console.log("Raw response: ", response); // Log the raw response
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-
-        const contentType = response.headers.get("content-type");
-        console.log("Content-Type: ", contentType); // Log the content-type
-
-        if (contentType && contentType.includes("application/json")) {
-          const data = await response.json();
-          console.log("Parsed data: ", data); // Log the parsed data
-          setTest(data);
-        } else {
-          throw new Error("Expected JSON response");
-        }
-      } catch (error) {
-        console.error("Fetch error:", error); // Log the error for debugging
-        setTest("2. Error: " + error);
-      }
-    };
-
-    fetchHealthCheck();
-  }, [backendUrl]);
+  async function fetchHealth(backendUrl: string) {
+    try {
+      const response = await axios.get(backendUrl);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching health: ", error);
+      throw error;
+    }
+  }
   // END TEST
 
   const navigate = useNavigate();

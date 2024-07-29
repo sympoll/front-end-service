@@ -15,7 +15,15 @@ export default function LandingPage() {
 
   async function fetchHealth(backendUrl: string) {
     try {
-      const response = await axios.get(backendUrl + "/api/poll/health");
+      const response = await axios
+        .create({
+          baseURL: "http://backend.default.svc.cluster.local:8081/api/poll",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .get("/health");
       return response.data;
     } catch (error) {
       console.error("Error fetching health: ", error);

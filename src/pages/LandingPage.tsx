@@ -3,9 +3,10 @@ import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import logger from "../logger/logger";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-console.log("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded
+logger.info("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded
 
 export default function LandingPage() {
   // TEST:
@@ -15,7 +16,7 @@ export default function LandingPage() {
 
   async function fetchHealth(backendUrl: string) {
     try {
-      console.log("Creating axios instance with baseURL:", backendUrl);
+      logger.info("Creating axios instance with baseURL:", backendUrl);
       const axiosInstance = axios.create({
         baseURL: backendUrl, // Use the backend URL from environment variables
         headers: {
@@ -24,21 +25,21 @@ export default function LandingPage() {
         withCredentials: true,
       });
   
-      console.log("Making GET request to /health");
+      logger.info("Making GET request to /health");
       const response = await axiosInstance.get("/health");
   
-      console.log("Response received:", response);
+      logger.info("Response received:", response);
       return response.data;
     } catch (error: unknown) { // Explicitly typing 'error' as 'unknown'
       if (axios.isAxiosError(error)) { // Type guard for Axios errors
         // Log detailed error information for Axios errors
-        console.error("Error response data:", error.response?.data);
-        console.error("Error response status:", error.response?.status);
-        console.error("Error response headers:", error.response?.headers);
-        console.error("Error request data:", error.request);
+        logger.error("Error response data:", error.response?.data);
+        logger.error("Error response status:", error.response?.status);
+        logger.error("Error response headers:", error.response?.headers);
+        logger.error("Error request data:", error.request);
       } else {
         // Handle other types of errors
-        console.error("Unexpected error:", error);
+        logger.error("Unexpected error:", error);
       }
   
       throw error; // Re-throw the error after logging

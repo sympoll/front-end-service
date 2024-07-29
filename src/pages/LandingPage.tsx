@@ -9,6 +9,10 @@ console.log("Backend URL:", backendUrl); // Log the backend URL to ensure it's c
 
 export default function LandingPage() {
   // TEST:
+  const [healthData, setHealthData] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   async function fetchHealth(backendUrl: string) {
     try {
       const response = await axios.get(backendUrl);
@@ -18,9 +22,22 @@ export default function LandingPage() {
       throw error;
     }
   }
+
+  useEffect(() => {
+    fetchHealth(backendUrl)
+      .then((data) => {
+        setHealthData(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setLoading(false);
+      });
+  }, [backendUrl]);
   // END TEST
 
   const navigate = useNavigate();
+  const test = fetchHealth(backendUrl);
 
   return (
     <section className="landing-page-container">
@@ -34,7 +51,10 @@ export default function LandingPage() {
           Temporary - Move to feed
         </Button>
       </div>
-      <h1>THIS IS A TEST: "{test}"</h1>
+      <h1>
+        THIS IS A TEST:{" "}
+        {loading ? "Loading..." : error ? `Error: ${error}` : healthData}
+      </h1>
     </section>
   );
 }

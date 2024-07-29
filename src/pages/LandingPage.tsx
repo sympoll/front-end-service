@@ -15,7 +15,7 @@ export default function LandingPage() {
 
   async function fetchHealth(backendUrl: string) {
     try {
-      const response = await axios.get(backendUrl);
+      const response = await axios.get(backendUrl + "/api/poll/health");
       return response.data;
     } catch (error) {
       console.error("Error fetching health: ", error);

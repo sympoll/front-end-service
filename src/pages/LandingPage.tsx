@@ -10,23 +10,30 @@ export default function LandingPage() {
   const [test, setTest] = useState("Fetching data...");
 
   useEffect(() => {
-    const backendUrl = "http://localhost:8080"; // Update this to your actual backend URL
     fetch(`${backendUrl}/api/poll/health`, {
       method: "GET",
       // other options
     })
       .then((response) => {
+        setTest("Raw response: " + response);
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
-        return response.text(); // Expect a plain text response
+        if (
+          response.headers.get("content-type")?.includes("application/json")
+        ) {
+          return response.json();
+        } else {
+          throw new Error("Expected JSON response");
+        }
       })
       .then((data) => {
-        setTest(data); // Set the state to the plain text response
+        setTest((prevData) => (prevData = data));
+
         console.log("Parsed data:", data); // Log the parsed data for debugging
       })
       .catch((error) => {
-        setTest("Error: " + error.message);
+        setTest("2. Error: " + error.message);
         console.error("Fetch error:", error); // Log the error for debugging
       });
   }, []);

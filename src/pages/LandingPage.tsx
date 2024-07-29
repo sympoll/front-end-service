@@ -15,19 +15,33 @@ export default function LandingPage() {
 
   async function fetchHealth(backendUrl: string) {
     try {
-      const response = await axios
-        .create({
-          baseURL: "http://backend.default.svc.cluster.local:8081/api/poll",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        })
-        .get("/health");
+      console.log("Creating axios instance with baseURL:", backendUrl);
+      const axiosInstance = axios.create({
+        baseURL: backendUrl, // Use the backend URL from environment variables
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+  
+      console.log("Making GET request to /health");
+      const response = await axiosInstance.get("/health");
+  
+      console.log("Response received:", response);
       return response.data;
-    } catch (error) {
-      console.error("Error fetching health: ", error);
-      throw error;
+    } catch (error: unknown) { // Explicitly typing 'error' as 'unknown'
+      if (axios.isAxiosError(error)) { // Type guard for Axios errors
+        // Log detailed error information for Axios errors
+        console.error("Error response data:", error.response?.data);
+        console.error("Error response status:", error.response?.status);
+        console.error("Error response headers:", error.response?.headers);
+        console.error("Error request data:", error.request);
+      } else {
+        // Handle other types of errors
+        console.error("Unexpected error:", error);
+      }
+  
+      throw error; // Re-throw the error after logging
     }
   }
 

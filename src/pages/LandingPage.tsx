@@ -3,10 +3,9 @@ import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import logger from "../logger/logger";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-logger.info("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded
+console.log("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded
 
 export default function LandingPage() {
   // TEST:
@@ -16,33 +15,19 @@ export default function LandingPage() {
 
   async function fetchHealth(backendUrl: string) {
     try {
-      logger.info("Creating axios instance with baseURL:", backendUrl);
-      const axiosInstance = axios.create({
-        baseURL: backendUrl, // Use the backend URL from environment variables
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
-  
-      logger.info("Making GET request to /health");
-      const response = await axiosInstance.get("/health");
-  
-      logger.info("Response received:", response);
+      const response = await axios
+        .create({
+          baseURL: "http://backend.default.svc.cluster.local:8081/api/poll",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        })
+        .get("/health");
       return response.data;
-    } catch (error: unknown) { // Explicitly typing 'error' as 'unknown'
-      if (axios.isAxiosError(error)) { // Type guard for Axios errors
-        // Log detailed error information for Axios errors
-        logger.error("Error response data:", error.response?.data);
-        logger.error("Error response status:", error.response?.status);
-        logger.error("Error response headers:", error.response?.headers);
-        logger.error("Error request data:", error.request);
-      } else {
-        // Handle other types of errors
-        logger.error("Unexpected error:", error);
-      }
-  
-      throw error; // Re-throw the error after logging
+    } catch (error) {
+      console.error("Error fetching health: ", error);
+      throw error;
     }
   }
 

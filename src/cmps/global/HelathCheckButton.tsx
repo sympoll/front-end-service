@@ -11,11 +11,11 @@ function HealthCheckButton() {
 
   const fetchHealthStatus = async () => {
     try {
-      logger.info("Try to fetch from URL: " + backendUrl + "/api/poll/health");
+      console.log("Try to fetch from URL: " + backendUrl + "/api/poll/health");
       const response = await fetch(backendUrl + "/api/poll/health");
-      logger.info("Awaiting fetch from: " + backendUrl + "/api/poll/health");
+      console.log("Awaiting fetch from: " + backendUrl + "/api/poll/health");
       const data: HealthCheckResponse = await response.json();
-      logger.info("Completed fetch from: " + backendUrl + "/api/poll/health");
+      console.log("Completed fetch from: " + backendUrl + "/api/poll/health");
       setHealthStatus(data.status);
     } catch (error) {
       console.error("Error fetching health status:", error);

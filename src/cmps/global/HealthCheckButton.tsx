@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import logger from "../../logger/logger";
 
 interface HealthCheckResponse {
   status: string;

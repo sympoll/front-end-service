@@ -3,7 +3,7 @@ import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import HealthCheckButton from "../cmps/global/HelathCheckButton";
+import HealthCheckButton from "../cmps/global/HealthCheckButton";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 console.log("Backend URL:", backendUrl); // Log the backend URL to ensure it's correctly loaded

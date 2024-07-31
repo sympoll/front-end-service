@@ -8,9 +8,9 @@ interface HealthCheckResponse {
 function HealthCheckButton() {
   const [healthStatus, setHealthStatus] = useState<string | null>(null);
   const pollServiceUrl =
-    import.meta.env.BASE_URL +
-    import.meta.env.API_GATEWAY_URL +
-    import.meta.env.POLL_SERVICE_URL;
+    import.meta.env.VITE_BASE_URL +
+    import.meta.env.VITE_API_GATEWAY_URL +
+    import.meta.env.VITE_POLL_SERVICE_URL;
 
   // TEST:
   const [healthData, setHealthData] = useState<string | null>(null);

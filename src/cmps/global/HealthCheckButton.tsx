@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 interface HealthCheckResponse {
   status: string;
@@ -6,15 +7,54 @@ interface HealthCheckResponse {
 
 function HealthCheckButton() {
   const [healthStatus, setHealthStatus] = useState<string | null>(null);
-  const backendUrl = import.meta.env.API_GATEWAY_URL;
+  const pollServiceUrl =
+    import.meta.env.BASE_URL +
+    import.meta.env.API_GATEWAY_URL +
+    import.meta.env.POLL_SERVICE_URL;
+
+  // TEST:
+  const [healthData, setHealthData] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // async function fetchHealth(backendUrl: string) {
+  //   try {
+  //     const response = await axios
+  //       .create({
+  //         baseURL: "http://backend.default.svc.cluster.local:8081/api/poll",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         withCredentials: true,
+  //       })
+  //       .get("/health");
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Error fetching health: ", error);
+  //     throw error;
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   fetchHealth(backendUrl)
+  //     .then((data) => {
+  //       setHealthData(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       setError(error.message);
+  //       setLoading(false);
+  //     });
+  // }, [backendUrl]);
+  // // END TEST
 
   const fetchHealthStatus = async () => {
     try {
-      console.log("Try to fetch from URL: " + backendUrl + "/api/poll/health");
-      const response = await fetch(backendUrl + "/api/poll/health");
-      console.log("Awaiting fetch from: " + backendUrl + "/api/poll/health");
+      console.log("Try to fetch from URL: " + pollServiceUrl + "/health");
+      const response = await fetch(pollServiceUrl + "/health");
+      console.log("Awaiting fetch from: " + pollServiceUrl + "/health");
       const data: HealthCheckResponse = await response.json();
-      console.log("Completed fetch from: " + backendUrl + "/api/poll/health");
+      console.log("Completed fetch from: " + pollServiceUrl + "/health");
       setHealthStatus(data.status);
     } catch (error) {
       console.error("Error fetching health status:", error);

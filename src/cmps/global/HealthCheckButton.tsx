@@ -6,7 +6,7 @@ interface HealthCheckResponse {
 
 function HealthCheckButton() {
   const [healthStatus, setHealthStatus] = useState<string | null>(null);
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const backendUrl = import.meta.env.API_GATEWAY_URL;
 
   const fetchHealthStatus = async () => {
     try {

@@ -12,11 +12,12 @@ function HealthCheckButton() {
     import.meta.env.VITE_API_GATEWAY_URL +
     import.meta.env.VITE_POLL_SERVICE_URL;
 
-  // TEST:
+  // USE THIS INSTEAD OF FETCH:
   const [healthData, setHealthData] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
+  const tempp = 2;
+  
   // async function fetchHealth(backendUrl: string) {
   //   try {
   //     const response = await axios

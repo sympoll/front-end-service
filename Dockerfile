@@ -13,18 +13,18 @@ RUN npm install
 # Copy the rest of the application
 COPY . .
 
-# Build the application
+# Build the application using TypeScript and Vite
 RUN npm run build
 
 # Use a smaller base image for the final stage
-FROM node:20-alpine AS final
+FROM node:20-alpine
 
 # Set the working directory
 WORKDIR /app
 
-# Copy built files from the build stage
-COPY --from=build /app/build /app/build
+# Copy only the necessary files for the final image
 COPY --from=build /app/package*.json ./
+COPY --from=build /app/dist /app/dist
 
 # Install only production dependencies
 RUN npm install --production
@@ -33,4 +33,4 @@ RUN npm install --production
 EXPOSE 8080
 
 # Command to run the application
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "preview"]

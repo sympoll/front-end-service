@@ -36,8 +36,11 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: true   
+      
           platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/${{ github.repository }}/sympoll-front-end-test:${{ steps.date.outputs.DATE }}
             ghcr.io/${{ github.repository }}/sympoll-front-end-test:latest
+          cache-from: type=gha
+          cache-to: type=gha, mode=max  # Optional: Store maximum available cache

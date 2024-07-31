@@ -1,4 +1,3 @@
-This is my github workflow
 name: Build and push test Docker image to Github packages
 on:
   push:

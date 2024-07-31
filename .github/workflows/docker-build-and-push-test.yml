@@ -1,3 +1,4 @@
+This is my github workflow
 name: Build and push test Docker image to Github packages
 on:
   push:
@@ -30,14 +31,6 @@ jobs:
         id: date
         run: echo "::set-output name=DATE::$(date +'%d.%m.%Y')"
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
       - name: Build and push Docker image
         id: docker_build
         uses: docker/build-push-action@v2
@@ -46,8 +39,6 @@ jobs:
           file: Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
           tags: |
             ghcr.io/${{ github.repository }}/sympoll-front-end-test:${{ steps.date.outputs.DATE }}
             ghcr.io/${{ github.repository }}/sympoll-front-end-test:latest

@@ -21,7 +21,7 @@ export async function fetchAllUserGroupsPolls(userId : number){
                   },
                   withCredentials: true,
                 })
-      .get("/");
+      .get("fetch-all");
     return response.data;
   } catch(err) {
     console.error("Error fetching all joined groups' polls of user ID {}. Error info: {}", userId, err);

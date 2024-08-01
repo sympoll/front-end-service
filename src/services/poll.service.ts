@@ -23,7 +23,7 @@ export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollDat
                   withCredentials: true,
                 })
       .get("/fetch-all");
-    return response.data.json();
+    return response.data;
   } catch(err) {
     console.error("Error fetching all joined groups' polls of user ID {}. Error info: {}", userId, err);
     throw err;

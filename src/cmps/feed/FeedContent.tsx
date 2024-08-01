@@ -14,6 +14,7 @@ export default function FeedContent() {
       .then((data) => {
         console.log("Fetched all user polls data: ", data);
         setPolls(data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.log("Error in fetching all user's polls: ", error);

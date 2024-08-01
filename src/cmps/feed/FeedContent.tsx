@@ -8,13 +8,12 @@ export default function FeedContent() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch all polls of the user's groups.
   useEffect(() => {
     fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
       .then((data) => {
         console.log("Fetched all user polls data: ", data);
         setPolls(data);
-        setIsLoading(false);
-        console.log("Polls object defined: ", polls);
       })
       .catch((error) => {
         console.log("Error in fetching all user's polls: ", error);
@@ -22,6 +21,12 @@ export default function FeedContent() {
         setIsLoading(false);
       });
   }, []);
+
+  // Complete the loading phase to display the received polls.
+  useEffect(() => {
+    console.log("Polls object defined: ", polls);
+    setIsLoading(false);
+  }, [polls]);
 
   if (isLoading) {
     return (

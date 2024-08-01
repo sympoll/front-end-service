@@ -11,15 +11,15 @@ export default function FeedContent() {
   useEffect(() => {
     fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
       .then((data) => {
+        console.log("Fetched all user polls data: ", data);
         setPolls(data);
         setIsLoading(false);
-        console.log("Finished setting up polls. Received: ", data);
         console.log("Polls object defined: ", polls);
       })
       .catch((error) => {
+        console.log("Error in fetching all user's polls: ", error);
         setError(error.message);
         setIsLoading(false);
-        console.log("Error in fetching all user's polls: ", error);
       });
   }, []);
 

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { CheckboxChoiceType } from "../cmps/feed/poll/CheckboxChoiceType"
+import { PollData } from "../models/PollData.model";
 
 const pollServiceUrl =
   import.meta.env.VITE_BASE_URL +
@@ -7,7 +8,7 @@ const pollServiceUrl =
   import.meta.env.VITE_POLL_SERVICE_URL;
 
 // Returns the logged in user's polls from all his groups.
-export async function fetchAllUserGroupsPolls(userId : number){
+export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollData[]>{
   // Send a request to the User Management Service for the user's join groups list.
   // !!! TODO !!!
 
@@ -22,7 +23,7 @@ export async function fetchAllUserGroupsPolls(userId : number){
                   withCredentials: true,
                 })
       .get("/fetch-all");
-    return response.data;
+    return response.data.json();
   } catch(err) {
     console.error("Error fetching all joined groups' polls of user ID {}. Error info: {}", userId, err);
     throw err;

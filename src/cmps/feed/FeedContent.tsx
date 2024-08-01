@@ -24,8 +24,11 @@ export default function FeedContent() {
 
   // Log polls state whenever it changes.
   useEffect(() => {
-    console.log("Polls object defined: ", polls);
-    if (polls) setIsLoading(false); // Only if the polls array is defined, end the loading phase.
+    // Only if the polls array is defined, end the loading phase.
+    if (polls) {
+      console.log("Polls object defined: ", polls);
+      setIsLoading(false);
+    }
   }, [polls]);
 
   if (isLoading) {

@@ -22,10 +22,9 @@ export default function FeedContent() {
       });
   }, []);
 
-  // Complete the loading phase to display the received polls.
+  // Log polls state whenever it changes.
   useEffect(() => {
     console.log("Polls object defined: ", polls);
-    setIsLoading(false);
   }, [polls]);
 
   if (isLoading) {

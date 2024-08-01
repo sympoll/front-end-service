@@ -1,30 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
-import { CheckboxChoiceType } from "./poll/CheckboxChoiceType";
-import { getDemoPollsData } from "../../services/poll.service";
-import { VotingItemData } from "../../models/VotingitemData.model";
-
-interface PollData {
-  pollID: string;
-  title: string;
-  content: string;
-  mode: CheckboxChoiceType;
-  votingItems: VotingItemData[];
-}
+import { fetchAllUserGroupsPolls } from "../../services/poll.service";
+import { PollData } from "../../models/PollData.model";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Timeout to simulate loading time of the feed, delete after connecting to DB
-    setTimeout(() => {
-      setPolls(getDemoPollsData());
-    }, 1000);
-  });
+    fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
+      .then((data) => {
+        setPolls(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setError(error.message);
+        setIsLoading(false);
+      });
+  }, []);
 
-  // TODO: Add if statement for cases where the group specified does not exist in the DB
-
-  if (!polls.length) {
+  if (isLoading) {
     return (
       <div className="feed-content-loading-container">
         <div className="feed-content-loading-message">
@@ -43,19 +39,33 @@ export default function FeedContent() {
         </div>
       </div>
     );
+  } else if (!polls.length) {
+    return (
+      <div className="feed-content-error-fetching-polls">
+        <div className="feed-content-error-fetching-polls-message">
+          ERROR: {error}
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div className="feed-content-container">
+        {polls.map((poll) => (
+          <Poll
+            key={poll.pollId}
+            pollId={poll.pollId}
+            title={poll.title}
+            description={poll.description}
+            nofAnswersAllowed={poll.nofAnswersAllowed}
+            creatorId={poll.creatorId}
+            groupId={poll.groupId}
+            timeCreated={poll.timeCreated}
+            timeUpdated={poll.timeUpdated}
+            deadline={poll.deadline}
+            votingItems={poll.votingItems}
+          />
+        ))}
+      </div>
+    );
   }
-  return (
-    <div className="feed-content-container">
-      {polls.map((poll) => (
-        <Poll
-          key={poll.pollID}
-          pollID={poll.pollID}
-          title={poll.title}
-          content={poll.content}
-          mode={poll.mode}
-          votingItems={poll.votingItems}
-        />
-      ))}
-    </div>
-  );
 }

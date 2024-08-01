@@ -8,14 +8,35 @@ import {
 } from "../../../models/VotingitemData.model";
 
 interface PollProps {
-  pollID: string;
+  pollId: string;
   title: string;
-  content: string;
-  mode: CheckboxChoiceType;
+  description: string;
+  nofAnswersAllowed: number;
+  creatorId: string;
+  groupId: string;
+  timeCreated: string;
+  timeUpdated: string;
+  deadline: string;
   votingItems: VotingItemData[];
 }
 
-export default function Poll({ title, content, mode, votingItems }: PollProps) {
+export default function Poll({
+  pollId,
+  title,
+  description,
+  nofAnswersAllowed,
+  creatorId,
+  groupId,
+  timeCreated,
+  timeUpdated,
+  deadline,
+  votingItems,
+}: PollProps) {
+  const mode =
+    nofAnswersAllowed > 1
+      ? CheckboxChoiceType.Multiple
+      : CheckboxChoiceType.Single; // TODO: Remove this, update to limit the nof answers allowed.
+
   const [votingItemsData, setVotingItemsData] =
     useState<VotingItemData[]>(votingItems);
 
@@ -39,7 +60,7 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
     let newIsCheckedStates: VotingItemIsChecked[] = [];
 
     votingItemsData.map((item) => {
-      // Find the newly clicked checkbox
+      // Find the newly clicked checkbox.
       if (item.votingItemID === inputID) {
         if (inputIsInc) {
           item.voteCount += 1;
@@ -55,13 +76,13 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
           });
         }
       } else {
-        // Uncheck previous checked checkboxes
+        // Uncheck previous checked checkboxes.
         const checkedState = isCheckedStates.find(
           (checkedState) => checkedState.votingItemID === item.votingItemID
         );
 
         if (mode === CheckboxChoiceType.Single) {
-          // Push unchecked states for all other checkboxes (that were not changed on this call)
+          // Push unchecked states for all other checkboxes (that were not changed on this call).
           if (inputIsInc && checkedState && checkedState.isChecked) {
             item.voteCount += -1;
           }
@@ -71,7 +92,7 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
             isChecked: false,
           });
         } else {
-          // Push unchanged checked state
+          // Push unchanged checked state.
           newIsCheckedStates.push({
             votingItemID: item.votingItemID,
             isChecked: checkedState?.isChecked || false,
@@ -79,25 +100,25 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
         }
       }
     });
-    // Update progress states based on the vote counts
+    // Update progress states based on the vote counts.
     setProgresses(
       votingItemsData.map((item) => ({
         votingItemID: item.votingItemID,
         progress: getProgress(item.votingItemID),
       }))
     );
-    // Update the checked states
+    // Update the checked states.
     setIsCheckedStates(newIsCheckedStates);
   }
 
   /* Finds the voting item state,
-  calculates and returns the progress from its vote count */
+  calculates and returns the progress from its vote count. */
   function getProgress(votingItemID: string) {
     let totalCount = 0;
     let changedItem: VotingItemData | undefined;
 
     votingItemsData.forEach((vItemData) => {
-      if (vItemData.votingItemID === votingItemID) changedItem = vItemData; // Find newly changed voting item
+      if (vItemData.votingItemID === votingItemID) changedItem = vItemData; // Find newly changed voting item.
       totalCount += vItemData.voteCount;
     });
 
@@ -117,7 +138,7 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
   return (
     <section className="poll-item">
       <div className="poll-item-title">{title}</div>
-      <div className="poll-item-content">{content}</div>
+      <div className="poll-item-description">{description}</div>
       <div className="poll-item-voting-container">
         <div className="poll-item-choice-messege">
           {mode === CheckboxChoiceType.Single
@@ -128,7 +149,8 @@ export default function Poll({ title, content, mode, votingItems }: PollProps) {
           <VotingItem
             key={vItem.votingItemID}
             votingItemID={vItem.votingItemID}
-            desc={vItem.desc}
+            votingItemOrdinal={vItem.votingItemOrdinal}
+            description={vItem.description}
             voteCount={
               votingItemsData.find(
                 (vItemData) => vItemData.votingItemID === vItem.votingItemID

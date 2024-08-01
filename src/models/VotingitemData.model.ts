@@ -1,6 +1,7 @@
 export interface VotingItemData {
     votingItemID: string;
-    desc: string;
+    votingItemOrdinal: number;
+    description: string;
     voteCount: number;
 }
 

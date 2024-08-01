@@ -13,12 +13,13 @@ export default function FeedContent() {
       .then((data) => {
         setPolls(data);
         setIsLoading(false);
-        console.log("Finished setting up polls. Received: {}", data);
+        console.log("Finished setting up polls. Received: ", data);
+        console.log("Polls object defined: ", polls);
       })
       .catch((error) => {
         setError(error.message);
         setIsLoading(false);
-        console.log("Error in fetching all user's polls: {}", error);
+        console.log("Error in fetching all user's polls: ", error);
       });
   }, []);
 

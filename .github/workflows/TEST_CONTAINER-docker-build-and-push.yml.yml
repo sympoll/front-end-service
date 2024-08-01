@@ -1,29 +1,21 @@
-name: RELEASE CONTAINER - Build and push Docker official image to Github packages
-on: 
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - '**/README.md'
-      - '.github/workflows/**'
-      - '**/.gitignore'
+name: TEST CONTAINER - Build and push test Docker image to Github packages
+on:
   workflow_dispatch:
 
-
-jobs: 
+jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-      
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      
+
       - name: Log in to GitHub Packages
         run: echo "${{ secrets.PACKAGE_TOKEN }}" | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
 
@@ -38,16 +30,18 @@ jobs:
           key: ${{ runner.os }}-build-${{ github.sha }}  # Cache key based on OS and commit SHA
           restore-keys: |   # Check for existing cache based on previous builds with same OS and SHA
             ${{ runner.os }}-build-
-      
+
+
       - name: Build and push Docker image
         id: docker_build
         uses: docker/build-push-action@v2
         with:
           context: .
           file: Dockerfile
-          push: true
+          push: true   
+      
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}/sympoll-front-end:${{ steps.date.outputs.DATE }}
-            ghcr.io/${{ github.repository }}/sympoll-front-end:latest
+            ghcr.io/${{ github.repository }}/sympoll-front-end-test:${{ steps.date.outputs.DATE }}
+            ghcr.io/${{ github.repository }}/sympoll-front-end-test:latest
           cache-from: type=gha,key=${{ runner.os }}-build-${{ github.sha }}  # Use cached layers based on commit SHA

@@ -4,7 +4,7 @@ import { fetchAllUserGroupsPolls } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 
 export default function FeedContent() {
-  const [polls, setPolls] = useState<PollData[]>([]);
+  const [polls, setPolls] = useState<PollData[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,7 +14,6 @@ export default function FeedContent() {
       .then((data) => {
         console.log("Fetched all user polls data: ", data);
         setPolls(data);
-        setIsLoading(false);
       })
       .catch((error) => {
         console.log("Error in fetching all user's polls: ", error);
@@ -26,6 +25,7 @@ export default function FeedContent() {
   // Log polls state whenever it changes.
   useEffect(() => {
     console.log("Polls object defined: ", polls);
+    setIsLoading(false);
   }, [polls]);
 
   if (isLoading) {
@@ -47,7 +47,7 @@ export default function FeedContent() {
         </div>
       </div>
     );
-  } else if (!polls.length) {
+  } else if (!polls) {
     return (
       <div className="feed-content-error-fetching-polls">
         <div className="feed-content-error-fetching-polls-message">

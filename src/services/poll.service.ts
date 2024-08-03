@@ -23,7 +23,7 @@ export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollDat
                   },
                   withCredentials: true,
                 })
-      .post(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_MULTIPLE_GROUP_IDS, { groupIds });
+      .post(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_MULTIPLE_GROUP_IDS, groupIds);
 
     return response.data;
   } catch(err) {

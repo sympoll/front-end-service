@@ -18,7 +18,6 @@ export default function FeedContent() {
   const { groupId } = useParams();
 
   useEffect(() => {
-    console.log(groupId);
     if (!groupId) {
       fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
         .then((data) => {

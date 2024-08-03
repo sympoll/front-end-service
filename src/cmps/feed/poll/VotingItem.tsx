@@ -1,11 +1,10 @@
-import React, { useState } from "react";
 import VotingCheckbox from "./VotingCheckbox";
 import VotingBar from "./VotingBar";
-import { CheckboxChoiceType } from "./CheckboxChoiceType";
 
 interface VotingItemProps {
   votingItemID: string;
-  desc: string;
+  votingItemOrdinal: number;
+  description: string;
   voteCount: number;
   progress: number;
   isChecked: boolean;
@@ -13,7 +12,7 @@ interface VotingItemProps {
 }
 export default function VotingItem({
   votingItemID,
-  desc,
+  description: desc,
   voteCount,
   progress,
   isChecked,

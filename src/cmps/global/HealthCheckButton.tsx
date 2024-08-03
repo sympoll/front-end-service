@@ -12,43 +12,6 @@ function HealthCheckButton() {
     import.meta.env.VITE_API_GATEWAY_URL +
     import.meta.env.VITE_POLL_SERVICE_URL;
 
-  // USE THIS INSTEAD OF FETCH:
-  const [healthData, setHealthData] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const tempp = 2;
-  
-  // async function fetchHealth(backendUrl: string) {
-  //   try {
-  //     const response = await axios
-  //       .create({
-  //         baseURL: "http://backend.default.svc.cluster.local:8081/api/poll",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         withCredentials: true,
-  //       })
-  //       .get("/health");
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error("Error fetching health: ", error);
-  //     throw error;
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   fetchHealth(backendUrl)
-  //     .then((data) => {
-  //       setHealthData(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       setError(error.message);
-  //       setLoading(false);
-  //     });
-  // }, [backendUrl]);
-  // // END TEST
-
   const fetchHealthStatus = async () => {
     try {
       console.log("Try to fetch from URL: " + pollServiceUrl + "/health");

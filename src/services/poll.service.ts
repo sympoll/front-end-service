@@ -23,7 +23,7 @@ export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollDat
                   },
                   withCredentials: true,
                 })
-      .post(import.meta.env.VITE_POLL_SERVICE_GET_ALL_POLLS, { groupIds });
+      .post(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_MULTIPLE_GROUP_IDS, { groupIds });
 
     return response.data;
   } catch(err) {
@@ -44,7 +44,7 @@ export async function fetchPollsByGroupId(groupId : number){
                   },
                   withCredentials: true,
                 })
-      .get(import.meta.env.VITE_POLL_SERVICE_GET_ALL_POLLS, { params: groupId } );
+      .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, { params: groupId } );
       
     return response.data;
   } catch(err) {

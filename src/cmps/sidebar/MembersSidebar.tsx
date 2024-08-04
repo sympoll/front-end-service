@@ -1,5 +1,4 @@
 import React from "react";
-import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import MembersSidebarItem from "./MembersSidebarItem";
 import PersonIcon from "@mui/icons-material/Person";
 

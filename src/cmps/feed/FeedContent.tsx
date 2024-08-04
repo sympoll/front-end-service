@@ -7,6 +7,7 @@ import {
 import { PollData } from "../../models/PollData.model";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useParams, matchPath, useLocation } from "react-router-dom";
+import { getSamplePolls } from "../../services/demo.data.service";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -57,15 +58,17 @@ export default function FeedContent() {
     return <LoadingAnimation />;
   } else if (!polls) {
     return (
-      <div className="feed-content-error-fetching-polls">
+      <div className="feed-content-error-fetching-polls-container">
         <div className="feed-content-error-fetching-polls-message">
-          ERROR: {error}
+          Error Fetching Polls...
+          <br />
+          {error}
         </div>
       </div>
     );
   } else {
     return (
-      <div className="feed-content-container">
+      <div className={`feed-content-container ${isLoading ? "down" : "up"}`}>
         {polls.map((poll) => (
           <Poll
             key={poll.pollId}

@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
-import {
-  fetchAllUserGroupsPolls,
-  fetchPollsByGroupId,
-} from "../../services/poll.service";
+import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
-import LoadingAnimation from "../global/LoadingAnimation";
+import FeedLoadingAnimation from "./messege/FeedLoadingAnimation";
+import FeedErrorMessage from "./messege/FeedErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 
@@ -53,37 +51,47 @@ export default function FeedContent() {
     }
   }, [polls]);
 
-  if (isLoading) {
-    return <LoadingAnimation />;
-  } else if (!polls) {
-    return (
-      <div className="feed-content-error-fetching-polls-container">
-        <div className="feed-content-error-fetching-polls-message">
-          Error Fetching Polls...
-          <br />
-          {error}
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="feed-content-container">
-        {polls.map((poll) => (
-          <Poll
-            key={poll.pollId}
-            pollId={poll.pollId}
-            title={poll.title}
-            description={poll.description}
-            nofAnswersAllowed={poll.nofAnswersAllowed}
-            creatorId={poll.creatorId}
-            groupId={poll.groupId}
-            timeCreated={poll.timeCreated}
-            timeUpdated={poll.timeUpdated}
-            deadline={poll.deadline}
-            votingItems={poll.votingItems}
-          />
-        ))}
-      </div>
-    );
+  // Use for testing animations/frontend stuff that don't require the server.
+  // return (
+  //   <div className="feed-content-container">
+  //     {getSamplePolls().map((poll) => (
+  //       <Poll
+  //         key={poll.pollId}
+  //         pollId={poll.pollId}
+  //         title={poll.title}
+  //         description={poll.description}
+  //         nofAnswersAllowed={poll.nofAnswersAllowed}
+  //         creatorId={poll.creatorId}
+  //         groupId={poll.groupId}
+  //         timeCreated={poll.timeCreated}
+  //         timeUpdated={poll.timeUpdated}
+  //         deadline={poll.deadline}
+  //         votingItems={poll.votingItems}
+  //       />
+  //     ))}
+  //   </div>
+  // );
+  if (isLoading) return <FeedLoadingAnimation />;
+  if (!polls) {
+    return <FeedErrorMessage error={error} />;
   }
+  return (
+    <div className="feed-content-container">
+      {polls.map((poll) => (
+        <Poll
+          key={poll.pollId}
+          pollId={poll.pollId}
+          title={poll.title}
+          description={poll.description}
+          nofAnswersAllowed={poll.nofAnswersAllowed}
+          creatorId={poll.creatorId}
+          groupId={poll.groupId}
+          timeCreated={poll.timeCreated}
+          timeUpdated={poll.timeUpdated}
+          deadline={poll.deadline}
+          votingItems={poll.votingItems}
+        />
+      ))}
+    </div>
+  );
 }

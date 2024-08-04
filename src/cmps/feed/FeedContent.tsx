@@ -54,7 +54,7 @@ export default function FeedContent() {
       // Delay setting isLoading to false to allow the transition to occur.
       setTimeout(() => {
         setIsLoading(false);
-      }, 20);
+      }, 1000);
     }
   }, [polls]);
 

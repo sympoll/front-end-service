@@ -13,9 +13,6 @@ export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  const location = useLocation();
-
   const { groupId } = useParams();
 
   useEffect(() => {
@@ -50,11 +47,7 @@ export default function FeedContent() {
     // Only if the polls array is defined, end the loading phase.
     if (polls) {
       console.log("Polls object defined: ", polls);
-
-      // Delay setting isLoading to false to allow the transition to occur.
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 1000);
+      setIsLoading(false);
     }
   }, [polls]);
 
@@ -72,7 +65,7 @@ export default function FeedContent() {
     );
   } else {
     return (
-      <div className={`feed-content-container ${isLoading ? "down" : "up"}`}>
+      <div className="feed-content-container">
         {polls.map((poll) => (
           <Poll
             key={poll.pollId}

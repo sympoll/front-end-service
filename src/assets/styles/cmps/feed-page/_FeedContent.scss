@@ -1,12 +1,15 @@
 .feed-content-container {
   @include mid-page-content-container;
-  transition: 1.2s ease-in-out transform;
-}
-.feed-content-container.down {
-  transform: translateY(100%);
-}
-.feed-content-container.up {
-  transform: translateY(0%);
+  animation: slideUp 1.2s ease-in-out forwards;
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0%);
+    }
+  }
 }
 
 @mixin feed-item {

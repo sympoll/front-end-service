@@ -50,7 +50,11 @@ export default function FeedContent() {
     // Only if the polls array is defined, end the loading phase.
     if (polls) {
       console.log("Polls object defined: ", polls);
-      setIsLoading(false);
+
+      // Delay setting isLoading to false to allow the transition to occur.
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 20);
     }
   }, [polls]);
 

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { CheckboxChoiceType } from "../cmps/feed/poll/CheckboxChoiceType"
 import { PollData } from "../models/PollData.model";
 
 const pollServiceUrl =

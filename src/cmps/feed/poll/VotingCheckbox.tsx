@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { CheckboxChoiceType } from "./CheckboxChoiceType";
 
 interface VotingCheckboxProps {
   votingItemId: string;

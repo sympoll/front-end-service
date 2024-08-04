@@ -112,7 +112,7 @@ export default function Poll({
         };
 
       // This item was not clicked
-      if (nofAnswersAllowed === 1 && inputIsInc) {
+      if (isSingleChoice() && inputIsInc) {
         // Uncheck all previously checked checkboxes
         return {
           votingItemId: item.votingItemId,

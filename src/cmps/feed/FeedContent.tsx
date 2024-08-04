@@ -1,26 +1,48 @@
 import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
-import { fetchAllUserGroupsPolls } from "../../services/poll.service";
+import {
+  fetchAllUserGroupsPolls,
+  fetchPollsByGroupId,
+} from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
+import LoadingAnimation from "../global/LoadingAnimation";
+import { useParams, matchPath, useLocation } from "react-router-dom";
+import { getSamplePolls } from "../../services/demo.data.service";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { groupId } = useParams();
 
-  // Fetch all polls of the user's groups.
   useEffect(() => {
-    fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
-      .then((data) => {
-        console.log("Fetched all user polls data: ", data);
-        setPolls(data);
-      })
-      .catch((error) => {
-        console.log("Error in fetching all user's polls: ", error);
-        setError(error.message);
-        setIsLoading(false);
-      });
-  }, []);
+    setIsLoading(true); // Make sure the initial state of isLoading is true.
+
+    if (!groupId) {
+      fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
+        .then((data) => {
+          console.log("Fetched all user polls data: ", data);
+          setPolls(data);
+        })
+        .catch((error) => {
+          console.log("Error in fetching all user's polls: ", error);
+          setError(error.message);
+          setIsLoading(false);
+        });
+    } else {
+      // Search for the group specified in the path.
+      fetchPollsByGroupId(groupId)
+        .then((data) => {
+          console.log("Fetched all group polls data: ", data);
+          setPolls(data);
+        })
+        .catch((error) => {
+          console.log("Error in fetching group polls: ", error);
+          setError(error.message);
+          setIsLoading(false);
+        });
+    }
+  }, [groupId]);
 
   // Log polls state whenever it changes.
   useEffect(() => {
@@ -32,29 +54,14 @@ export default function FeedContent() {
   }, [polls]);
 
   if (isLoading) {
-    return (
-      <div className="feed-content-loading-container">
-        <div className="feed-content-loading-message">
-          Feed is loading
-          <span className="dots">
-            <span className="dot1">.</span>
-            <span className="dot2">.</span>
-            <span className="dot3">.</span>
-          </span>
-        </div>
-        <div className="feed-content-loading-icon">
-          <div className="lds-ripple">
-            <div></div>
-            <div></div>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingAnimation />;
   } else if (!polls) {
     return (
-      <div className="feed-content-error-fetching-polls">
+      <div className="feed-content-error-fetching-polls-container">
         <div className="feed-content-error-fetching-polls-message">
-          ERROR: {error}
+          Error Fetching Polls...
+          <br />
+          {error}
         </div>
       </div>
     );

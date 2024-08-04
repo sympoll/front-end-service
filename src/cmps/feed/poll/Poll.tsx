@@ -7,6 +7,7 @@ import {
   VotingItemProgress,
 } from "../../../models/VotingitemData.model";
 
+
 interface PollProps {
   pollId: string;
   title: string;
@@ -26,7 +27,6 @@ export default function Poll({
   description,
   nofAnswersAllowed,
   creatorId,
-  groupId,
   timeCreated,
   timeUpdated,
   deadline,
@@ -40,7 +40,7 @@ export default function Poll({
   const [votingItemsData, setVotingItemsData] =
     useState<VotingItemData[]>(votingItems);
 
-  /* States array of the checked state of each voting item (checked/unchecked) */
+    /* States array of the checked state of each voting item (checked/unchecked) */
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
     []
   );

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import VotingItem from "./VotingItem";
-import { CheckboxChoiceType } from "./CheckboxChoiceType";
 import {
   VotingItemData,
   VotingItemIsChecked,
-  VotingItemProgress,
+  VotingItemProgress
 } from "../../../models/VotingitemData.model";
-
 
 interface PollProps {
   pollId: string;
@@ -27,111 +25,131 @@ export default function Poll({
   description,
   nofAnswersAllowed,
   creatorId,
+  groupId,
   timeCreated,
   timeUpdated,
   deadline,
-  votingItems,
+  votingItems
 }: PollProps) {
-  const mode =
-    nofAnswersAllowed > 1
-      ? CheckboxChoiceType.Multiple
-      : CheckboxChoiceType.Single; // TODO: Remove this, update to limit the nof answers allowed.
+  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
 
-  const [votingItemsData, setVotingItemsData] =
-    useState<VotingItemData[]>(votingItems);
+  // Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
 
-    /* States array of the checked state of each voting item (checked/unchecked) */
-  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
-    []
-  );
-
-  /* Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
-  initialized using votingItemsData states array */
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
-      votingItemID: vItemData.votingItemId,
-      progress: getProgress(vItemData.votingItemId),
+      votingItemId: vItemData.votingItemId,
+      progress: getProgress(vItemData.votingItemId)
     }))
-  );
+  ); // initialized using votingItemsData states array
 
-  /* On checkbox click,
-  progress and voting count is updated */
-  function handleNewProgress(inputID: string, inputIsInc: boolean) {
-    let newIsCheckedStates: VotingItemIsChecked[] = [];
+  const countCheckedItems = () => {
+    return isCheckedStates.filter((item) => item.isChecked).length;
+  }; // Function to count the number of items with isChecked === true
 
-    votingItemsData.map((item) => {
-      // Find the newly clicked checkbox.
-      if (item.votingItemId === inputID) {
-        if (inputIsInc) {
-          item.voteCount += 1;
-          newIsCheckedStates.push({
-            votingItemID: item.votingItemId,
-            isChecked: true,
-          });
-        } else {
-          item.voteCount += -1;
-          newIsCheckedStates.push({
-            votingItemID: item.votingItemId,
-            isChecked: false,
-          });
-        }
-      } else {
-        // Uncheck previous checked checkboxes.
-        const checkedState = isCheckedStates.find(
-          (checkedState) => checkedState.votingItemID === item.votingItemId
-        );
+  const isSingleChoice = () => {
+    return nofAnswersAllowed === 1;
+  }; // true if the poll is single choice, false otherwise.
 
-        if (mode === CheckboxChoiceType.Single) {
-          // Push unchecked states for all other checkboxes (that were not changed on this call).
-          if (inputIsInc && checkedState && checkedState.isChecked) {
-            item.voteCount += -1;
-          }
-
-          newIsCheckedStates.push({
-            votingItemID: item.votingItemId,
-            isChecked: false,
-          });
-        } else {
-          // Push unchanged checked state.
-          newIsCheckedStates.push({
-            votingItemID: item.votingItemId,
-            isChecked: checkedState?.isChecked || false,
-          });
-        }
-      }
-    });
-    // Update progress states based on the vote counts.
+  // Update progresses whenever votingItemsData changes
+  useEffect(() => {
     setProgresses(
       votingItemsData.map((item) => ({
-        votingItemID: item.votingItemId,
-        progress: getProgress(item.votingItemId),
+        votingItemId: item.votingItemId,
+        progress: getProgress(item.votingItemId)
       }))
     );
-    // Update the checked states.
-    setIsCheckedStates(newIsCheckedStates);
+  }, [votingItemsData]);
+
+  // Don't change the states if the user has already chosen the maximum amount of voting choices,
+  // and is trying to choose another (only on a multiple choices poll)
+  const shouldPreventProgressUpdate = (inputIsInc: boolean) => {
+    return !isSingleChoice() && inputIsInc && nofAnswersAllowed === countCheckedItems();
+  };
+
+  // On checkbox click, progress and voting count is updated
+  function handleNewProgress(inputId: string, inputIsInc: boolean) {
+    if (shouldPreventProgressUpdate(inputIsInc)) return;
+
+    // Set new states:
+    setIsCheckedStates(getUpdatedCheckedStates(inputId, inputIsInc));
+    setVotingItemsData(getUpdatedVoteCounts(inputId, inputIsInc));
   }
 
-  /* Finds the voting item state,
-  calculates and returns the progress from its vote count. */
-  function getProgress(votingItemID: string) {
+  // Update vote counts of the voting items
+  const getUpdatedVoteCounts = (inputId: string, inputIsInc: boolean) => {
+    return votingItemsData.map((item) => {
+      // This item is was clicked
+      if (item.votingItemId === inputId)
+        return {
+          ...item,
+          voteCount: inputIsInc ? item.voteCount + 1 : item.voteCount - 1
+        };
+
+      // This item was not clicked
+      if (isSingleChoice() && inputIsInc) {
+        const checkedState = isCheckedStates.find(
+          (checkedState) => checkedState.votingItemId === item.votingItemId
+        );
+
+        if (checkedState && checkedState.isChecked) {
+          return { ...item, voteCount: item.voteCount - 1 };
+        }
+      }
+
+      return item; // On multiple choice, there is no need to change the vote count of non-clicked items
+    });
+  };
+
+  // Update the checked states of the voting items
+  const getUpdatedCheckedStates = (inputId: string, inputIsInc: boolean) => {
+    return votingItemsData.map((item) => {
+      // This item is was clicked
+      if (item.votingItemId === inputId)
+        return {
+          votingItemId: item.votingItemId,
+          isChecked: inputIsInc
+        };
+
+      // This item was not clicked
+      if (nofAnswersAllowed === 1 && inputIsInc) {
+        // Uncheck all previously checked checkboxes
+        return {
+          votingItemId: item.votingItemId,
+          isChecked: false
+        };
+      }
+
+      // Don't change the item
+      const checkedState = isCheckedStates.find(
+        (checkedState) => checkedState.votingItemId === item.votingItemId
+      );
+      return {
+        votingItemId: item.votingItemId,
+        isChecked: getIsChecked(item.votingItemId)
+      };
+    });
+  };
+
+  //Finds the voting item state, calculates and returns the progress from its vote count
+  function getProgress(votingItemId: string) {
     let totalCount = 0;
     let changedItem: VotingItemData | undefined;
 
     votingItemsData.forEach((vItemData) => {
-      if (vItemData.votingItemId === votingItemID) changedItem = vItemData; // Find newly changed voting item.
+      if (vItemData.votingItemId === votingItemId) changedItem = vItemData; // Find newly changed voting item
       totalCount += vItemData.voteCount;
     });
 
-    if (changedItem)
-      return (changedItem.voteCount / (totalCount ? totalCount : 1)) * 100;
+    if (changedItem) return (changedItem.voteCount / (totalCount ? totalCount : 1)) * 100;
     return 0;
   }
 
-  function getIsChecked(votingItemID: string) {
+  // true if the voting item is checked, false if not
+  function getIsChecked(votingItemId: string) {
     return (
-      isCheckedStates.find(
-        (isCheckedState) => isCheckedState.votingItemID === votingItemID
-      )?.isChecked || false
+      isCheckedStates.find((isCheckedState) => isCheckedState.votingItemId === votingItemId)
+        ?.isChecked || false
     );
   }
 
@@ -141,9 +159,9 @@ export default function Poll({
       <div className="poll-item-description">{description}</div>
       <div className="poll-item-voting-container">
         <div className="poll-item-choice-messege">
-          {mode === CheckboxChoiceType.Single
+          {isSingleChoice()
             ? "Select one"
-            : "Select one or more"}
+            : "Select up to " + nofAnswersAllowed + " voting options"}
         </div>
         {votingItems.map((vItem) => (
           <VotingItem
@@ -152,19 +170,15 @@ export default function Poll({
             votingItemOrdinal={vItem.votingItemOrdinal}
             description={vItem.description}
             voteCount={
-              votingItemsData.find(
-                (vItemData) => vItemData.votingItemId === vItem.votingItemId
-              )?.voteCount || 0
+              votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                ?.voteCount || 0
             }
             progress={
-              progresses.find(
-                (pItem) => pItem.votingItemID === vItem.votingItemId
-              )?.progress || 0
+              progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
             }
             isChecked={
-              isCheckedStates.find(
-                (cItem) => cItem.votingItemID === vItem.votingItemId
-              )?.isChecked || false
+              isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                ?.isChecked || false
             }
             handleNewProgress={handleNewProgress}
           />

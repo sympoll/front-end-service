@@ -6,11 +6,11 @@ export interface VotingItemData {
 }
 
 export interface VotingItemProgress {
-    votingItemID: string;
+    votingItemId: string;
     progress: number;
 }
 
 export interface VotingItemIsChecked {
-    votingItemID: string;
+    votingItemId: string;
     isChecked: boolean;
 }

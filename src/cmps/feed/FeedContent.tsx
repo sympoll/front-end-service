@@ -53,32 +53,9 @@ export default function FeedContent() {
   }, [polls]);
 
   // Use for testing animations/frontend stuff that don't require the server.
-  return (
-    <div className="feed-content-container">
-      {getSamplePolls().map((poll) => (
-        <Poll
-          key={poll.pollId}
-          pollId={poll.pollId}
-          title={poll.title}
-          description={poll.description}
-          nofAnswersAllowed={poll.nofAnswersAllowed}
-          creatorId={poll.creatorId}
-          groupId={poll.groupId}
-          timeCreated={poll.timeCreated}
-          timeUpdated={poll.timeUpdated}
-          deadline={poll.deadline}
-          votingItems={poll.votingItems}
-        />
-      ))}
-    </div>
-  );
-  // if (isLoading) return <FeedLoadingAnimation />;
-  // if (!polls) {
-  //   return <FeedErrorMessage error={error} />;
-  // }
   // return (
   //   <div className="feed-content-container">
-  //     {polls.map((poll) => (
+  //     {getSamplePolls().map((poll) => (
   //       <Poll
   //         key={poll.pollId}
   //         pollId={poll.pollId}
@@ -95,4 +72,27 @@ export default function FeedContent() {
   //     ))}
   //   </div>
   // );
+  if (isLoading) return <FeedLoadingAnimation />;
+  if (!polls) {
+    return <FeedErrorMessage error={error} />;
+  }
+  return (
+    <div className="feed-content-container">
+      {polls.map((poll) => (
+        <Poll
+          key={poll.pollId}
+          pollId={poll.pollId}
+          title={poll.title}
+          description={poll.description}
+          nofAnswersAllowed={poll.nofAnswersAllowed}
+          creatorId={poll.creatorId}
+          groupId={poll.groupId}
+          timeCreated={poll.timeCreated}
+          timeUpdated={poll.timeUpdated}
+          deadline={poll.deadline}
+          votingItems={poll.votingItems}
+        />
+      ))}
+    </div>
+  );
 }

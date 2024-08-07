@@ -168,19 +168,29 @@ export default function Poll({
   return (
     <section className="poll-container">
       {
-        // Display Group info only on specific group polls
-        isSpecificGroup && (
-          <div className="poll-group-container">
-            <div className="poll-group-title">{groupId}</div>
-            <div className="poll-group-title2">
-              <div className="poll-group-creator-name">
+        // Display Group info only on all groups tab
+        isSpecificGroup ? (
+          <div className="poll-info-title-container">
+            <div className="poll-info-title-row1">
+              {
+                //TODO: change to creator name
+                creatorId
+              }
+            </div>
+            <div className="poll-info-title-row2">{getTimeAgo(timeCreated)}</div>
+          </div>
+        ) : (
+          <div className="poll-info-title-container">
+            <div className="poll-info-title-row1">{groupId}</div>
+            <div className="poll-info-title-row2">
+              <div className="poll-info-title-creator-name">
                 {
                   //TODO: change to creator name
                   creatorId
                 }
               </div>
-              <div className="poll-group-title-separator">•</div>
-              <div className="poll-group-time-posted">{getTimeAgo(timeCreated)}</div>
+              <div className="poll-info-title-separator">•</div>
+              <div className="poll-info-title-time-posted">{getTimeAgo(timeCreated)}</div>
             </div>
           </div>
         )

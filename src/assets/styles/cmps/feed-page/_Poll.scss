@@ -30,22 +30,22 @@
   font-weight: 600;
 }
 
-.poll-group-container {
+.poll-info-title-container {
   display: flex;
   flex-direction: column;
   height: fit-content;
-  gap: 2px;
   padding: 0;
   margin: 0;
   margin-bottom: 8px;
+  gap: 4px;
 }
 
-.poll-group-title {
+.poll-info-title-row1 {
   font-size: larger;
   font-weight: bolder;
 }
 
-.poll-group-title2 {
+.poll-info-title-row2 {
   display: flex;
   color: $mainBgColor1;
   flex-direction: row;
@@ -58,6 +58,6 @@
   border-bottom: 1px solid $grayedOutFontColor;
 }
 
-.poll-group-title-separator {
+.poll-info-title-separator {
   font-size: 70%;
 }

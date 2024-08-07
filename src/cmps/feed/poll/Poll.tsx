@@ -68,12 +68,14 @@ export default function Poll({
   };
 
   // On checkbox click, progress and voting count is updated
+  // Returns true if changed progress, false otherwise
   function handleNewProgress(inputId: string, inputIsInc: boolean) {
-    if (shouldPreventProgressUpdate(inputIsInc)) return;
+    if (shouldPreventProgressUpdate(inputIsInc)) return false;
 
     // Set new states:
     setIsCheckedStates(getUpdatedCheckedStates(inputId, inputIsInc));
     setVotingItemsData(getUpdatedVoteCounts(inputId, inputIsInc));
+    return true;
   }
 
   // Update vote counts of the voting items

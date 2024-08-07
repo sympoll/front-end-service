@@ -9,14 +9,28 @@ interface VotingCheckboxProps {
 export default function VotingCheckbox({
   votingItemId,
   isChecked,
-  handleNewProgress,
+  handleNewProgress
 }: VotingCheckboxProps) {
+  const [shakeClass, setShakeClass] = useState("");
+  const [animationCooldown, setAnimationCooldown] = useState(false);
+
   const handleCheckboxChange = () => {
-    handleNewProgress(votingItemId, !isChecked);
+    if (!handleNewProgress(votingItemId, !isChecked)) {
+      if (animationCooldown) return; // Animation did not complete, wait for the cooldown to end
+
+      // Trigger cannot vote animation
+      setShakeClass("shake");
+      setAnimationCooldown(true);
+
+      setTimeout(() => {
+        setShakeClass("");
+        setAnimationCooldown(false);
+      }, 820); // Clear the shake class after the animation
+    }
   };
 
   return (
-    <div className="voting-checkbox-container">
+    <div className={`voting-checkbox-container ${shakeClass}`}>
       <div className="cbx">
         <input
           id={votingItemId}
@@ -33,11 +47,7 @@ export default function VotingCheckbox({
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <filter id="goo-12">
-            <feGaussianBlur
-              result="blur"
-              stdDeviation="4"
-              in="SourceGraphic"
-            ></feGaussianBlur>
+            <feGaussianBlur result="blur" stdDeviation="4" in="SourceGraphic"></feGaussianBlur>
             <feColorMatrix
               result="goo-12"
               values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -7"

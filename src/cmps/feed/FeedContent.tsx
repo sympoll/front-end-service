@@ -68,10 +68,12 @@ export default function FeedContent() {
   //         timeUpdated={poll.timeUpdated}
   //         deadline={poll.deadline}
   //         votingItems={poll.votingItems}
+  //         isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
   //       />
   //     ))}
   //   </div>
   // );
+
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
     return <FeedErrorMessage error={error} />;
@@ -91,6 +93,7 @@ export default function FeedContent() {
           timeUpdated={poll.timeUpdated}
           deadline={poll.deadline}
           votingItems={poll.votingItems}
+          isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
         />
       ))}
     </div>

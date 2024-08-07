@@ -13,7 +13,8 @@
 }
 
 @mixin feed-item {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   background-color: $secondaryBgColor0;
   border-radius: 10px;
   justify-content: start;

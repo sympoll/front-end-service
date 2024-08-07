@@ -6,6 +6,7 @@ import {
   VotingItemProgress
 } from "../../../models/VotingitemData.model";
 import ErrorPopup from "../../popup/ErrorPopup";
+import { getTimeAgo } from "../../../services/poll.service";
 
 interface PollProps {
   pollId: string;
@@ -18,6 +19,7 @@ interface PollProps {
   timeUpdated: string;
   deadline: string;
   votingItems: VotingItemData[];
+  isSpecificGroup: boolean;
 }
 
 export default function Poll({
@@ -30,7 +32,8 @@ export default function Poll({
   timeCreated,
   timeUpdated,
   deadline,
-  votingItems
+  votingItems,
+  isSpecificGroup
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
@@ -164,6 +167,24 @@ export default function Poll({
 
   return (
     <section className="poll-container">
+      {
+        // Display Group info only on specific group polls
+        isSpecificGroup && (
+          <div className="poll-group-container">
+            <div className="poll-group-title">{groupId}</div>
+            <div className="poll-group-title2">
+              <div className="poll-group-creator-name">
+                {
+                  //TODO: change to creator name
+                  creatorId
+                }
+              </div>
+              <div className="poll-group-title-separator">•</div>
+              <div className="poll-group-time-posted">{getTimeAgo(timeCreated)}</div>
+            </div>
+          </div>
+        )
+      }
       <div className="poll-title">{title}</div>
       <div className="poll-description">{description}</div>
       <div className="poll-voting-container">
@@ -172,27 +193,30 @@ export default function Poll({
             ? "Select one"
             : "Select up to " + nofAnswersAllowed + " voting options"}
         </div>
-        {votingItems.map((vItem) => (
-          <VotingItem
-            key={vItem.votingItemId}
-            votingItemID={vItem.votingItemId}
-            votingItemOrdinal={vItem.votingItemOrdinal}
-            description={vItem.description}
-            voteCount={
-              votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
-                ?.voteCount || 0
-            }
-            progress={
-              progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
-            }
-            isChecked={
-              isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
-                ?.isChecked || false
-            }
-            handleNewProgress={handleNewProgress}
-            showErrorPopup={showErrorPopup}
-          />
-        ))}
+        {
+          // Add voting items to the poll
+          votingItems.map((vItem) => (
+            <VotingItem
+              key={vItem.votingItemId}
+              votingItemID={vItem.votingItemId}
+              votingItemOrdinal={vItem.votingItemOrdinal}
+              description={vItem.description}
+              voteCount={
+                votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                  ?.voteCount || 0
+              }
+              progress={
+                progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
+              }
+              isChecked={
+                isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                  ?.isChecked || false
+              }
+              handleNewProgress={handleNewProgress}
+              showErrorPopup={showErrorPopup}
+            />
+          ))
+        }
       </div>
       <p className="poll-error-message">
         {isErrorPopupVisible && (

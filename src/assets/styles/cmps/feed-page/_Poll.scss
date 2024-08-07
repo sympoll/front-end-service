@@ -3,12 +3,12 @@
 }
 
 .poll-title {
-  width: 100%;
+  display: block;
   font-weight: bold;
 }
 
 .poll-description {
-  width: 100%;
+  display: block;
 }
 
 .poll-voting-container {
@@ -28,4 +28,36 @@
   color: $grayedOutFontColor;
   font-size: 90%;
   font-weight: 600;
+}
+
+.poll-group-container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  gap: 2px;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.poll-group-title {
+  font-size: larger;
+  font-weight: bolder;
+}
+
+.poll-group-title2 {
+  display: flex;
+  color: $mainBgColor1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: small;
+  font-weight: normal;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid $grayedOutFontColor;
+}
+
+.poll-group-title-separator {
+  font-size: 70%;
 }

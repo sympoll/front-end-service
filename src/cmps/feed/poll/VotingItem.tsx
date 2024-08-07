@@ -9,6 +9,7 @@ interface VotingItemProps {
   progress: number;
   isChecked: boolean;
   handleNewProgress: Function;
+  showErrorPopup: () => void;
 }
 export default function VotingItem({
   votingItemID,
@@ -17,6 +18,7 @@ export default function VotingItem({
   progress,
   isChecked,
   handleNewProgress,
+  showErrorPopup
 }: VotingItemProps) {
   return (
     <div className="voting-item-container">
@@ -24,6 +26,7 @@ export default function VotingItem({
         votingItemId={votingItemID}
         isChecked={isChecked}
         handleNewProgress={handleNewProgress}
+        showErrorPopup={showErrorPopup}
       />
       <VotingBar desc={desc} voteCount={voteCount} progress={progress} />
     </div>

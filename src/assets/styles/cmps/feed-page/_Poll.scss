@@ -1,24 +1,30 @@
-.poll-item {
+.poll-container {
   @include feed-item;
 }
 
-.poll-item-title {
+.poll-title {
   width: 100%;
   font-weight: bold;
 }
 
-.poll-item-description {
+.poll-description {
   width: 100%;
 }
 
-.poll-item-voting-container {
+.poll-voting-container {
   display: grid;
   margin-top: 10px;
   margin-bottom: 8px;
   grid-gap: 10px;
 }
 
-.poll-item-choice-messege {
+.poll-voting-choice-messege {
+  color: $grayedOutFontColor;
+  font-size: 90%;
+  font-weight: 600;
+}
+
+.poll-error-messege {
   color: $grayedOutFontColor;
   font-size: 90%;
   font-weight: 600;

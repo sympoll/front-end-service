@@ -5,6 +5,7 @@ import {
   VotingItemIsChecked,
   VotingItemProgress
 } from "../../../models/VotingitemData.model";
+import ErrorPopup from "../../popup/ErrorPopup";
 
 interface PollProps {
   pollId: string;
@@ -33,8 +34,14 @@ export default function Poll({
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
 
-  // Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
 
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
@@ -156,11 +163,11 @@ export default function Poll({
   }
 
   return (
-    <section className="poll-item">
-      <div className="poll-item-title">{title}</div>
-      <div className="poll-item-description">{description}</div>
-      <div className="poll-item-voting-container">
-        <div className="poll-item-choice-messege">
+    <section className="poll-container">
+      <div className="poll-title">{title}</div>
+      <div className="poll-description">{description}</div>
+      <div className="poll-voting-container">
+        <div className="poll-voting-choice-messege">
           {isSingleChoice()
             ? "Select one"
             : "Select up to " + nofAnswersAllowed + " voting options"}
@@ -183,9 +190,18 @@ export default function Poll({
                 ?.isChecked || false
             }
             handleNewProgress={handleNewProgress}
+            showErrorPopup={showErrorPopup}
           />
         ))}
       </div>
+      <p className="poll-error-message">
+        {isErrorPopupVisible && (
+          <ErrorPopup
+            message="Already reached the limit of votes!"
+            closeErrorPopup={closeErrorPopup}
+          />
+        )}
+      </p>
     </section>
   );
 }

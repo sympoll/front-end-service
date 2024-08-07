@@ -4,18 +4,22 @@ interface VotingCheckboxProps {
   votingItemId: string;
   isChecked: boolean;
   handleNewProgress: Function;
+  showErrorPopup: () => void;
 }
 
 export default function VotingCheckbox({
   votingItemId,
   isChecked,
-  handleNewProgress
+  handleNewProgress,
+  showErrorPopup
 }: VotingCheckboxProps) {
   const [shakeClass, setShakeClass] = useState("");
   const [animationCooldown, setAnimationCooldown] = useState(false);
 
   const handleCheckboxChange = () => {
     if (!handleNewProgress(votingItemId, !isChecked)) {
+      showErrorPopup();
+
       if (animationCooldown) return; // Animation did not complete, wait for the cooldown to end
 
       // Trigger cannot vote animation

@@ -1,25 +1,63 @@
-.poll-item {
+.poll-container {
   @include feed-item;
 }
 
-.poll-item-title {
-  width: 100%;
+.poll-title {
+  display: block;
   font-weight: bold;
 }
 
-.poll-item-description {
-  width: 100%;
+.poll-description {
+  display: block;
 }
 
-.poll-item-voting-container {
+.poll-voting-container {
   display: grid;
   margin-top: 10px;
   margin-bottom: 8px;
   grid-gap: 10px;
 }
 
-.poll-item-choice-messege {
+.poll-voting-choice-messege {
   color: $grayedOutFontColor;
   font-size: 90%;
   font-weight: 600;
+}
+
+.poll-error-messege {
+  color: $grayedOutFontColor;
+  font-size: 90%;
+  font-weight: 600;
+}
+
+.poll-info-title-container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 8px;
+  gap: 4px;
+}
+
+.poll-info-title-row1 {
+  font-size: larger;
+  font-weight: bolder;
+}
+
+.poll-info-title-row2 {
+  display: flex;
+  color: $mainBgColor1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: small;
+  font-weight: normal;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid $grayedOutFontColor;
+}
+
+.poll-info-title-separator {
+  font-size: 70%;
 }

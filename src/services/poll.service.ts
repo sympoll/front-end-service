@@ -53,3 +53,29 @@ export async function fetchPollsByGroupId(groupId : string){
     throw err;
   }
 }
+
+// Convert timestamp to how many hours/days passed since time posted
+export function getTimeAgo(postedTime: string): string {
+  const now = new Date();
+  const postedDate = new Date(postedTime);
+  const diffInSeconds = Math.floor((now.getTime() - postedDate.getTime()) / 1000);
+
+  const secondsInMinute = 60;
+  const secondsInHour = 60 * secondsInMinute;
+  const secondsInDay = 24 * secondsInHour;
+
+  const days = Math.floor(diffInSeconds / secondsInDay);
+  const hours = Math.floor((diffInSeconds % secondsInDay) / secondsInHour);
+  const minutes = Math.floor((diffInSeconds % secondsInHour) / secondsInMinute);
+  const seconds = diffInSeconds % secondsInMinute;
+
+  if (days > 0) {
+    return days === 1 ? `${days} day ago` : `${days} days ago`;
+  } else if (hours > 0) {
+    return hours === 1 ? `${hours} hour ago` : `${hours} hours ago`;
+  } else if (minutes > 0) {
+    return minutes === 1 ? `${minutes} minute ago` : `${minutes} minutes ago`;
+  } else {
+    return seconds === 1 ? `${seconds} second ago` : `${seconds} seconds ago`;
+  }
+}

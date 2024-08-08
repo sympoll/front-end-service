@@ -6,6 +6,7 @@ import FeedLoadingAnimation from "./messege/FeedLoadingAnimation";
 import FeedErrorMessage from "./messege/FeedErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
+import ErrorPopup from "../popup/ErrorPopup";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -67,10 +68,12 @@ export default function FeedContent() {
   //         timeUpdated={poll.timeUpdated}
   //         deadline={poll.deadline}
   //         votingItems={poll.votingItems}
+  //         isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
   //       />
   //     ))}
   //   </div>
   // );
+
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
     return <FeedErrorMessage error={error} />;
@@ -90,6 +93,7 @@ export default function FeedContent() {
           timeUpdated={poll.timeUpdated}
           deadline={poll.deadline}
           votingItems={poll.votingItems}
+          isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
         />
       ))}
     </div>

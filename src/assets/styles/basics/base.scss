@@ -19,7 +19,7 @@ body {
 
 @mixin page-grid {
   display: grid;
-  grid-template-columns: 200px 1fr 200px;
+  grid-template-columns: 18vw 1fr 18vw;
   grid-template-rows: 50px 1fr;
 }
 

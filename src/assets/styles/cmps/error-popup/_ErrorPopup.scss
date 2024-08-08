@@ -1,0 +1,40 @@
+.error-popup-container {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-popup-container p {
+  animation: textColorChange 3s forwards;
+}
+
+.error-popup-container .error-popup-close-button {
+  background: none;
+  border: none;
+  font-size: 30px;
+  font-weight: normal;
+  cursor: pointer;
+  animation: textColorChange 3s forwards;
+  min-height: fit-content;
+  padding: 0%;
+}
+
+// .error-popup-container .error-popup-close-button:hover {
+//   color: white;
+// }
+
+@keyframes textColorChange {
+  0% {
+    color: $grayedOutFontColor;
+  }
+  25%,
+  50%,
+  75% {
+    color: $errorColor;
+  }
+  100% {
+    color: $grayedOutFontColor;
+  }
+}

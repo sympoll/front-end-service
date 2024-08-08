@@ -1,5 +1,5 @@
 .groups-sidebar-container {
-  @include sticky-top(5vh);
+  @include sticky-top(vh);
   @include set-grid-location(2, 1);
   display: grid;
   align-content: flex-start;

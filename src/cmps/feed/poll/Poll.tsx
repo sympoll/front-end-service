@@ -5,6 +5,8 @@ import {
   VotingItemIsChecked,
   VotingItemProgress
 } from "../../../models/VotingitemData.model";
+import ErrorPopup from "../../popup/ErrorPopup";
+import { getTimeAgo } from "../../../services/poll.service";
 
 interface PollProps {
   pollId: string;
@@ -17,6 +19,7 @@ interface PollProps {
   timeUpdated: string;
   deadline: string;
   votingItems: VotingItemData[];
+  isSpecificGroup: boolean;
 }
 
 export default function Poll({
@@ -29,12 +32,19 @@ export default function Poll({
   timeCreated,
   timeUpdated,
   deadline,
-  votingItems
+  votingItems,
+  isSpecificGroup
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
 
-  // Coexists with the VotingItemData, saving it alongside it to display it properly without actualy saving it in the DB.
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
 
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
@@ -68,12 +78,14 @@ export default function Poll({
   };
 
   // On checkbox click, progress and voting count is updated
+  // Returns true if changed progress, false otherwise
   function handleNewProgress(inputId: string, inputIsInc: boolean) {
-    if (shouldPreventProgressUpdate(inputIsInc)) return;
+    if (shouldPreventProgressUpdate(inputIsInc)) return false;
 
     // Set new states:
     setIsCheckedStates(getUpdatedCheckedStates(inputId, inputIsInc));
     setVotingItemsData(getUpdatedVoteCounts(inputId, inputIsInc));
+    return true;
   }
 
   // Update vote counts of the voting items
@@ -154,36 +166,76 @@ export default function Poll({
   }
 
   return (
-    <section className="poll-item">
-      <div className="poll-item-title">{title}</div>
-      <div className="poll-item-description">{description}</div>
-      <div className="poll-item-voting-container">
-        <div className="poll-item-choice-messege">
+    <section className="poll-container">
+      {
+        // Display Group info only on all groups tab
+        isSpecificGroup ? (
+          <div className="poll-info-title-container">
+            <div className="poll-info-title-row1">
+              {
+                //TODO: change to creator name
+                creatorId
+              }
+            </div>
+            <div className="poll-info-title-row2">{getTimeAgo(timeCreated)}</div>
+          </div>
+        ) : (
+          <div className="poll-info-title-container">
+            <div className="poll-info-title-row1">{groupId}</div>
+            <div className="poll-info-title-row2">
+              <div className="poll-info-title-creator-name">
+                {
+                  //TODO: change to creator name
+                  creatorId
+                }
+              </div>
+              <div className="poll-info-title-separator">•</div>
+              <div className="poll-info-title-time-posted">{getTimeAgo(timeCreated)}</div>
+            </div>
+          </div>
+        )
+      }
+      <div className="poll-title">{title}</div>
+      <div className="poll-description">{description}</div>
+      <div className="poll-voting-container">
+        <div className="poll-voting-choice-messege">
           {isSingleChoice()
             ? "Select one"
             : "Select up to " + nofAnswersAllowed + " voting options"}
         </div>
-        {votingItems.map((vItem) => (
-          <VotingItem
-            key={vItem.votingItemId}
-            votingItemID={vItem.votingItemId}
-            votingItemOrdinal={vItem.votingItemOrdinal}
-            description={vItem.description}
-            voteCount={
-              votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
-                ?.voteCount || 0
-            }
-            progress={
-              progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
-            }
-            isChecked={
-              isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
-                ?.isChecked || false
-            }
-            handleNewProgress={handleNewProgress}
-          />
-        ))}
+        {
+          // Add voting items to the poll
+          votingItems.map((vItem) => (
+            <VotingItem
+              key={vItem.votingItemId}
+              votingItemID={vItem.votingItemId}
+              votingItemOrdinal={vItem.votingItemOrdinal}
+              description={vItem.description}
+              voteCount={
+                votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                  ?.voteCount || 0
+              }
+              progress={
+                progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
+              }
+              isChecked={
+                isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                  ?.isChecked || false
+              }
+              handleNewProgress={handleNewProgress}
+              showErrorPopup={showErrorPopup}
+            />
+          ))
+        }
       </div>
+      <p className="poll-error-message">
+        {isErrorPopupVisible && (
+          <ErrorPopup
+            message="Already reached the limit of votes!"
+            closeErrorPopup={closeErrorPopup}
+          />
+        )}
+      </p>
     </section>
   );
 }

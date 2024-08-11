@@ -13,4 +13,4 @@
 
 ---
 
-#### Exposed Port: 8080
+#### Service Port: 8080

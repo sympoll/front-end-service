@@ -3,7 +3,6 @@ import VotingBar from "./VotingBar";
 
 interface VotingItemProps {
   votingItemID: string;
-  votingItemOrdinal: number;
   description: string;
   voteCount: number;
   progress: number;

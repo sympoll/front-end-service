@@ -3,21 +3,21 @@ import { VotingItemData } from "../models/VotingitemData.model";
 
 // Sample Voting Items Data
 const sampleVotingItems1: VotingItemData[] = [
-  { votingItemId: "item1", votingItemOrdinal: 1, description: "Option A", voteCount: 1 },
-  { votingItemId: "item2", votingItemOrdinal: 2, description: "Option B", voteCount: 1 },
-  { votingItemId: "item3", votingItemOrdinal: 3, description: "Option C", voteCount: 1 },
+  { votingItemId: "item1", description: "Option A", voteCount: 1 },
+  { votingItemId: "item2", description: "Option B", voteCount: 1 },
+  { votingItemId: "item3", description: "Option C", voteCount: 1 },
 ];
 
 const sampleVotingItems2: VotingItemData[] = [
-  { votingItemId: "item1", votingItemOrdinal: 1, description: "Option X", voteCount: 0 },
-  { votingItemId: "item2", votingItemOrdinal: 2, description: "Option Y", voteCount: 0 },
-  { votingItemId: "item3", votingItemOrdinal: 3, description: "Option Z", voteCount: 0 },
+  { votingItemId: "item1", description: "Option X", voteCount: 0 },
+  { votingItemId: "item2", description: "Option Y", voteCount: 0 },
+  { votingItemId: "item3", description: "Option Z", voteCount: 0 },
 ];
 
 const sampleVotingItems3: VotingItemData[] = [
-  { votingItemId: "item1", votingItemOrdinal: 1, description: "Choice 1", voteCount: 1 },
-  { votingItemId: "item2", votingItemOrdinal: 2, description: "Choice 2", voteCount: 2 },
-  { votingItemId: "item3", votingItemOrdinal: 3, description: "Choice 3", voteCount: 3 },
+  { votingItemId: "item1", description: "Choice 1", voteCount: 1 },
+  { votingItemId: "item2", description: "Choice 2", voteCount: 2 },
+  { votingItemId: "item3", description: "Choice 3", voteCount: 3 },
 ];
 
 // Sample Polls Data

@@ -209,7 +209,6 @@ export default function Poll({
             <VotingItem
               key={vItem.votingItemId}
               votingItemID={vItem.votingItemId}
-              votingItemOrdinal={vItem.votingItemOrdinal}
               description={vItem.description}
               voteCount={
                 votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)

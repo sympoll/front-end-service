@@ -186,7 +186,7 @@ export default function Poll({
                 creatorId
               }
             </div>
-            <div className="poll-info-title-row2">{getTimeAgo(timeCreated)}</div>
+            <div className="poll-info-title-row2">{timePassed}</div>
           </div>
         ) : (
           <div className="poll-info-title-container">
@@ -199,7 +199,7 @@ export default function Poll({
                 }
               </div>
               <div className="poll-info-title-separator">•</div>
-              <div className="poll-info-title-time-posted">{getTimeAgo(timeCreated)}</div>
+              <div className="poll-info-title-time-posted">{timePassed}</div>
             </div>
           </div>
         )

@@ -38,6 +38,7 @@ export default function Poll({
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+  const [timePassed, setTimePassed] = useState(getTimeAgo(timeCreated));
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -45,6 +46,14 @@ export default function Poll({
   const showErrorPopup = () => {
     setIsErrorPopupVisible(true);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimePassed(getTimeAgo(timeCreated));
+    }, 1000); // Update every second
+
+    return () => clearInterval(interval); // Cleanup the interval on component unmount
+  }, [timeCreated]);
 
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({

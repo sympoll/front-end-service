@@ -10,7 +10,7 @@ const pollServiceUrl =
 export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollData[]>{
   // Send a request to the User Management Service for the user's join groups list.
   // !!! TODO !!!
-  const groupIds = ['group_1', 'group_2'] // Temporary
+  const groupIds = ['group1', 'group2'] // Temporary
   console.log("Trying to fetch polls by group IDs: " + groupIds);
 
   // Send a request to the Poll Managemenet Service to get all polls of the specified groups.

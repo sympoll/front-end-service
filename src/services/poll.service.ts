@@ -54,7 +54,7 @@ export async function fetchPollsByGroupId(groupId : string){
     if (axios.isAxiosError(err)) {
       // Axios error - type narrowing
       if (err.response && err.response.data) {
-        throw new Error((err.response.data as { message: string }).message || "Unknown error occurred");
+        throw new Error((err.response.data as { message: string }).message || err.message);
       } else {
         throw new Error(err.message);
       }

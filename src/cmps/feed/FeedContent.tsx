@@ -9,13 +9,14 @@ import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
 
 export default function FeedContent() {
-  const [polls, setPolls] = useState<PollData[]>();
+  const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
 
   useEffect(() => {
-    setIsLoading(true); // Make sure the initial state of isLoading is true.
+    setPolls([]); // Reset the polls state to an empty array
+    setIsLoading(true); // Reset the initial state of isLoading.
 
     if (!groupId) {
       fetchAllUserGroupsPolls(0) // TODO: Change to user ID.

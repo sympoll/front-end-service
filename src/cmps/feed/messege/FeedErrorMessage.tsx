@@ -5,7 +5,7 @@ interface FeedErrorMessageProps {
 }
 
 /**
- * Provide error message string with '\n' characters to start a new line.
+ * Provide error message string with '&n' characters to start a new line.
  */
 export default function ErrorMessage({ error }: FeedErrorMessageProps) {
   return (
@@ -14,11 +14,11 @@ export default function ErrorMessage({ error }: FeedErrorMessageProps) {
         Error Fetching Polls...
         <br />
         {error
-          ? error.split("\n").map((line) => (
-              <div>
-                line
+          ? error.split("&n").map((line, index) => (
+              <React.Fragment key={index}>
+                {line.trim() === "" ? <br /> : line}
                 <br />
-              </div>
+              </React.Fragment>
             ))
           : null}
       </div>

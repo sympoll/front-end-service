@@ -78,6 +78,11 @@ export default function FeedContent() {
   if (!polls) {
     return <FeedErrorMessage error={error} />;
   }
+  if (polls.length === 0) {
+    return (
+      <FeedErrorMessage error="No polls are currently available for this group. Please check back later or contact the group administrator for more information." />
+    ); // TODO: add tutorial for admins only (members wont see the tutorail)
+  }
   return (
     <div className="feed-content-container">
       {polls.map((poll) => (

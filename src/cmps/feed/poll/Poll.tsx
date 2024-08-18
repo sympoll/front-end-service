@@ -187,6 +187,9 @@ export default function Poll({
               }
             </div>
             <div className="poll-info-title-row2">{timePassed}</div>
+            <div className="poll-info-title-row3">
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
+            </div>
           </div>
         ) : (
           <div className="poll-info-title-container">

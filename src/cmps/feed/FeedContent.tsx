@@ -81,8 +81,11 @@ export default function FeedContent() {
   if (polls.length === 0) {
     return (
       <FeedErrorMessage
-        error="No polls are currently available for this group.&n
-      Please check back later or contact the group administrator for more information."
+        error={
+          groupId
+            ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
+            : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
+        }
       />
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }

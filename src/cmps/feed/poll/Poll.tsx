@@ -6,7 +6,7 @@ import {
   VotingItemProgress
 } from "../../../models/VotingitemData.model";
 import ErrorPopup from "../../popup/ErrorPopup";
-import { getTimeAgo } from "../../../services/poll.service";
+import { getTimePassed, getTimeToDeadline } from "../../../services/poll.service";
 
 interface PollProps {
   pollId: string;
@@ -38,7 +38,7 @@ export default function Poll({
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
-  const [timePassed, setTimePassed] = useState(getTimeAgo(timeCreated));
+  const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -49,7 +49,7 @@ export default function Poll({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimePassed(getTimeAgo(timeCreated));
+      setTimePassed(getTimePassed(timeCreated));
     }, 1000); // Update every second
 
     return () => clearInterval(interval); // Cleanup the interval on component unmount
@@ -200,6 +200,9 @@ export default function Poll({
               </div>
               <div className="poll-info-title-separator">•</div>
               <div className="poll-info-title-time-posted">{timePassed}</div>
+            </div>
+            <div className="poll-info-title-row3">
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>
         )

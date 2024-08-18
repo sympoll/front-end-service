@@ -14,11 +14,11 @@ export default function ErrorMessage({ error }: FeedErrorMessageProps) {
         Error Fetching Polls...
         <br />
         {error
-          ? error.split("\n").map((line, index) => (
-              <React.Fragment key={index}>
-                {line}
+          ? error.split("\n").map((line) => (
+              <div>
+                line
                 <br />
-              </React.Fragment>
+              </div>
             ))
           : null}
       </div>

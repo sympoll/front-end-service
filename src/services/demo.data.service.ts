@@ -31,7 +31,7 @@ const samplePolls = [
     groupId: "group1",
     timeCreated: "2023-01-01T00:00:00Z",
     timeUpdated: "2023-01-01T00:00:00Z",
-    deadline: "2023-12-31T23:59:59Z",
+    deadline: "2025-12-31T23:59:59Z",
     votingItems: sampleVotingItems1,
   },
   {
@@ -43,7 +43,7 @@ const samplePolls = [
     groupId: "group2",
     timeCreated: "2023-02-01T00:00:00Z",
     timeUpdated: "2023-02-01T00:00:00Z",
-    deadline: "2023-11-30T23:59:59Z",
+    deadline: "2025-11-30T23:59:59Z",
     votingItems: sampleVotingItems2,
   },
   {
@@ -55,7 +55,7 @@ const samplePolls = [
     groupId: "group3",
     timeCreated: "2023-03-01T00:00:00Z",
     timeUpdated: "2023-03-01T00:00:00Z",
-    deadline: "2023-10-31T23:59:59Z",
+    deadline: "2025-10-31T23:59:59Z",
     votingItems: sampleVotingItems3,
   },
 ];

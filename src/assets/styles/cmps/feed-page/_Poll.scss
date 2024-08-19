@@ -54,6 +54,17 @@
   font-size: small;
   font-weight: normal;
   gap: 8px;
+}
+
+.poll-info-title-row3 {
+  display: flex;
+  color: $active-vote-color;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: small;
+  font-weight: normal;
+  gap: 8px;
   padding-bottom: 6px;
   border-bottom: 1px solid $grayedOutFontColor;
 }

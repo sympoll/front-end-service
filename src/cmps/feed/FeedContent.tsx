@@ -15,7 +15,8 @@ export default function FeedContent() {
   const { groupId } = useParams();
 
   useEffect(() => {
-    setIsLoading(true); // Make sure the initial state of isLoading is true.
+    setPolls(undefined); // Reset the polls state to an empty array
+    setIsLoading(true); // Reset the initial state of isLoading.
 
     if (!groupId) {
       fetchAllUserGroupsPolls(0) // TODO: Change to user ID.

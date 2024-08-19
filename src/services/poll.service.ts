@@ -48,9 +48,20 @@ export async function fetchPollsByGroupId(groupId : string){
       .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, { params: { groupId } } );
       
     return response.data;
-  } catch(err) {
+  } catch (err) {
     console.error("Error fetching all polls of group with ID " + groupId + ".");
-    throw err;
+
+    if (axios.isAxiosError(err)) {
+      // Axios error - type narrowing
+      if (err.response && err.response.data) {
+        throw new Error((err.response.data as { message: string }).message || err.message);
+      } else {
+        throw new Error(err.message);
+      }
+    } else {
+      // Handle unexpected errors
+      throw new Error("An unexpected error occurred");
+    }
   }
 }
 

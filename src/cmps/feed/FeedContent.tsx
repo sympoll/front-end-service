@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
-import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
+import {
+  fetchAllUserGroupsPolls,
+  fetchPollsByGroupId,
+} from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "./messege/FeedLoadingAnimation";
 import FeedErrorMessage from "./messege/FeedErrorMessage";

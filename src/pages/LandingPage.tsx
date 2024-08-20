@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import logo from "../assets/imgs/logo-no-bg.png";
 import Button from "../cmps/global/Button";
 import { useNavigate } from "react-router-dom";
+import CreateButton from "../cmps/feed/poll/CreateForm";
 
 export default function LandingPage() {
   const navigate = useNavigate();

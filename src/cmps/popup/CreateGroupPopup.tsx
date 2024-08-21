@@ -4,7 +4,7 @@ interface CreateGroupPopupProps {
   onClose: () => void;
 }
 
-const CreateGroupPopup: React.FC<CreateGroupPopupProps> = ({ onClose }) => {
+export default function CreateGroupPopup({ onClose }: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>('');
   const [groupDescription, setGroupDescription] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -46,5 +46,3 @@ const CreateGroupPopup: React.FC<CreateGroupPopupProps> = ({ onClose }) => {
     </div>
   );
 };
-
-export default CreateGroupPopup;

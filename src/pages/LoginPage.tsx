@@ -42,6 +42,10 @@ export default function LoginPage() {
     event.preventDefault();
 
     // TODO: Add login logic
+
+    // TODO: appy user as signed in
+
+    navigate("/feed");
   };
 
   const handleSignUp = (event: React.FormEvent) => {
@@ -53,7 +57,10 @@ export default function LoginPage() {
     invokeSignUp(userData)
       .then((data) => {
         console.log("Successfully Signed up user: " + data);
-        // TODO: route to feed page.
+
+        // TODO: appy user as signed in
+
+        navigate("/feed");
       })
       .catch((err) => {
         console.error("Could not sign up user. " + err);

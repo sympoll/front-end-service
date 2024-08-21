@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { invokeSignUp } from "../services/signup.service";
+import { UserData } from "../models/UserData.model";
 
 const SPACE = " ";
 const EMPTY_STR = "";
@@ -41,25 +43,28 @@ export default function LoginPage() {
   };
 
   const handleSignUp = (event: React.FormEvent) => {
-    // TODO: Add sign up logic
+    // TODO: add form fields validation - password matching, username (should be checked on form change), email
+
+    const userData: UserData = { username: username, email: email, password: password };
+    invokeSignUp(userData)
+      .then((data) => {
+        console.log("Signed up user: " + data);
+      })
+      .catch((err) => {
+        console.error("Could not sign up user. " + err);
+        // TODO: display error on screen.
+      });
   };
 
-  const preventSpaceKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const preventSpaceKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === SPACE) event.preventDefault();
   };
 
   return (
     <section className="login-page-container">
       <div className="login-form-container">
-        <p className="login-form-title">
-          {isSignIn ? "Log In" : "Sign Up"} to Sympoll™
-        </p>
-        <form
-          className="login-form"
-          onSubmit={isSignIn ? handleLogIn : handleSignUp}
-        >
+        <p className="login-form-title">{isSignIn ? "Log In" : "Sign Up"} to Sympoll™</p>
+        <form className="login-form" onSubmit={isSignIn ? handleLogIn : handleSignUp}>
           <input
             type="text"
             onKeyDown={preventSpaceKeyPress}

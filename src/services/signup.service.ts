@@ -13,7 +13,7 @@ const userServiceUrl =
  * Send a request to user-service to signup the user.
  * @param userData Information of the user, filled in the sign up form.
  */
-export async function envokeSignUp(userData : UserData) {
+export async function invokeSignUp(userData : UserData) {
     try {
         const response = await axios
             .create({

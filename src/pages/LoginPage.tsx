@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { invokeSignUp } from "../services/signup.service";
+import { invokeSignUp, validateUserData } from "../services/signup.service";
 import { UserData } from "../models/UserData.model";
 import ErrorPopup from "../cmps/popup/ErrorPopup";
 
@@ -36,6 +36,7 @@ export default function LoginPage() {
     setPassword(EMPTY_STR);
     setPasswordConfirm(EMPTY_STR);
     setShowPassword(false);
+    closeErrorPopup();
   };
 
   useEffect(() => {
@@ -63,9 +64,14 @@ export default function LoginPage() {
   const handleSignUp = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // TODO: add form fields validation - password matching, username (should be checked on form change), email
-
     const userData: UserData = { username: username, email: email, password: password };
+    const isValidData = validateUserData(userData, passwordConfirm, setErrorMessage);
+    if (!isValidData) {
+      showErrorPopup();
+      console.log("Invalid user data entered: " + errorMessage);
+      return;
+    }
+
     invokeSignUp(userData)
       .then((data) => {
         console.log("Successfully Signed up user: " + data);
@@ -98,11 +104,11 @@ export default function LoginPage() {
               </Link>
             </p>
           </div>
-          <p className="login-form-error-message">
+          <div className="login-form-error-message">
             {isErrorPopupVisible && (
               <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />
             )}
-          </p>
+          </div>
           <div className="login-form-input-fields">
             <input
               type="text"

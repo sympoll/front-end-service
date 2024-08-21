@@ -1,24 +1,72 @@
-.form-container {
-  position: relative;
-  width: 200px;
-  background-color: #ffda8a;
-  border-radius: 15px;
-  overflow: hidden;
-  transition: max-height 0.3s ease-in-out;
-}
+.poll-form {
+  &__header {
+    background-color: #4a4a4a;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+  }
 
-.closed {
-  max-height: 40px;
-}
+  &__create-btn {
+    background-color: #f39c12;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+  }
 
-.open {
-  max-height: 300px; /* Adjust this based on the content height */
-}
+  &__body {
+    background-color: #f5b041;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
-.toggle-button {
-  background-color: #707070;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  cursor: pointer;
+    input,
+    textarea {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-family: $mainFont;
+    }
+
+    .poll-form__voting-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      .poll-form__remove-btn {
+        background-color: $removeColor;
+        color: white;
+        border: none;
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 50%;
+      }
+    }
+
+    .poll-form__add-btn {
+      background-color: rgba(255, 255, 255, 0);
+      border: 3px solid $mainBgColor2;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      line-height: 0;
+      margin: 0 auto; // Center the button
+    }
+
+    .poll-form__submit-btn {
+      background-color: #f39c12;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      align-self: center;
+    }
+  }
 }

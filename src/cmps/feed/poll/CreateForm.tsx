@@ -1,105 +1,126 @@
 import React, { useState } from "react";
 import { CreatePollData } from "../../../models/CreatePollData";
 
-export default function CreateButton() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [pollData, setPollData] = useState<CreatePollData>({
+export default function CreatePollForm() {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
     nofAnswersAllowed: 1,
-    creatorId: "", // Replace with actual creator ID
-    groupId: "", // Replace with actual group ID
-    deadline: new Date().toISOString(),
-    votingItems: [],
+    creatorId: "", // Replace with actual creatorId
+    groupId: "", // Replace with actual groupId
+    deadline: "",
+    votingItems: ["", "", ""],
   });
 
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   const handleVotingItemChange = (index: number, value: string) => {
-    const newVotingItems = [...pollData.votingItems];
+    const newVotingItems = [...formData.votingItems];
     newVotingItems[index] = value;
-    setPollData((prev) => ({ ...prev, votingItems: newVotingItems }));
+    setFormData({
+      ...formData,
+      votingItems: newVotingItems,
+    });
   };
 
-  const handleAddVotingItem = () => {
-    setPollData((prev) => ({
-      ...prev,
-      votingItems: [...prev.votingItems, ""], // Add a new empty string for the new voting item
-    }));
+  const addVotingItem = () => {
+    setFormData({
+      ...formData,
+      votingItems: [...formData.votingItems, ""],
+    });
   };
 
-  const handleRemoveVotingItem = (index: number) => {
-    const newVotingItems = [...pollData.votingItems];
-    newVotingItems.splice(index, 1);
-    setPollData((prev) => ({ ...prev, votingItems: newVotingItems }));
+  const removeVotingItem = (index: number) => {
+    setFormData({
+      ...formData,
+      votingItems: formData.votingItems.filter((_, i) => i !== index),
+    });
   };
 
-  const handleSubmit = () => {
-    // Handle form submission here (e.g., send poll data to a server)
-    setIsFormOpen(false);
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    // Handle form submission logic with formData
+    console.log("Form submitted", formData);
+    toggleExpand(); // Collapse the form after submission
   };
 
   return (
-    <div>
-      <button onClick={() => setIsFormOpen(!isFormOpen)}>
-        {isFormOpen ? "Close Poll Creation" : "Create Poll"}
-      </button>
-      {isFormOpen && (
-        <div>
+    <div className="poll-form">
+      <div className="poll-form__header" onClick={toggleExpand}>
+        {!isExpanded && (
+          <button className="poll-form__create-btn">Create Poll</button>
+        )}
+      </div>
+      {isExpanded && (
+        <form onSubmit={handleSubmit} className="poll-form__body">
           <input
             type="text"
+            name="title"
             placeholder="Title"
-            value={pollData.title}
-            onChange={(e) =>
-              setPollData((prev) => ({ ...prev, title: e.target.value }))
-            }
+            value={formData.title}
+            onChange={handleInputChange}
           />
           <textarea
+            name="description"
             placeholder="Description"
-            value={pollData.description}
-            onChange={(e) =>
-              setPollData((prev) => ({ ...prev, description: e.target.value }))
-            }
+            value={formData.description}
+            onChange={handleInputChange}
           />
-          <label>Number of available answers:</label>
           <input
             type="number"
-            value={pollData.nofAnswersAllowed}
-            onChange={(e) =>
-              setPollData((prev) => ({
-                ...prev,
-                nofAnswersAllowed: parseInt(e.target.value),
-              }))
-            }
+            name="nofAnswersAllowed"
+            placeholder="Number of available answers"
+            value={formData.nofAnswersAllowed}
+            onChange={handleInputChange}
           />
-          <label>Deadline:</label>
           <input
-            type="date"
-            value={new Date(pollData.deadline).toISOString().split("T")[0]}
-            onChange={(e) =>
-              setPollData((prev) => ({
-                ...prev,
-                deadline: new Date(e.target.value).toISOString(),
-              }))
-            }
+            type="datetime-local"
+            name="deadline"
+            placeholder="Choose deadline"
+            value={formData.deadline}
+            onChange={handleInputChange}
           />
-          <div>
-            {pollData.votingItems.map((votingItem, index) => (
-              <div key={index}>
-                <input
-                  type="text"
-                  value={votingItem}
-                  onChange={(e) =>
-                    handleVotingItemChange(index, e.target.value)
-                  }
-                />
-                <button onClick={() => handleRemoveVotingItem(index)}>
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button onClick={handleAddVotingItem}>Add Option</button>
-          </div>
-          <button onClick={handleSubmit}>Submit</button>
-        </div>
+          {formData.votingItems.map((votingItem, index) => (
+            <div key={index} className="poll-form__voting-item">
+              <button
+                type="button"
+                onClick={() => removeVotingItem(index)}
+                className="poll-form__remove-btn"
+              >
+                -
+              </button>
+              <input
+                type="text"
+                value={votingItem}
+                onChange={(e) => handleVotingItemChange(index, e.target.value)}
+                placeholder={`Option ${index + 1}`}
+              />
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addVotingItem}
+            className="poll-form__add-btn"
+          >
+            +
+          </button>
+          <button type="submit" className="poll-form__submit-btn">
+            Submit
+          </button>
+        </form>
       )}
     </div>
   );

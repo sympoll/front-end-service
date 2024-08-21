@@ -10,6 +10,7 @@ import FeedErrorMessage from "./messege/FeedErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
+import CreatePollForm from "./poll/CreateForm";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();

@@ -3,6 +3,7 @@ import GroupsSidebarItem from "./GroupsSidebarItem";
 import GroupsIcon from "@mui/icons-material/Groups";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CreateGroupButton from "../global/CreateGroupButton";
+import CreateGroupPopup from "../popup/CreateGroupPopup";
 
 export default function GroupsSidebar() {
   /*
@@ -16,6 +17,11 @@ export default function GroupsSidebar() {
   useEffect(() => {
 
   }, []);
+
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
 
   return (
     <div className="groups-sidebar-container">
@@ -41,7 +47,8 @@ export default function GroupsSidebar() {
           path="/feed/group31"
         />
       </ul>
-      <CreateGroupButton />
+      <CreateGroupButton onClick={openPopup} />
+      {isPopupOpen && <CreateGroupPopup onClose={closePopup} />}
     </div>
   );
 }

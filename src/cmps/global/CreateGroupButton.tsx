@@ -1,13 +1,16 @@
 import React from "react";
 
-export default function CreateGroupButton() {
+
+interface CreateGroupButtonProps {
+  onClick: () => void;
+}
+
+export default function CreateGroupButton({onClick}: CreateGroupButtonProps) {
     return (
         <div className="create-group-button">
           <button
             className="create-group-btn"
-            onClick={() => {
-              // Add logic for creating a new group
-            }}
+            onClick={onClick}
           >New Group</button>
         </div>
       );

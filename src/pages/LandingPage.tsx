@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import logo from "../assets/imgs/logo-no-bg.png";
-import Button from "../cmps/global/Button";
-import { useNavigate } from "react-router-dom";
-import CreatePollForm from "../cmps/feed/poll/CreateForm";
+import React, { useEffect, useState } from "react"
+import logo from "../assets/imgs/logo-no-bg.png"
+import Button from "../cmps/global/CustomButton"
+import { useNavigate } from "react-router-dom"
+import CreatePollForm from "../cmps/feed/poll/CreatePollForm"
+import CustomButton from "../cmps/global/CustomButton"
 
 export default function LandingPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <section className="landing-page-container">
@@ -14,11 +15,13 @@ export default function LandingPage() {
         Welcome to Sympoll™, where decisions are made...
       </p>
       <div className="landing-page-buttons">
-        <Button onClick={() => navigate("/login")}>Log In / Sign Up</Button>
-        <Button onClick={() => navigate("/feed")}>
+        <CustomButton onClick={() => navigate("/login")}>
+          Log In / Sign Up
+        </CustomButton>
+        <CustomButton onClick={() => navigate("/feed")}>
           Temporary - Move to feed
-        </Button>
+        </CustomButton>
       </div>
     </section>
-  );
+  )
 }

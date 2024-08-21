@@ -1,4 +1,4 @@
-Button {
+.custom-button {
   @include center;
   background-color: $mainColor-normal;
   border: 0;
@@ -20,25 +20,27 @@ Button {
   padding-right: 20px;
   text-align: center;
   touch-action: manipulation;
-  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
+    color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
-  }
-  
-  Button:hover,
-  Button:focus { 
-    background-color: $mainColor-dark0;
-    color: rgb(255, 255, 255, 1);
-  }
-  
-  Button:active {
-    background: $mainColor-dark1;
-    color: rgb(255, 255, 255, .7);
-  }
-  
-  Button:disabled { 
-    cursor: not-allowed;
-    background: rgba(0, 0, 0, .08);
-    color: rgba(0, 0, 0, .3);
-  }
+}
+
+CustomButton:hover,
+CustomButton:focus {
+  background-color: $mainColor-dark0;
+  color: rgb(255, 255, 255, 1);
+}
+
+CustomButton:active {
+  background: $mainColor-dark1;
+  color: rgb(255, 255, 255, 0.7);
+}
+
+CustomButton:disabled {
+  cursor: not-allowed;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+}

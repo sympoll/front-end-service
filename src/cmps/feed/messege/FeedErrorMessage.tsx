@@ -1,8 +1,8 @@
-import React from "react";
-import CreatePollForm from "../poll/CreateForm";
+import React from "react"
+import CreatePollForm from "../poll/CreatePollForm"
 
 interface FeedErrorMessageProps {
-  error: string | null;
+  error: string | null
 }
 
 /**
@@ -25,5 +25,5 @@ export default function ErrorMessage({ error }: FeedErrorMessageProps) {
           : null}
       </div>
     </div>
-  );
+  )
 }

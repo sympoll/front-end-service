@@ -1,9 +1,9 @@
-import React from "react";
-import Button from "../cmps/global/Button";
-import { useNavigate } from "react-router-dom";
+import React from "react"
+import Button from "../cmps/global/CustomButton"
+import { useNavigate } from "react-router-dom"
 
 export default function NotFoundPage() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
     <section className="not-found-page-container">
@@ -22,5 +22,5 @@ export default function NotFoundPage() {
         <Button onClick={() => navigate("/")}>Go to Home</Button>
       </div>
     </section>
-  );
+  )
 }

@@ -1,12 +1,48 @@
 .groups-sidebar-container {
   @include sticky-top(vh);
   @include set-grid-location(2, 1);
-  display: grid;
-  align-content: flex-start;
+  display: flex;
+  flex-direction: column;
   background-color: $mainSidebarColor;
   color: white;
   row-gap: 5px;
   z-index: 10;
+  height: 100%; // Ensure the sidebar takes full height
+}
+
+.groups-list {
+  overflow-y: auto; // Enable scrolling for the group list
+  flex: 1; // Allow the list to expand and take available space
+  margin-bottom: 10px; // Space for the button
+  max-height: calc(100vh - 50px); // Adjust based on the button height and padding
+}
+
+.create-group-button {
+  position: sticky;
+  bottom: 0;
+  background-color: $mainSidebarColor;
+  padding: 10px;
+  button {
+    width: 100%;
+    background-color: $mainColor-normal;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $mainColor-normal; 
+    }
+    .button-icon {
+      margin-right: 8px;
+      font-size: 20px;
+    }
+  }
 }
 
 .groups-sidebar-container #groups-sidebar-item-active {

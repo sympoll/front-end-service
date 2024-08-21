@@ -9,6 +9,7 @@ body {
   font-family: $mainFont;
   background-color: $mainBgColor0;
   max-height: 100vh;
+  overflow: hidden;
 }
 
 @mixin center {

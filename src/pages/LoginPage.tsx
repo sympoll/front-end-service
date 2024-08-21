@@ -52,7 +52,8 @@ export default function LoginPage() {
     const userData: UserData = { username: username, email: email, password: password };
     invokeSignUp(userData)
       .then((data) => {
-        console.log("Signed up user: " + data);
+        console.log("Successfully Signed up user: " + data);
+        // TODO: route to feed page.
       })
       .catch((err) => {
         console.error("Could not sign up user. " + err);

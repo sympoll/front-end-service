@@ -25,9 +25,9 @@ export async function invokeSignUp(userData : UserData) {
             })
             .post("", userData);
 
-        return response.data;
+        return response;
     } catch (err) {
-        console.error("Error signing up the use:r " + userData + ".");
+        console.error("Error signing up the user: " + userData + ".");
         throw throwAxiosErr(err);
     }
 }

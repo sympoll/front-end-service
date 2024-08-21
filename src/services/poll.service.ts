@@ -1,5 +1,6 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { PollData } from "../models/PollData.model";
+import { throwAxiosErr } from "./error.service";
 
 const pollServiceUrl =
   import.meta.env.VITE_BASE_URL +
@@ -32,7 +33,7 @@ export async function fetchAllUserGroupsPolls(userId : number) : Promise<PollDat
     return response.data;
   } catch(err) {
     console.error("Error fetching all joined groups' polls of user ID " + userId + ". Error info: " + err);
-    throw err;
+    throw throwAxiosErr(err);
   }
 }
 
@@ -58,18 +59,7 @@ export async function fetchPollsByGroupId(groupId : string) {
     return response.data;
   } catch (err) {
     console.error("Error fetching all polls of group with ID " + groupId + ".");
-
-    if (axios.isAxiosError(err)) {
-      // Axios error - type narrowing
-      if (err.response && err.response.data) {
-        throw new Error((err.response.data as { message: string }).message || err.message);
-      } else {
-        throw new Error(err.message);
-      }
-    } else {
-      // Handle unexpected errors
-      throw new Error("An unexpected error occurred");
-    }
+    throw throwAxiosErr(err);
   }
 }
 

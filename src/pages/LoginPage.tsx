@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { invokeSignUp } from "../services/signup.service";
 import { UserData } from "../models/UserData.model";
+import ErrorPopup from "../cmps/popup/ErrorPopup";
 
 const SPACE = " ";
 const EMPTY_STR = "";
@@ -16,7 +17,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState(EMPTY_STR);
   const [passwordConfirm, setPasswordConfirm] = useState(EMPTY_STR);
   const [showPassword, setShowPassword] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+
   const navigate = useNavigate();
+
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
 
   const clearInputs = () => {
     setUsername(EMPTY_STR);
@@ -45,7 +57,7 @@ export default function LoginPage() {
 
     // TODO: appy user as signed in
 
-    navigate("/feed");
+    // navigate("/feed");
   };
 
   const handleSignUp = (event: React.FormEvent) => {
@@ -64,7 +76,8 @@ export default function LoginPage() {
       })
       .catch((err) => {
         console.error("Could not sign up user. " + err);
-        // TODO: display error on screen.
+        setErrorMessage(err.message);
+        showErrorPopup();
       });
   };
 
@@ -77,51 +90,73 @@ export default function LoginPage() {
       <div className="login-form-container">
         <p className="login-form-title">{isSignIn ? "Log In" : "Sign Up"} to Sympoll™</p>
         <form className="login-form" onSubmit={isSignIn ? handleLogIn : handleSignUp}>
-          <input
-            type="text"
-            onKeyDown={preventSpaceKeyPress}
-            maxLength={MAX_USERNAME_LEN}
-            placeholder="Username..."
-            value={username}
-            onChange={(event: any) => {
-              if (event.nativeEvent.keyCode === 32) event.preventDefault();
-              else setUsername(event.target.value);
-            }}
-          />
-          {!isSignIn && (
+          <div className="login-form-swap-mode">
+            <p>
+              {isSignIn ? "Don't have an account? " : "Already have an account? "}
+              <Link to="" onClick={handleModeToggle}>
+                {isSignIn ? "Sign Up" : "Log In"}
+              </Link>
+            </p>
+          </div>
+          <p className="login-form-error-message">
+            {isErrorPopupVisible && (
+              <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />
+            )}
+          </p>
+          <div className="login-form-input-fields">
             <input
               type="text"
               onKeyDown={preventSpaceKeyPress}
-              maxLength={MAX_EMAIL_LEN}
-              placeholder="Email..."
-              value={email}
+              maxLength={MAX_USERNAME_LEN}
+              placeholder="Username..."
+              value={username}
               onChange={(event: any) => {
                 if (event.nativeEvent.keyCode === 32) event.preventDefault();
-                else setEmail(event.target.value);
+                else setUsername(event.target.value);
               }}
             />
-          )}
-          <input
-            type={showPassword ? "text" : "password"}
-            onKeyDown={preventSpaceKeyPress}
-            maxLength={MAX_PASS_LEN}
-            placeholder="Password..."
-            value={password}
-            onChange={(event: any) => {
-              setPassword(event.target.value);
-            }}
-          />
-          {!isSignIn && (
+            {!isSignIn && (
+              <input
+                type="text"
+                onKeyDown={preventSpaceKeyPress}
+                maxLength={MAX_EMAIL_LEN}
+                placeholder="Email..."
+                value={email}
+                onChange={(event: any) => {
+                  if (event.nativeEvent.keyCode === 32) event.preventDefault();
+                  else setEmail(event.target.value);
+                }}
+              />
+            )}
             <input
               type={showPassword ? "text" : "password"}
               onKeyDown={preventSpaceKeyPress}
               maxLength={MAX_PASS_LEN}
-              placeholder="Confirm Password..."
-              value={passwordConfirm}
-              onChange={(event) => {
-                setPasswordConfirm(event.target.value);
+              placeholder="Password..."
+              value={password}
+              onChange={(event: any) => {
+                setPassword(event.target.value);
               }}
             />
+            {!isSignIn && (
+              <input
+                type={showPassword ? "text" : "password"}
+                onKeyDown={preventSpaceKeyPress}
+                maxLength={MAX_PASS_LEN}
+                placeholder="Confirm Password..."
+                value={passwordConfirm}
+                onChange={(event) => {
+                  setPasswordConfirm(event.target.value);
+                }}
+              />
+            )}
+          </div>
+          {isSignIn ? (
+            <p>
+              <Link to="/reset-account">Forgot Username / Password?</Link>
+            </p>
+          ) : (
+            <></>
           )}
           <div className="show-password-container">
             <input
@@ -139,20 +174,8 @@ export default function LoginPage() {
               <div id="show-password-label">Show Password</div>
             </label>
           </div>
-
           <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
         </form>
-        <div className="login-form-forgot-info">
-          <p>
-            <Link to="/reset-account">Forgot Username / Password?</Link>
-          </p>
-          <p>
-            {isSignIn ? "Don't have an account? " : "Already have an account? "}
-            <Link to="" onClick={handleModeToggle}>
-              {isSignIn ? "Sign Up" : "Log In"}
-            </Link>
-          </p>
-        </div>
       </div>
     </section>
   );

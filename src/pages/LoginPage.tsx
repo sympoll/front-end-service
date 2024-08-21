@@ -39,10 +39,14 @@ export default function LoginPage() {
   };
 
   const handleLogIn = (event: React.FormEvent) => {
+    event.preventDefault();
+
     // TODO: Add login logic
   };
 
   const handleSignUp = (event: React.FormEvent) => {
+    event.preventDefault();
+
     // TODO: add form fields validation - password matching, username (should be checked on form change), email
 
     const userData: UserData = { username: username, email: email, password: password };

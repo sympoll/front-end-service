@@ -13,7 +13,6 @@ export default function ErrorMessage({ error }: FeedErrorMessageProps) {
     <div className="feed-content-error-fetching-polls-container">
       <div className="feed-content-error-fetching-polls-message">
         Error Fetching Polls...
-        <CreatePollForm />;
         <br />
         {error
           ? error.split("&n").map((line, index) => (

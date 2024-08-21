@@ -7,6 +7,7 @@ import CustomButton from "../../global/CustomButton"
 export default function CreatePollForm() {
   const [isExpanded, setIsExpanded] = useState(false)
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
@@ -23,6 +24,16 @@ export default function CreatePollForm() {
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false)
+    setErrorMessage("")
+  }
+
+  const displayErrorPopup = (message: string) => {
+    setErrorMessage(message)
+    setIsErrorPopupVisible(true)
+
+    setTimeout(() => {
+      closeErrorPopup()
+    }, 5000) // Hide after 5 seconds
   }
 
   const handleInputChange = (
@@ -45,10 +56,14 @@ export default function CreatePollForm() {
   }
 
   const addVotingItem = () => {
-    setFormData({
-      ...formData,
-      votingItems: [...formData.votingItems, ""],
-    })
+    if (formData.votingItems.length < 9) {
+      setFormData({
+        ...formData,
+        votingItems: [...formData.votingItems, ""],
+      })
+    } else {
+      displayErrorPopup("You cannot have more than 9 options.")
+    }
   }
 
   const removeVotingItem = (index: number) => {
@@ -65,14 +80,35 @@ export default function CreatePollForm() {
           updatedVotingItems.length
         ),
       }))
+    } else {
+      displayErrorPopup("You must have at least two voting items.")
     }
   }
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault()
     // Handle form submission logic with formData
-    console.log("Form submitted", formData)
-    toggleExpand() // Collapse the form after submission
+    if (!isAllVotingItemsDefined()) {
+      displayErrorPopup("All options need to contain a value")
+    } else if (!isTitleDefined()) {
+      displayErrorPopup("Poll needs to have title.")
+    } else {
+      console.log("Form submitted", formData)
+      toggleExpand() // Collapse the form after submission
+    }
+  }
+
+  function isAllVotingItemsDefined(): boolean {
+    for (const votingItem of formData.votingItems) {
+      if (votingItem == "") {
+        return false
+      }
+    }
+    return true
+  }
+
+  function isTitleDefined(): boolean {
+    return formData.title != ""
   }
 
   // Sets a limit on the number of answers the nofAnswersAllowed field can display
@@ -84,7 +120,7 @@ export default function CreatePollForm() {
     if (value > 10) {
       value = value % 10
     }
-    if (!isNaN(value) && value <= formData.votingItems.length) {
+    if (!isNaN(value) && value >= 1 && value <= formData.votingItems.length) {
       setFormData({
         ...formData,
         nofAnswersAllowed: value,
@@ -179,7 +215,7 @@ export default function CreatePollForm() {
           <p>
             {isErrorPopupVisible && (
               <ErrorPopup
-                message={errorMessage ? errorMessage : ""}
+                message={errorMessage}
                 closeErrorPopup={closeErrorPopup}
               />
             )}

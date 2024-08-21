@@ -1,25 +1,51 @@
 .poll-form {
+  width: 400px; // Adjust width as needed
+  margin: 0 auto; // Center the form horizontally
+  border: 1px solid $mainSidebarColor; // Apply border color
+  border-radius: 20px; // Apply border radius
+
   &__header {
-    background-color: #4a4a4a;
+    background-color: $hoverSidebarColor;
     padding: 10px;
     text-align: center;
     cursor: pointer;
+    border-radius: 20px;
   }
 
   &__create-btn {
-    background-color: #f39c12;
+    // Fixed selector name from &__foo &__create-btn to &__create-btn
     border: none;
-    color: white;
     padding: 10px 20px;
     cursor: pointer;
   }
 
   &__body {
-    background-color: #f5b041;
+    background-color: $mainColor-light0;
+    border-radius: 20px; // Apply border radius
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    .poll-form__settings {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%; // Make it the same width as the title and description inputs
+      box-sizing: border-box; // Ensure padding and border are included in width
+
+      input[name="nofAnswersAllowed"] {
+        width: 40%;
+      }
+
+      input[name="deadline"] {
+        width: 100%; // Longer width for the datetime input
+        max-width: 300px; // Limit maximum width
+        color: gray;
+        user-select: none;
+        cursor: default;
+      }
+    }
 
     input,
     textarea {
@@ -27,20 +53,36 @@
       border-radius: 5px;
       border: 1px solid #ccc;
       font-family: $mainFont;
+      resize: none;
     }
 
     .poll-form__voting-item {
       display: flex;
       align-items: center;
       gap: 10px;
+      margin: 0 5px;
+
+      input {
+        flex-grow: 1;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-family: $mainFont;
+      }
 
       .poll-form__remove-btn {
         background-color: $removeColor;
         color: white;
         border: none;
         cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 50%;
+        width: 24px; // Smaller width
+        height: 24px; // Smaller height
+        padding: 0; // Remove padding
+        border-radius: 50%; // Make it round
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 10px; // Smaller font size
       }
     }
 
@@ -61,8 +103,6 @@
     }
 
     .poll-form__submit-btn {
-      background-color: #f39c12;
-      color: white;
       border: none;
       padding: 10px 20px;
       cursor: pointer;

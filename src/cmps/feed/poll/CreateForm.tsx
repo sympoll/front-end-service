@@ -44,10 +44,12 @@ export default function CreatePollForm() {
   };
 
   const removeVotingItem = (index: number) => {
-    setFormData({
-      ...formData,
-      votingItems: formData.votingItems.filter((_, i) => i !== index),
-    });
+    if (formData.votingItems.length > 1) {
+      setFormData({
+        ...formData,
+        votingItems: formData.votingItems.filter((_, i) => i !== index),
+      });
+    }
   };
 
   const handleSubmit = (event: React.FormEvent) => {
@@ -57,13 +59,51 @@ export default function CreatePollForm() {
     toggleExpand(); // Collapse the form after submission
   };
 
+  // Sets a limit on the number of answers the nofAnswersAllowed field can display
+  const handleNofAnswersAllowedChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = parseInt(e.target.value, 10);
+
+    if (isNaN(value)) {
+      return; // Ignore invalid input
+    }
+
+    if (value > formData.votingItems.length) {
+      setFormData({
+        ...formData,
+        nofAnswersAllowed: formData.votingItems.length,
+      });
+    } else if (value < 1) {
+      setFormData({
+        ...formData,
+        nofAnswersAllowed: 1,
+      });
+    } else {
+      setFormData({
+        ...formData,
+        nofAnswersAllowed: value,
+      });
+    }
+  };
+
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
   return (
     <div className="poll-form">
-      <div className="poll-form__header" onClick={toggleExpand}>
-        {!isExpanded && (
+      {!isExpanded && (
+        <div className="poll-form__header" onClick={toggleExpand}>
           <button className="poll-form__create-btn">Create Poll</button>
-        )}
-      </div>
+        </div>
+      )}
       {isExpanded && (
         <form onSubmit={handleSubmit} className="poll-form__body">
           <input
@@ -79,20 +119,24 @@ export default function CreatePollForm() {
             value={formData.description}
             onChange={handleInputChange}
           />
-          <input
-            type="number"
-            name="nofAnswersAllowed"
-            placeholder="Number of available answers"
-            value={formData.nofAnswersAllowed}
-            onChange={handleInputChange}
-          />
-          <input
-            type="datetime-local"
-            name="deadline"
-            placeholder="Choose deadline"
-            value={formData.deadline}
-            onChange={handleInputChange}
-          />
+          <div className="poll-form__settings">
+            <input
+              type="number"
+              name="nofAnswersAllowed"
+              placeholder="Number of available answers"
+              value={formData.nofAnswersAllowed}
+              onChange={handleNofAnswersAllowedChange}
+            />
+            <input
+              type="datetime-local"
+              name="deadline"
+              placeholder="Choose deadline"
+              value={formData.deadline}
+              onChange={handleInputChange}
+              min={getCurrentDateTime()}
+              onFocus={(e) => e.target.blur()}
+            />
+          </div>
           {formData.votingItems.map((votingItem, index) => (
             <div key={index} className="poll-form__voting-item">
               <button

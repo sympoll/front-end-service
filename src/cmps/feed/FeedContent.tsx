@@ -96,7 +96,11 @@ export default function FeedContent() {
   }
   return (
     <div className="feed-content-container">
-      <CreatePollForm />
+      {(() => {
+        console.log(groupId);
+        return null;
+      })()}
+      {groupId && <CreatePollForm groupId={groupId} />}
       {polls.map((poll) => (
         <Poll
           key={poll.pollId}

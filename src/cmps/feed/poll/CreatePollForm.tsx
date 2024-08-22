@@ -1,76 +1,81 @@
-import React, { useState } from "react"
-import { CreatePollData } from "../../../models/CreatePollData"
-import ErrorPopup from "../../popup/ErrorPopup"
-import ErrorMessage from "../messege/FeedErrorMessage"
-import CustomButton from "../../global/CustomButton"
+import React, { useState } from "react";
+import { CreatePollData } from "../../../models/CreatePollData";
+import ErrorPopup from "../../popup/ErrorPopup";
+import ErrorMessage from "../messege/FeedErrorMessage";
+import CustomButton from "../../global/CustomButton";
+import { useParams } from "react-router-dom";
 
-export default function CreatePollForm() {
-  const [isExpanded, setIsExpanded] = useState(false)
-  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+interface CreatePollFormProps {
+  groupId: string;
+}
+
+export default function CreatePollForm({ groupId }: CreatePollFormProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
     nofAnswersAllowed: 1,
     creatorId: "", // Replace with actual creatorId
-    groupId: "", // Replace with actual groupId
+    groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""],
-  })
+  });
 
   const toggleExpand = () => {
-    setIsExpanded(!isExpanded)
-  }
+    setIsExpanded(!isExpanded);
+  };
 
   const closeErrorPopup = () => {
-    setIsErrorPopupVisible(false)
-    setErrorMessage("")
-  }
+    setIsErrorPopupVisible(false);
+    setErrorMessage("");
+  };
 
   const displayErrorPopup = (message: string) => {
-    setErrorMessage(message)
-    setIsErrorPopupVisible(true)
+    setErrorMessage(message);
+    setIsErrorPopupVisible(true);
 
     setTimeout(() => {
-      closeErrorPopup()
-    }, 5000) // Hide after 5 seconds
-  }
+      closeErrorPopup();
+    }, 5000); // Hide after 5 seconds
+  };
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target
+    const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
-    })
-  }
+    });
+  };
 
   const handleVotingItemChange = (index: number, value: string) => {
-    const newVotingItems = [...formData.votingItems]
-    newVotingItems[index] = value
+    const newVotingItems = [...formData.votingItems];
+    newVotingItems[index] = value;
     setFormData({
       ...formData,
       votingItems: newVotingItems,
-    })
-  }
+    });
+  };
 
   const addVotingItem = () => {
     if (formData.votingItems.length < 9) {
       setFormData({
         ...formData,
         votingItems: [...formData.votingItems, ""],
-      })
+      });
     } else {
-      displayErrorPopup("You cannot have more than 9 options.")
+      displayErrorPopup("You cannot have more than 9 options.");
     }
-  }
+  };
 
   const removeVotingItem = (index: number) => {
     if (formData.votingItems.length > 2) {
       const updatedVotingItems = formData.votingItems.filter(
         (_, i) => i !== index
-      )
+      );
 
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -79,69 +84,69 @@ export default function CreatePollForm() {
           prevFormData.nofAnswersAllowed,
           updatedVotingItems.length
         ),
-      }))
+      }));
     } else {
-      displayErrorPopup("You must have at least two voting items.")
+      displayErrorPopup("You must have at least two voting items.");
     }
-  }
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault()
+    event.preventDefault();
     // Handle form submission logic with formData
     if (!isAllVotingItemsDefined()) {
-      displayErrorPopup("All options need to contain a value")
+      displayErrorPopup("All options need to contain a value");
     } else if (!isTitleDefined()) {
-      displayErrorPopup("Poll needs to have title.")
+      displayErrorPopup("Poll needs to have title.");
     } else {
-      console.log("Form submitted", formData)
-      toggleExpand() // Collapse the form after submission
+      console.log("Form submitted", formData);
+      toggleExpand(); // Collapse the form after submission
     }
-  }
+  };
 
   function isAllVotingItemsDefined(): boolean {
     for (const votingItem of formData.votingItems) {
       if (votingItem == "") {
-        return false
+        return false;
       }
     }
-    return true
+    return true;
   }
 
   function isTitleDefined(): boolean {
-    return formData.title != ""
+    return formData.title != "";
   }
 
   // Sets a limit on the number of answers the nofAnswersAllowed field can display
   const handleNofAnswersAllowedChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
-    var value = parseInt(e.target.value, 10)
+    var value = parseInt(e.target.value, 10);
 
     if (value > 10) {
-      value = value % 10
+      value = value % 10;
     }
     if (!isNaN(value) && value >= 1 && value <= formData.votingItems.length) {
       setFormData({
         ...formData,
         nofAnswersAllowed: value,
-      })
+      });
     } else {
       setFormData({
         ...formData,
         nofAnswersAllowed: formData.nofAnswersAllowed,
-      })
+      });
     }
-  }
+  };
 
   const getCurrentDateTime = () => {
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = String(now.getMonth() + 1).padStart(2, "0")
-    const day = String(now.getDate()).padStart(2, "0")
-    const hours = String(now.getHours()).padStart(2, "0")
-    const minutes = String(now.getMinutes()).padStart(2, "0")
-    return `${year}-${month}-${day}T${hours}:${minutes}`
-  }
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
 
   return (
     <div className="poll-form">
@@ -223,5 +228,5 @@ export default function CreatePollForm() {
         </form>
       )}
     </div>
-  )
+  );
 }

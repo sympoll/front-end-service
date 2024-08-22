@@ -33,7 +33,6 @@
   justify-content: start;
   align-items: center;
   gap: 20px;
-  margin-bottom: 20px;
 }
 
 .login-form-title {
@@ -69,6 +68,10 @@
     &:focus {
       outline: 1px solid rgba(91, 90, 90, 0.8);
     }
+  }
+
+  #reset-account-link {
+    margin-top: 14px;
   }
 }
 

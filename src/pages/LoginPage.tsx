@@ -157,13 +157,6 @@ export default function LoginPage() {
               />
             )}
           </div>
-          {isSignIn ? (
-            <p>
-              <Link to="/reset-account">Forgot Username / Password?</Link>
-            </p>
-          ) : (
-            <></>
-          )}
           <div className="show-password-container">
             <input
               id="show-password-checkbox"
@@ -180,6 +173,13 @@ export default function LoginPage() {
               <div id="show-password-label">Show Password</div>
             </label>
           </div>
+          {isSignIn ? (
+            <p id="reset-account-link">
+              <Link to="/reset-account">Forgot Username / Password?</Link>
+            </p>
+          ) : (
+            <></>
+          )}
           <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
         </form>
       </div>

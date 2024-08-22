@@ -1,0 +1,11 @@
+.sidebar-user-info-container {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin: 20px;
+}
+
+.sidebar-user-info-data {
+  @include flex-column;
+  justify-content: center;
+}

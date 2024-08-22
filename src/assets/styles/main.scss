@@ -13,11 +13,13 @@
 
 // ** Components **
 @import "cmps/error-popup/ErrorPopup";
+@import "cmps/profile-picture/ProfilePicture";
 
 // * App Header *
 @import "cmps/app-header/AppHeader";
 
 // * Sidebar *
+@import "cmps/sidebar/SidebarUserInfo";
 @import "cmps/sidebar/GroupsSidebarItem";
 @import "cmps/sidebar/GroupsSidebar";
 @import "cmps/sidebar/MembersSidebarItem";

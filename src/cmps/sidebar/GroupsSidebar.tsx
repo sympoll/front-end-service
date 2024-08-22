@@ -14,6 +14,9 @@ export default function GroupsSidebar() {
  // const groups = {title: 'All Groups',}
  // const [groups, setGroups] = useState(null);
 
+  // Temporary hard coded user ID
+  const userId = 'b1f8e925-2129-473d-bc09-b3a2a331f839'
+
   useEffect(() => {
 
   }, []);
@@ -47,8 +50,8 @@ export default function GroupsSidebar() {
           path="/feed/group31"
         />
       </ul>
-      <CreateGroupButton onClick={openPopup} />
-      {isPopupOpen && <CreateGroupPopup onClose={closePopup} />}
+      <CreateGroupButton onClick = {openPopup} />
+      {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} />}
     </div>
   );
 }

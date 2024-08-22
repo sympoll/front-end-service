@@ -1,19 +1,26 @@
 import React, { useState, FormEvent } from 'react';
+import { createNewGroup } from '../../services/group.service';
 
 interface CreateGroupPopupProps {
+  userId: string;
   onClose: () => void;
 }
 
-export default function CreateGroupPopup({ onClose }: CreateGroupPopupProps) {
+export default function CreateGroupPopup({ userId, onClose }: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>('');
   const [groupDescription, setGroupDescription] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('New Group Created:', groupName);
-    onClose(); // Close the popup after submission
+    try {
+      createNewGroup(groupName, groupDescription, userId);
+      await console.log('New Group Created:', groupName);
+      onClose(); // Close the popup after submission
+    } catch(err) {
+      setErrorMessage(String(err));
+    }
   };
 
   return (

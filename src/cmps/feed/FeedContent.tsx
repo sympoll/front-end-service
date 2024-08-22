@@ -103,8 +103,10 @@ export default function FeedContent() {
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }
   return (
-    <div className="feed-header">
-      {groupId && <FeedBar groupId={groupId} />}
+    <div className="feed-container">
+      <div className="feed-header">
+        {groupId && <FeedBar groupId={groupId} />}
+      </div>
       <div className="feed-content-container">
         {polls.map((poll) => (
           <Poll

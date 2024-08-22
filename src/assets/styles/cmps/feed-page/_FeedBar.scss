@@ -1,0 +1,15 @@
+.feed-bar {
+  @include basic-feed-item;
+  text-align: center;
+  justify-content: center;
+  margin: 0 auto; // Center the form horizontally
+  min-width: 400px;
+  row-gap: 6px;
+}
+
+create-btn {
+  border: none;
+  padding: 10px 20px;
+  margin: 0 auto; // Center the button horizontally
+  display: inline-flex;
+}

@@ -6,23 +6,7 @@
   padding: 10px;
   width: 45vw;
 
-  &__closed {
-    background-color: $secondaryBgColor0;
-    padding: 10px;
-    text-align: center;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-  }
-
-  &__create-btn {
-    border: none;
-    padding: 10px 20px;
-    margin: 0 auto; // Center the button horizontally
-    display: inline-flex;
-  }
-
-  &__open {
+  &__body {
     background-color: $secondaryBgColor0;
     border-radius: 20px; // Apply border radius
     padding: 20px;
@@ -31,14 +15,14 @@
     gap: 10px;
     width: 100%;
 
-    .poll-form__title {
+    &__title {
       font-size: 24px; /* Adjust font size as needed */
       font-weight: bold; /* Makes the text bold */
       color: #333; /* Set text color */
       text-align: center;
     }
 
-    .poll-form__settings {
+    &__settings {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -67,7 +51,7 @@
       resize: none;
     }
 
-    .poll-form__voting-item {
+    &__voting-item {
       display: flex;
       align-items: center;
       gap: 10px;
@@ -97,7 +81,7 @@
       }
     }
 
-    .poll-form__add-btn {
+    &__add-btn {
       background-color: rgba(255, 255, 255, 0);
       border: 3px solid $mainBgColor2;
       color: white;

@@ -11,6 +11,7 @@ import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
+import FeedBar from "./bar/FeedBar";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -83,7 +84,7 @@ export default function FeedContent() {
   if (!polls) {
     return (
       <div>
-        <CreatePollForm groupId={"1"} />
+        <FeedBar groupId={"1"} />
         <FeedErrorMessage error={error} />
       </div>
     );
@@ -103,7 +104,7 @@ export default function FeedContent() {
   }
   return (
     <div className="feed-header">
-      {groupId && <CreatePollForm groupId={groupId} />}
+      {groupId && <FeedBar groupId={groupId} />}
       <div className="feed-content-container">
         {polls.map((poll) => (
           <Poll

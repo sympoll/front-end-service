@@ -7,10 +7,13 @@ import { useParams } from "react-router-dom";
 
 interface CreatePollFormProps {
   groupId: string;
+  onSubmit: () => void;
 }
 
-export default function CreatePollForm({ groupId }: CreatePollFormProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export default function CreatePollForm({
+  groupId,
+  onSubmit,
+}: CreatePollFormProps) {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -23,10 +26,6 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
     deadline: "",
     votingItems: ["", "", ""],
   });
-
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -99,8 +98,8 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
     } else if (!isTitleDefined()) {
       displayErrorPopup("Poll needs to have title.");
     } else {
+      onSubmit();
       console.log("Form submitted", formData);
-      toggleExpand(); // Collapse the form after submission
     }
   };
 
@@ -151,84 +150,75 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
 
   return (
     <div className="poll-form">
-      {!isExpanded && (
-        <div className="poll-form__closed">
-          <CustomButton onClick={toggleExpand}>Create Poll</CustomButton>
-        </div>
-      )}
-      {isExpanded && (
-        <form onSubmit={handleSubmit} className="poll-form__open">
-          <div className="poll-form__title">Create Poll</div>
+      <form onSubmit={handleSubmit} className="poll-form__body">
+        <div className="poll-form__body__title">Create Poll</div>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          value={formData.title}
+          onChange={handleInputChange}
+        />
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={formData.description}
+          onChange={handleInputChange}
+        />
+        <div className="poll-form__body__settings">
           <input
-            type="text"
-            name="title"
-            placeholder="Title"
-            value={formData.title}
-            onChange={handleInputChange}
+            type="number"
+            name="nofAnswersAllowed"
+            placeholder="Number of options a voter can pick"
+            value={
+              formData.nofAnswersAllowed >= 1 ? formData.nofAnswersAllowed : ""
+            }
+            onChange={handleNofAnswersAllowedChange}
           />
-          <textarea
-            name="description"
-            placeholder="Description"
-            value={formData.description}
+          <input
+            type="datetime-local"
+            name="deadline"
+            placeholder="Choose deadline"
+            value={formData.deadline}
             onChange={handleInputChange}
+            min={getCurrentDateTime()}
+            onFocus={(e) => e.target.blur()}
           />
-          <div className="poll-form__settings">
+        </div>
+        {formData.votingItems.map((votingItem, index) => (
+          <div key={index} className="poll-form__body__voting-item">
+            <button
+              type="button"
+              onClick={() => removeVotingItem(index)}
+              className="poll-form__remove-btn"
+            >
+              -
+            </button>
             <input
-              type="number"
-              name="nofAnswersAllowed"
-              placeholder="Number of options a voter can pick"
-              value={
-                formData.nofAnswersAllowed >= 1
-                  ? formData.nofAnswersAllowed
-                  : ""
-              }
-              onChange={handleNofAnswersAllowedChange}
-            />
-            <input
-              type="datetime-local"
-              name="deadline"
-              placeholder="Choose deadline"
-              value={formData.deadline}
-              onChange={handleInputChange}
-              min={getCurrentDateTime()}
-              onFocus={(e) => e.target.blur()}
+              type="text"
+              value={votingItem}
+              onChange={(e) => handleVotingItemChange(index, e.target.value)}
+              placeholder={`Option ${index + 1}`}
             />
           </div>
-          {formData.votingItems.map((votingItem, index) => (
-            <div key={index} className="poll-form__voting-item">
-              <button
-                type="button"
-                onClick={() => removeVotingItem(index)}
-                className="poll-form__remove-btn"
-              >
-                -
-              </button>
-              <input
-                type="text"
-                value={votingItem}
-                onChange={(e) => handleVotingItemChange(index, e.target.value)}
-                placeholder={`Option ${index + 1}`}
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addVotingItem}
-            className="poll-form__add-btn"
-          >
-            +
-          </button>
-          <CustomButton type="submit">Submit</CustomButton>
-          <p>
-            {isErrorPopupVisible && (
-              <ErrorPopup
-                message={errorMessage}
-                closeErrorPopup={closeErrorPopup}
-              />
-            )}
-          </p>
-        </form>
-      )}
+        ))}
+        <button
+          type="button"
+          onClick={addVotingItem}
+          className="poll-form__body__add-btn"
+        >
+          +
+        </button>
+        <CustomButton type="submit">Submit</CustomButton>
+        <p>
+          {isErrorPopupVisible && (
+            <ErrorPopup
+              message={errorMessage}
+              closeErrorPopup={closeErrorPopup}
+            />
+          )}
+        </p>
+      </form>
     </div>
   );
 }

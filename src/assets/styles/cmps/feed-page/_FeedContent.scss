@@ -12,18 +12,22 @@
   }
 }
 
-@mixin feed-item {
-  display: flex;
-  flex-direction: column;
-  background-color: $secondaryBgColor0;
+@mixin basic-feed-item {
+  width: 45vw;
+  height: fit-content;
   border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  background-color: $secondaryBgColor0;
+}
+
+@mixin feed-item {
+  @include basic-feed-item;
+  flex-direction: column;
   justify-content: start;
   grid-template-rows: 20px auto;
   grid-template-columns: 100%;
   row-gap: 6px;
-  padding: 10px;
-  width: 45vw;
-  height: fit-content;
   word-wrap: break-word;
 }
 

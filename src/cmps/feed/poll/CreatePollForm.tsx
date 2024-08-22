@@ -7,12 +7,12 @@ import { useParams } from "react-router-dom";
 
 interface CreatePollFormProps {
   groupId: string;
-  onSubmit: () => void;
+  closePollFunction: () => void;
 }
 
 export default function CreatePollForm({
   groupId,
-  onSubmit,
+  closePollFunction,
 }: CreatePollFormProps) {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -103,7 +103,7 @@ export default function CreatePollForm({
     } else if (!isDeadlineValid()) {
       displayErrorPopup("Deadline need to be a valid date in the future");
     } else {
-      onSubmit(); //
+      closePollFunction(); //
       console.log("Form submitted", formData);
     }
   };
@@ -167,6 +167,9 @@ export default function CreatePollForm({
   return (
     <div className="poll-form">
       <form onSubmit={handleSubmit} className="poll-form__body">
+        <button className="poll-form__close-button" onClick={closePollFunction}>
+          X
+        </button>
         <div className="poll-form__body__title">Create Poll</div>
         <input
           type="text"

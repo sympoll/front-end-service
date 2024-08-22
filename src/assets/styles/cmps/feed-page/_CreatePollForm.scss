@@ -1,10 +1,42 @@
 .poll-form {
-  //width: 400px; // Adjust width as needed
+  @include basic-feed-item;
   margin: 0 auto; // Center the form horizontally
+  margin-top: 10px;
   min-width: 400px;
   row-gap: 6px;
   padding: 10px;
   width: 45vw;
+  position: relative; // Ensure the close button is positioned relative to the poll form
+  font-family: $mainFont;
+
+  &__close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333; // Adjust color as needed
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      color: #e74c3c; // Change color on hover for a modern effect
+    }
+
+    &:focus {
+      outline: none; // Remove focus outline
+    }
+
+    &::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    &::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  }
 
   &__body {
     background-color: $secondaryBgColor0;
@@ -18,7 +50,6 @@
     &__title {
       font-size: 24px; /* Adjust font size as needed */
       font-weight: bold; /* Makes the text bold */
-      color: #333; /* Set text color */
       text-align: center;
     }
 
@@ -49,6 +80,10 @@
       border: 0px solid #ccc;
       font-family: $mainFont;
       resize: none;
+
+      &:focus {
+        outline: none; // Remove focus outline
+      }
     }
 
     &__voting-item {

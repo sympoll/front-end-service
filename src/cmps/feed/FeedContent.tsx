@@ -84,7 +84,7 @@ export default function FeedContent() {
   if (!polls) {
     return (
       <div>
-        <FeedBar groupId={"1"} />
+        {/* <FeedBar groupId={"1"} /> */}
         <FeedErrorMessage error={error} />
       </div>
     );

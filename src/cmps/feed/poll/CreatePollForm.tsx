@@ -13,6 +13,7 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
@@ -157,6 +158,7 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
       )}
       {isExpanded && (
         <form onSubmit={handleSubmit} className="poll-form__open">
+          <div className="poll-form__title">Create Poll</div>
           <input
             type="text"
             name="title"

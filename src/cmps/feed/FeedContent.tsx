@@ -81,7 +81,12 @@ export default function FeedContent() {
 
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
-    return <FeedErrorMessage error={error} />;
+    return (
+      <div>
+        <CreatePollForm groupId={"1"} />
+        <FeedErrorMessage error={error} />
+      </div>
+    );
   }
   if (polls.length === 0) {
     return (

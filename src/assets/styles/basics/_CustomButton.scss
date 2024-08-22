@@ -6,7 +6,9 @@
   box-sizing: border-box;
   color: #ffffff;
   cursor: pointer;
-  display: inline-flex;
+  display: flex; // Or block, depending on layout needs
+  justify-content: center;
+  align-items: center;
   font-family: $secondaryFont;
   font-size: 16px;
   font-weight: 600;
@@ -19,6 +21,7 @@
   padding-left: 20px;
   padding-right: 20px;
   text-align: center;
+  align-self: center;
   touch-action: manipulation;
   transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
     box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
@@ -28,18 +31,18 @@
   vertical-align: middle;
 }
 
-CustomButton:hover,
-CustomButton:focus {
+.custom-button:hover,
+.custom-button:focus {
   background-color: $mainColor-dark0;
   color: rgb(255, 255, 255, 1);
 }
 
-CustomButton:active {
+.custom-button:active {
   background: $mainColor-dark1;
   color: rgb(255, 255, 255, 0.7);
 }
 
-CustomButton:disabled {
+.custom-button:disabled {
   cursor: not-allowed;
   background: rgba(0, 0, 0, 0.08);
   color: rgba(0, 0, 0, 0.3);

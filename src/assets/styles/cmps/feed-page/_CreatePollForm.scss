@@ -1,33 +1,35 @@
-.poll-container {
-  @include feed-item;
-}
-
 .poll-form {
-  width: 400px; // Adjust width as needed
+  //width: 400px; // Adjust width as needed
   margin: 0 auto; // Center the form horizontally
+  min-width: 400px;
+  row-gap: 6px;
+  padding: 10px;
+  width: 45vw;
 
-  &__header {
+  &__closed {
     background-color: $hoverSidebarColor;
     padding: 10px;
     text-align: center;
-    cursor: pointer;
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
   }
 
   &__create-btn {
-    // Fixed selector name from &__foo &__create-btn to &__create-btn
     border: none;
     padding: 10px 20px;
-    cursor: pointer;
+    margin: 0 auto; // Center the button horizontally
+    display: inline-flex;
   }
 
-  &__body {
+  &__open {
     background-color: $mainColor-light0;
     border-radius: 20px; // Apply border radius
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 
     .poll-form__settings {
       display: flex;
@@ -42,7 +44,6 @@
 
       input[name="deadline"] {
         width: 100%; // Longer width for the datetime input
-        max-width: 300px; // Limit maximum width
         color: gray;
         user-select: none;
         cursor: default;
@@ -110,7 +111,9 @@
       border: none;
       padding: 10px 20px;
       cursor: pointer;
-      align-self: center;
+      margin: 0 auto; // Center the button horizontally
+      display: block; // Try block display to ensure it stretches full width
+      width: 100%; // Ensure it takes full width of its container
     }
   }
 }

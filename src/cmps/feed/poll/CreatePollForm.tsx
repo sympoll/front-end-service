@@ -151,12 +151,12 @@ export default function CreatePollForm({ groupId }: CreatePollFormProps) {
   return (
     <div className="poll-form">
       {!isExpanded && (
-        <div className="poll-form__header">
+        <div className="poll-form__closed">
           <CustomButton onClick={toggleExpand}>Create Poll</CustomButton>
         </div>
       )}
       {isExpanded && (
-        <form onSubmit={handleSubmit} className="poll-form__body">
+        <form onSubmit={handleSubmit} className="poll-form__open">
           <input
             type="text"
             name="title"

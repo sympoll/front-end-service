@@ -81,17 +81,24 @@ export default function FeedContent() {
 
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
-    return <FeedErrorMessage error={error} />;
+    return (
+      <div>
+        <CreatePollForm groupId={"1"} />
+        <FeedErrorMessage error={error} />
+      </div>
+    );
   }
   if (polls.length === 0) {
     return (
-      <FeedErrorMessage
-        error={
-          groupId
-            ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
-            : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
-        }
-      />
+      <div>
+        <FeedErrorMessage
+          error={
+            groupId
+              ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
+              : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
+          }
+        />
+      </div>
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }
   return (

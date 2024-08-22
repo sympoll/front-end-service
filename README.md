@@ -10,6 +10,7 @@
 > - Base Library - React
 > - Build Tool - Vite
 > - Styling CSS Language - SASS
+> - HTTP Client for sending API requests - Axios
 
 ---
 

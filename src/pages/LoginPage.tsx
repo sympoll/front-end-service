@@ -61,11 +61,11 @@ export default function LoginPage() {
     // navigate("/feed");
   };
 
-  const handleSignUp = (event: React.FormEvent) => {
+  const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const userData: UserData = { username: username, email: email, password: password };
-    const isValidData = validateUserData(userData, passwordConfirm, setErrorMessage);
+    const isValidData = await validateUserData(userData, passwordConfirm, setErrorMessage);
     if (!isValidData) {
       showErrorPopup();
       console.log("Invalid user data entered: " + errorMessage);
@@ -157,13 +157,6 @@ export default function LoginPage() {
               />
             )}
           </div>
-          {isSignIn ? (
-            <p>
-              <Link to="/reset-account">Forgot Username / Password?</Link>
-            </p>
-          ) : (
-            <></>
-          )}
           <div className="show-password-container">
             <input
               id="show-password-checkbox"
@@ -180,6 +173,13 @@ export default function LoginPage() {
               <div id="show-password-label">Show Password</div>
             </label>
           </div>
+          {isSignIn ? (
+            <p id="reset-account-link">
+              <Link to="/reset-account">Forgot Username / Password?</Link>
+            </p>
+          ) : (
+            <></>
+          )}
           <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
         </form>
       </div>

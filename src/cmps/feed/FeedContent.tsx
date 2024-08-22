@@ -81,12 +81,7 @@ export default function FeedContent() {
 
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
-    return (
-      <div>
-        <CreatePollForm groupId={"1"} />
-        <FeedErrorMessage error={error} />
-      </div>
-    );
+    return <FeedErrorMessage error={error} />;
   }
   if (polls.length === 0) {
     return (
@@ -102,24 +97,26 @@ export default function FeedContent() {
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }
   return (
-    <div className="feed-content-container">
+    <div className="feed-header">
       {groupId && <CreatePollForm groupId={groupId} />}
-      {polls.map((poll) => (
-        <Poll
-          key={poll.pollId}
-          pollId={poll.pollId}
-          title={poll.title}
-          description={poll.description}
-          nofAnswersAllowed={poll.nofAnswersAllowed}
-          creatorId={poll.creatorId}
-          groupId={poll.groupId}
-          timeCreated={poll.timeCreated}
-          timeUpdated={poll.timeUpdated}
-          deadline={poll.deadline}
-          votingItems={poll.votingItems}
-          isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-        />
-      ))}
+      <div className="feed-content-container">
+        {polls.map((poll) => (
+          <Poll
+            key={poll.pollId}
+            pollId={poll.pollId}
+            title={poll.title}
+            description={poll.description}
+            nofAnswersAllowed={poll.nofAnswersAllowed}
+            creatorId={poll.creatorId}
+            groupId={poll.groupId}
+            timeCreated={poll.timeCreated}
+            timeUpdated={poll.timeUpdated}
+            deadline={poll.deadline}
+            votingItems={poll.votingItems}
+            isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -23,6 +23,7 @@ export default function FeedBar({ groupId }: FeedBarProps) {
     <div className="feed-header">
       {isFeedBarVisible && (
         <div className="feed-bar">
+          // Add buttons to feed bar here.
           <CustomButton onClick={toggleCreatePollForm} name="create-btn">
             Create Poll
           </CustomButton>

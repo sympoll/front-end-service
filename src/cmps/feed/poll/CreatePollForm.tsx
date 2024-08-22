@@ -41,6 +41,7 @@ export default function CreatePollForm({
     }, 5000); // Hide after 5 seconds
   };
 
+  // Each time there is an input change, this sets the form's returned parametes.
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -51,6 +52,7 @@ export default function CreatePollForm({
     });
   };
 
+  // Changed the values in the returned voting items
   const handleVotingItemChange = (index: number, value: string) => {
     const newVotingItems = [...formData.votingItems];
     newVotingItems[index] = value;
@@ -90,6 +92,7 @@ export default function CreatePollForm({
     }
   };
 
+  // Validates the form contents, If everything is ok submits the form in the else case
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     // Handle form submission logic with formData
@@ -97,8 +100,10 @@ export default function CreatePollForm({
       displayErrorPopup("All options need to contain a value");
     } else if (!isTitleDefined()) {
       displayErrorPopup("Poll needs to have title.");
+    } else if (!isDeadlineValid()) {
+      displayErrorPopup("Deadline need to be a valid date in the future");
     } else {
-      onSubmit();
+      onSubmit(); //
       console.log("Form submitted", formData);
     }
   };
@@ -116,6 +121,17 @@ export default function CreatePollForm({
     return formData.title != "";
   }
 
+  function isDeadlineValid(): boolean {
+    const deadlineDate = new Date(formData.deadline);
+
+    // Check if the deadline is a valid date
+    if (isNaN(deadlineDate.getTime())) {
+      return false; // Invalid date
+    }
+
+    const now = new Date();
+    return deadlineDate > now;
+  }
   // Sets a limit on the number of answers the nofAnswersAllowed field can display
   const handleNofAnswersAllowedChange = (
     e: React.ChangeEvent<HTMLInputElement>

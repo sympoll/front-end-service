@@ -61,11 +61,11 @@ export default function LoginPage() {
     // navigate("/feed");
   };
 
-  const handleSignUp = (event: React.FormEvent) => {
+  const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
 
     const userData: UserData = { username: username, email: email, password: password };
-    const isValidData = validateUserData(userData, passwordConfirm, setErrorMessage);
+    const isValidData = await validateUserData(userData, passwordConfirm, setErrorMessage);
     if (!isValidData) {
       showErrorPopup();
       console.log("Invalid user data entered: " + errorMessage);

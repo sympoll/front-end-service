@@ -60,23 +60,28 @@ export default function FeedContent() {
 
   // Use for testing animations/frontend stuff that don't require the server.
   // return (
-  //   <div className="feed-content-container">
-  //     {getSamplePolls().map((poll) => (
-  //       <Poll
-  //         key={poll.pollId}
-  //         pollId={poll.pollId}
-  //         title={poll.title}
-  //         description={poll.description}
-  //         nofAnswersAllowed={poll.nofAnswersAllowed}
-  //         creatorId={poll.creatorId}
-  //         groupId={poll.groupId}
-  //         timeCreated={poll.timeCreated}
-  //         timeUpdated={poll.timeUpdated}
-  //         deadline={poll.deadline}
-  //         votingItems={poll.votingItems}
-  //         isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-  //       />
-  //     ))}
+  //   <div className="feed-container">
+  //     <div className="feed-header">
+  //       {groupId && <FeedBar groupId={groupId} />}
+  //     </div>
+  //     <div className="feed-content-container">
+  //       {getSamplePolls().map((poll) => (
+  //         <Poll
+  //           key={poll.pollId}
+  //           pollId={poll.pollId}
+  //           title={poll.title}
+  //           description={poll.description}
+  //           nofAnswersAllowed={poll.nofAnswersAllowed}
+  //           creatorId={poll.creatorId}
+  //           groupId={poll.groupId}
+  //           timeCreated={poll.timeCreated}
+  //           timeUpdated={poll.timeUpdated}
+  //           deadline={poll.deadline}
+  //           votingItems={poll.votingItems}
+  //           isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
+  //         />
+  //       ))}
+  //     </div>
   //   </div>
   // );
 

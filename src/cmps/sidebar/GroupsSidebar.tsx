@@ -7,12 +7,14 @@ import UserInfoSidebarItem from "./SidebarUserInfo";
 export default function GroupsSidebar() {
   // TODO: change username to the current user
   return (
-    <ul className="groups-sidebar-container">
+    <div className="groups-sidebar-container">
       <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
-      <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
-      <GroupsSidebarItem title="Group 1" Icon={GroupsIcon} path="/feed/group1" />
-      <GroupsSidebarItem title="Group 69" Icon={GroupsIcon} path="/feed/group69" />
-      <GroupsSidebarItem title="Group 31" Icon={GroupsIcon} path="/feed/group31" />
-    </ul>
+      <ul className="groups-sidebar-groups-list">
+        <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
+        <GroupsSidebarItem title="Group 1" Icon={GroupsIcon} path="/feed/group1" />
+        <GroupsSidebarItem title="Group 69" Icon={GroupsIcon} path="/feed/group69" />
+        <GroupsSidebarItem title="Group 31" Icon={GroupsIcon} path="/feed/group31" />
+      </ul>
+    </div>
   );
 }

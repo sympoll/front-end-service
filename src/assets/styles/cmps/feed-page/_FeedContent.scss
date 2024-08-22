@@ -1,18 +1,18 @@
 .feed-container {
   max-height: 100vh;
   overflow-y: auto;
-}
 
-.feed-content-container {
-  // @include mid-page-content-container;
-  animation: slideUp 1.2s ease-in-out forwards;
+  .feed-content-container {
+    // @include mid-page-content-container;
+    animation: slideUp 1.2s ease-in-out forwards;
 
-  @keyframes slideUp {
-    from {
-      transform: translateY(100%);
-    }
-    to {
-      transform: translateY(0%);
+    @keyframes slideUp {
+      from {
+        transform: translateY(100%);
+      }
+      to {
+        transform: translateY(0%);
+      }
     }
   }
 }

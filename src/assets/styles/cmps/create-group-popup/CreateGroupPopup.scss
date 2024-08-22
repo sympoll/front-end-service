@@ -69,6 +69,28 @@
   .create-group-popup-form-button {
     margin-top: 20px;
   }
+
+  form input,
+  form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px; /* Ensure the text inside both elements is the same size */
+    border: 1px solid #ccc; /* Match the border style */
+    border-radius: 4px; /* Match the border radius */
+    outline: none; /* Remove the default outline */
+  }
+  
+  form input:focus,
+  form textarea:focus {
+    border-color: #0066cc; /* Change the border color on focus */
+  }
+  
+  form textarea {
+    height: 80px;
+    resize: none;
+  }
   
   @keyframes textColorChange {
     100% {

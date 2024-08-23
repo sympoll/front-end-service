@@ -1,0 +1,13 @@
+.sidebar-user-info-container {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid $sectionDividerColor;
+}
+
+.sidebar-user-info-data {
+  @include flex-column;
+  justify-content: center;
+}

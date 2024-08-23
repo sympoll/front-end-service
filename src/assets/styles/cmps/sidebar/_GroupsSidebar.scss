@@ -1,14 +1,21 @@
 .groups-sidebar-container {
-  @include sticky-top(vh);
+  @include sticky-top(1vh);
   @include set-grid-location(2, 1);
-  display: grid;
+  @include flex-column;
   align-content: flex-start;
   background-color: $mainSidebarColor;
   color: white;
-  row-gap: 5px;
   z-index: 10;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
 }
 
-.groups-sidebar-container #groups-sidebar-item-active {
+.groups-sidebar-groups-list {
+  @include flex-column;
+  gap: 4px;
+}
+
+.groups-sidebar-groups-list #groups-sidebar-item-active {
   background-color: $activeSidebarColor;
 }

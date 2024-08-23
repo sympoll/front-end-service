@@ -41,3 +41,24 @@ export async function createNewGroup(
         setSubmitButtonText('Create Group');
       }
 }
+
+export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
+  console.log("Send request to get '" + memberId + "' groups");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .get(import.meta.env.VITE_GROUP_SERVICE_GET_GROUPS_BY_MEMBER_ID, { params: { memberId } } );
+      
+    return response.data;
+  } catch (err){
+    console.error("Error fetching '" + memberId + "' groups");
+    throw err;
+  }
+}

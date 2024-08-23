@@ -4,6 +4,8 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import CreateGroupButton from "../global/CreateGroupButton";
 import CreateGroupPopup from "../popup/CreateGroupPopup";
+import { GroupData } from "../../models/GroupData.model";
+import { fetchUserGroups } from "../../services/group.service";
 
 export default function GroupsSidebar() {
   /*
@@ -17,8 +19,16 @@ export default function GroupsSidebar() {
   // Temporary hard coded user ID
   const userId = 'b1f8e925-2129-473d-bc09-b3a2a331f839'
 
-  useEffect(() => {
+  const [groups, setGroups] = useState<GroupData[]>();
 
+  useEffect(() => {
+    setGroups(undefined);
+
+    fetchUserGroups(userId)
+    .then((data) => {
+      console.log("Fetching user groups");
+      setGroups(data);
+    })
   }, []);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
@@ -49,6 +59,13 @@ export default function GroupsSidebar() {
           Icon={GroupsIcon}
           path="/feed/group31"
         />
+        {groups?.map((group) => (
+          <GroupsSidebarItem
+            title={group.groupName}
+            Icon={GroupsIcon}
+            path={"/feed/" + group.groupName}
+            />
+        ))}
       </ul>
       <CreateGroupButton onClick = {openPopup} />
       {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} />}

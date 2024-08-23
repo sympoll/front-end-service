@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
-import {
-  fetchAllUserGroupsPolls,
-  fetchPollsByGroupId,
-} from "../../services/poll.service";
+import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "./messege/FeedLoadingAnimation";
 import FeedErrorMessage from "./messege/FeedErrorMessage";
@@ -87,31 +84,22 @@ export default function FeedContent() {
 
   if (isLoading) return <FeedLoadingAnimation />;
   if (!polls) {
-    return (
-      <div>
-        {/* <FeedBar groupId={"1"} /> */}
-        <FeedErrorMessage error={error} />
-      </div>
-    );
+    return <FeedErrorMessage error={error} />;
   }
   if (polls.length === 0) {
     return (
-      <div>
-        <FeedErrorMessage
-          error={
-            groupId
-              ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
-              : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
-          }
-        />
-      </div>
+      <FeedErrorMessage
+        error={
+          groupId
+            ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
+            : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
+        }
+      />
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }
   return (
     <div className="feed-container">
-      <div className="feed-header">
-        {groupId && <FeedBar groupId={groupId} />}
-      </div>
+      <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>
       <div className="feed-content-container">
         {polls.map((poll) => (
           <Poll

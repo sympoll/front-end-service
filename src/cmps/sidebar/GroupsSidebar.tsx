@@ -26,7 +26,7 @@ export default function GroupsSidebar() {
 
     fetchUserGroups(userId)
     .then((data) => {
-      console.log("Fetching user groups");
+      console.log("Fetching user groups data: ", data);
       setGroups(data);
     })
   }, []);

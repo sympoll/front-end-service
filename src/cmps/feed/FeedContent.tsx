@@ -7,6 +7,8 @@ import FeedErrorMessage from "./messege/FeedErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
+import CreatePollForm from "./poll/CreatePollForm";
+import FeedBar from "./bar/FeedBar";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -55,23 +57,28 @@ export default function FeedContent() {
 
   // Use for testing animations/frontend stuff that don't require the server.
   // return (
-  //   <div className="feed-content-container">
-  //     {getSamplePolls().map((poll) => (
-  //       <Poll
-  //         key={poll.pollId}
-  //         pollId={poll.pollId}
-  //         title={poll.title}
-  //         description={poll.description}
-  //         nofAnswersAllowed={poll.nofAnswersAllowed}
-  //         creatorId={poll.creatorId}
-  //         groupId={poll.groupId}
-  //         timeCreated={poll.timeCreated}
-  //         timeUpdated={poll.timeUpdated}
-  //         deadline={poll.deadline}
-  //         votingItems={poll.votingItems}
-  //         isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-  //       />
-  //     ))}
+  //   <div className="feed-container">
+  //     <div className="feed-header">
+  //       {groupId && <FeedBar groupId={groupId} />}
+  //     </div>
+  //     <div className="feed-content-container">
+  //       {getSamplePolls().map((poll) => (
+  //         <Poll
+  //           key={poll.pollId}
+  //           pollId={poll.pollId}
+  //           title={poll.title}
+  //           description={poll.description}
+  //           nofAnswersAllowed={poll.nofAnswersAllowed}
+  //           creatorId={poll.creatorId}
+  //           groupId={poll.groupId}
+  //           timeCreated={poll.timeCreated}
+  //           timeUpdated={poll.timeUpdated}
+  //           deadline={poll.deadline}
+  //           votingItems={poll.votingItems}
+  //           isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
+  //         />
+  //       ))}
+  //     </div>
   //   </div>
   // );
 
@@ -91,23 +98,26 @@ export default function FeedContent() {
     ); // TODO: add tutorial for admins only (members wont see the tutorail)
   }
   return (
-    <div className="feed-content-container">
-      {polls.map((poll) => (
-        <Poll
-          key={poll.pollId}
-          pollId={poll.pollId}
-          title={poll.title}
-          description={poll.description}
-          nofAnswersAllowed={poll.nofAnswersAllowed}
-          creatorId={poll.creatorId}
-          groupId={poll.groupId}
-          timeCreated={poll.timeCreated}
-          timeUpdated={poll.timeUpdated}
-          deadline={poll.deadline}
-          votingItems={poll.votingItems}
-          isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-        />
-      ))}
+    <div className="feed-container">
+      <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>
+      <div className="feed-content-container">
+        {polls.map((poll) => (
+          <Poll
+            key={poll.pollId}
+            pollId={poll.pollId}
+            title={poll.title}
+            description={poll.description}
+            nofAnswersAllowed={poll.nofAnswersAllowed}
+            creatorId={poll.creatorId}
+            groupId={poll.groupId}
+            timeCreated={poll.timeCreated}
+            timeUpdated={poll.timeUpdated}
+            deadline={poll.deadline}
+            votingItems={poll.votingItems}
+            isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
+          />
+        ))}
+      </div>
     </div>
   );
 }

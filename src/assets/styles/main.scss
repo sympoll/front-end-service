@@ -6,7 +6,7 @@
 
 // ** Basics **
 @import "basics/base";
-@import "basics/Button";
+@import "basics/CustomButton";
 
 // ** Effects **
 @import "effects/ripple-loading";
@@ -35,6 +35,8 @@
 @import "cmps/feed-page/FeedContent";
 @import "cmps/feed-page/Poll";
 @import "cmps/feed-page/FeedPage";
+@import "cmps/feed-page/CreatePollForm";
+@import "cmps/feed-page/FeedBar";
 
 // * Not Found Page *
 @import "cmps/not-found-page/NotFoundPage";

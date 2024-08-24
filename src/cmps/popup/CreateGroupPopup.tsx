@@ -7,7 +7,7 @@ interface CreateGroupPopupProps {
   triggerGroupsChange: () => void;
 }
 
-export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange: handleGroupsChange}: CreateGroupPopupProps) {
+export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange: triggerGroupsChange}: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>('');
   const [groupDescription, setGroupDescription] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -20,7 +20,7 @@ export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange:
     try {
       await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText);
       console.log('New Group Created:', groupName);
-      handleGroupsChange();
+      triggerGroupsChange();
       onClose(); // Close the popup after submission
     } catch(err) {
       setErrorMessage(String(err));

@@ -14,6 +14,51 @@
 .groups-sidebar-groups-list {
   @include flex-column;
   gap: 4px;
+  overflow-y: auto; // Enable scrolling for the group list
+  flex: 1; // Allow the list to expand and take available space
+  margin-bottom: 10px; // Space for the button
+  max-height: calc(100vh - 50px); // Adjust based on the button height and padding
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.groups-list::-webkit-scrollbar {
+  width: 0; /* Hide scrollbar for WebKit browsers */
+}
+
+.groups-list::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Ensure no visible thumb */
+}
+
+.groups-list::-webkit-scrollbar-track {
+  background-color: transparent; /* Ensure no visible track */
+}
+
+.create-group-button {
+  position: sticky;
+  bottom: 0;
+  background-color: $mainSidebarColor;
+  padding: 10px;
+  button {
+    width: 100%;
+    background-color: $mainColor-normal;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: $mainColor-normal; 
+    }
+    .button-icon {
+      margin-right: 8px;
+      font-size: 20px;
+    }
+  }
 }
 
 .groups-sidebar-groups-list #groups-sidebar-item-active {

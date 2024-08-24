@@ -37,6 +37,11 @@ export default function GroupsSidebar() {
   return (
     <div className="groups-sidebar-container">
       <ul className="groups-list">
+        <GroupsSidebarItem
+          title="All Groups"
+          Icon={FormatListBulletedIcon}
+          path="/feed"
+          />
         {groups?.map((group) => (
           <GroupsSidebarItem
             title={group.groupName}

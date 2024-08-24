@@ -7,7 +7,7 @@ import CreateGroupPopup from "../popup/CreateGroupPopup";
 import { GroupData } from "../../models/GroupData.model";
 import { fetchUserGroups } from "../../services/group.service";
 
-export default function GroupsSidebar() {
+export default async function GroupsSidebar() {
   /*
     At the moment the sidebar items don't route.
     after we add multiple groups, change to the path of the chosen group,
@@ -19,20 +19,15 @@ export default function GroupsSidebar() {
   // Temporary hard coded user ID
   const userId = 'b1f8e925-2129-473d-bc09-b3a2a331f839'
 
-  const [groups, setGroups] = useState<GroupData[]>();
-  const [trigger, setTrigger] = useState(false);
-
-  const triggerGroupsChange = () => setTrigger(!trigger);
+  const [groups, setGroups] = useState<GroupData[]>(await fetchUserGroups(userId));
 
   useEffect(() => {
-    setGroups(undefined);
-
     fetchUserGroups(userId)
     .then((data) => {
       console.log("Fetching user groups data: ", data);
       setGroups(data);
     })
-  }, [trigger]);
+  }, [groups]);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
@@ -71,7 +66,7 @@ export default function GroupsSidebar() {
         ))}
       </ul>
       <CreateGroupButton onClick = {openPopup} />
-      {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} triggerGroupsChange={triggerGroupsChange} />}
+      {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} groups={groups} />}
     </div>
   );
 }

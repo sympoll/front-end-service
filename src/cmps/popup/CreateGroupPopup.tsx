@@ -1,13 +1,14 @@
 import React, { useState, FormEvent, useEffect } from 'react';
 import { createNewGroup } from '../../services/group.service';
+import { GroupData } from '../../models/GroupData.model';
 
 interface CreateGroupPopupProps {
   userId: string;
   onClose: () => void;
-  triggerGroupsChange: () => void;
+  groups: GroupData[];
 }
 
-export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange: triggerGroupsChange}: CreateGroupPopupProps) {
+export default function CreateGroupPopup({ userId, onClose, groups}: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>('');
   const [groupDescription, setGroupDescription] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -18,9 +19,8 @@ export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange:
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText);
+      groups.push(await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText));
       console.log('New Group Created:', groupName);
-      triggerGroupsChange();
       onClose(); // Close the popup after submission
     } catch(err) {
       setErrorMessage(String(err));

@@ -14,7 +14,6 @@ export async function createNewGroup(
     setIsCreating: (data: boolean) => void,
     setSubmitButtonText: (data: string) => void) : Promise<GroupData> {
     const groupCreateRequestPayload ={
-        groupId: groupName,
         groupName: groupName,
         description: description,
         creatorId: userId,

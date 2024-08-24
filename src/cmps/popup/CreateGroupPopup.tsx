@@ -5,7 +5,7 @@ import { GroupData } from '../../models/GroupData.model';
 interface CreateGroupPopupProps {
   userId: string;
   onClose: () => void;
-  groups: GroupData[];
+  groups: GroupData[] | undefined;
 }
 
 export default function CreateGroupPopup({ userId, onClose, groups}: CreateGroupPopupProps) {
@@ -19,6 +19,10 @@ export default function CreateGroupPopup({ userId, onClose, groups}: CreateGroup
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
+      if(!groups){
+        return;
+      }
+      
       groups.push(await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText));
       console.log('New Group Created:', groupName);
       onClose(); // Close the popup after submission

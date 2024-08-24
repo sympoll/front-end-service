@@ -7,6 +7,10 @@ $errorFont: "Arvo", serif;
 
 $mainFontSize: 14px;
 
+// ** Font Colors **
+$mainFontColor: black;
+$secondaryFontColor: white;
+
 // ** Background Colors **
 $mainBgColor0: peachpuff;
 $mainBgColor1: rgb(43, 43, 43);
@@ -27,13 +31,13 @@ $voting-checkbox-font-color: #000000;
 $loading-icon-color: rgb(6, 68, 36);
 
 // ** Main Colors **
-$mainFontColor: black;
 $grayedOutFontColor: $active-vote-color;
 $mainColor-normal: #e48f17;
 $mainColor-light0: #f3c380;
 $mainColor-light1: #ffdab9;
 $mainColor-dark0: #c97f17;
 $mainColor-dark1: #9e6515;
+$mainColor-dark3: #e0b16f;
 $errorColor: rgb(117, 26, 26);
 
 // **Form Colors **

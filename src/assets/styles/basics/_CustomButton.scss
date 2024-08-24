@@ -1,10 +1,10 @@
 .custom-button {
   @include center;
-  background-color: $mainColor-normal;
+  background-color: $mainColor-dark3;
   border: 0;
   border-radius: 100px;
   box-sizing: border-box;
-  color: #ffffff;
+  color: $mainFontColor;
   cursor: pointer;
   display: flex; // Or block, depending on layout needs
   justify-content: center;
@@ -24,8 +24,7 @@
   align-self: center;
   touch-action: manipulation;
   transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
-    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
-    color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+    box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
@@ -34,7 +33,7 @@
 .custom-button:hover,
 .custom-button:focus {
   background-color: $mainColor-dark0;
-  color: rgb(255, 255, 255, 1);
+  color: $secondaryFontColor;
 }
 
 .custom-button:active {

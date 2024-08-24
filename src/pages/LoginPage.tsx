@@ -180,7 +180,9 @@ export default function LoginPage() {
           ) : (
             <></>
           )}
-          <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
+          <button type="submit" className="custom-button">
+            {isSignIn ? "Log In" : "Sign Up"}
+          </button>
         </form>
       </div>
     </section>

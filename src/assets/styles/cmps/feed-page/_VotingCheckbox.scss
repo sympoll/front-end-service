@@ -89,16 +89,17 @@
 @keyframes splash-12 {
   40% {
     background: $active-vote-color;
-    box-shadow: 0 -18px 0 -8px $active-vote-color, 16px -8px 0 -8px $active-vote-color,
-      16px 8px 0 -8px $active-vote-color, 0 18px 0 -8px $active-vote-color,
-      -16px 8px 0 -8px $active-vote-color, -16px -8px 0 -8px $active-vote-color;
+    box-shadow: 0 -18px 0 -8px $active-vote-color,
+      16px -8px 0 -8px $active-vote-color, 16px 8px 0 -8px $active-vote-color,
+      0 18px 0 -8px $active-vote-color, -16px 8px 0 -8px $active-vote-color,
+      -16px -8px 0 -8px $active-vote-color;
   }
 
   100% {
     background: $active-vote-color;
     box-shadow: 0 -36px 0 -10px transparent, 32px -16px 0 -10px transparent,
-      32px 16px 0 -10px transparent, 0 36px 0 -10px transparent, -32px 16px 0 -10px transparent,
-      -32px -16px 0 -10px transparent;
+      32px 16px 0 -10px transparent, 0 36px 0 -10px transparent,
+      -32px 16px 0 -10px transparent, -32px -16px 0 -10px transparent;
   }
 }
 

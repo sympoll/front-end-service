@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { invokeSignUp, validateUserData } from "../services/signup.service";
+import { UserData } from "../models/UserData.model";
+import ErrorPopup from "../cmps/popup/ErrorPopup";
 
 const SPACE = " ";
 const EMPTY_STR = "";
@@ -14,7 +17,18 @@ export default function LoginPage() {
   const [password, setPassword] = useState(EMPTY_STR);
   const [passwordConfirm, setPasswordConfirm] = useState(EMPTY_STR);
   const [showPassword, setShowPassword] = useState(false);
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+
   const navigate = useNavigate();
+
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
 
   const clearInputs = () => {
     setUsername(EMPTY_STR);
@@ -22,6 +36,7 @@ export default function LoginPage() {
     setPassword(EMPTY_STR);
     setPasswordConfirm(EMPTY_STR);
     setShowPassword(false);
+    closeErrorPopup();
   };
 
   useEffect(() => {
@@ -37,75 +52,111 @@ export default function LoginPage() {
   };
 
   const handleLogIn = (event: React.FormEvent) => {
+    event.preventDefault();
+
     // TODO: Add login logic
+
+    // TODO: appy user as signed in
+
+    // navigate("/feed");
   };
 
-  const handleSignUp = (event: React.FormEvent) => {
-    // TODO: Add sign up logic
+  const handleSignUp = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const userData: UserData = { username: username, email: email, password: password };
+    const isValidData = await validateUserData(userData, passwordConfirm, setErrorMessage);
+    if (!isValidData) {
+      showErrorPopup();
+      console.log("Invalid user data entered: " + errorMessage);
+      return;
+    }
+
+    invokeSignUp(userData)
+      .then((data) => {
+        console.log("Successfully Signed up user: " + data);
+
+        // TODO: appy user as signed in
+
+        navigate("/feed");
+      })
+      .catch((err) => {
+        console.error("Could not sign up user. " + err);
+        setErrorMessage(err.message);
+        showErrorPopup();
+      });
   };
 
-  const preventSpaceKeyPress = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ) => {
+  const preventSpaceKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === SPACE) event.preventDefault();
   };
 
   return (
     <section className="login-page-container">
       <div className="login-form-container">
-        <p className="login-form-title">
-          {isSignIn ? "Log In" : "Sign Up"} to Sympoll™
-        </p>
-        <form
-          className="login-form"
-          onSubmit={isSignIn ? handleLogIn : handleSignUp}
-        >
-          <input
-            type="text"
-            onKeyDown={preventSpaceKeyPress}
-            maxLength={MAX_USERNAME_LEN}
-            placeholder="Username..."
-            value={username}
-            onChange={(event: any) => {
-              if (event.nativeEvent.keyCode === 32) event.preventDefault();
-              else setUsername(event.target.value);
-            }}
-          />
-          {!isSignIn && (
+        <p className="login-form-title">{isSignIn ? "Log In" : "Sign Up"} to Sympoll™</p>
+        <form className="login-form" onSubmit={isSignIn ? handleLogIn : handleSignUp}>
+          <div className="login-form-swap-mode">
+            <p>
+              {isSignIn ? "Don't have an account? " : "Already have an account? "}
+              <Link to="" onClick={handleModeToggle}>
+                {isSignIn ? "Sign Up" : "Log In"}
+              </Link>
+            </p>
+          </div>
+          <div className="login-form-error-message">
+            {isErrorPopupVisible && (
+              <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />
+            )}
+          </div>
+          <div className="login-form-input-fields">
             <input
               type="text"
               onKeyDown={preventSpaceKeyPress}
-              maxLength={MAX_EMAIL_LEN}
-              placeholder="Email..."
-              value={email}
+              maxLength={MAX_USERNAME_LEN}
+              placeholder="Username..."
+              value={username}
               onChange={(event: any) => {
                 if (event.nativeEvent.keyCode === 32) event.preventDefault();
-                else setEmail(event.target.value);
+                else setUsername(event.target.value);
               }}
             />
-          )}
-          <input
-            type={showPassword ? "text" : "password"}
-            onKeyDown={preventSpaceKeyPress}
-            maxLength={MAX_PASS_LEN}
-            placeholder="Password..."
-            value={password}
-            onChange={(event: any) => {
-              setPassword(event.target.value);
-            }}
-          />
-          {!isSignIn && (
+            {!isSignIn && (
+              <input
+                type="text"
+                onKeyDown={preventSpaceKeyPress}
+                maxLength={MAX_EMAIL_LEN}
+                placeholder="Email..."
+                value={email}
+                onChange={(event: any) => {
+                  if (event.nativeEvent.keyCode === 32) event.preventDefault();
+                  else setEmail(event.target.value);
+                }}
+              />
+            )}
             <input
               type={showPassword ? "text" : "password"}
               onKeyDown={preventSpaceKeyPress}
               maxLength={MAX_PASS_LEN}
-              placeholder="Confirm Password..."
-              value={passwordConfirm}
-              onChange={(event) => {
-                setPasswordConfirm(event.target.value);
+              placeholder="Password..."
+              value={password}
+              onChange={(event: any) => {
+                setPassword(event.target.value);
               }}
             />
-          )}
+            {!isSignIn && (
+              <input
+                type={showPassword ? "text" : "password"}
+                onKeyDown={preventSpaceKeyPress}
+                maxLength={MAX_PASS_LEN}
+                placeholder="Confirm Password..."
+                value={passwordConfirm}
+                onChange={(event) => {
+                  setPasswordConfirm(event.target.value);
+                }}
+              />
+            )}
+          </div>
           <div className="show-password-container">
             <input
               id="show-password-checkbox"
@@ -122,20 +173,15 @@ export default function LoginPage() {
               <div id="show-password-label">Show Password</div>
             </label>
           </div>
-
+          {isSignIn ? (
+            <p id="reset-account-link">
+              <Link to="/reset-account">Forgot Username / Password?</Link>
+            </p>
+          ) : (
+            <></>
+          )}
           <button type="submit">{isSignIn ? "Log In" : "Sign Up"}</button>
         </form>
-        <div className="login-form-forgot-info">
-          <p>
-            <Link to="/reset-account">Forgot Username / Password?</Link>
-          </p>
-          <p>
-            {isSignIn ? "Don't have an account? " : "Already have an account? "}
-            <Link to="" onClick={handleModeToggle}>
-              {isSignIn ? "Sign Up" : "Log In"}
-            </Link>
-          </p>
-        </div>
       </div>
     </section>
   );

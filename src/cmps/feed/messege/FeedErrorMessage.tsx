@@ -1,4 +1,5 @@
 import React from "react";
+import CreatePollForm from "../poll/CreatePollForm";
 
 interface FeedErrorMessageProps {
   error: string | null;

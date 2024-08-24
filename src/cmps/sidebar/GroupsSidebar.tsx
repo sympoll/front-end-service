@@ -2,19 +2,14 @@ import React, { useEffect, useState } from "react";
 import GroupsSidebarItem from "./GroupsSidebarItem";
 import GroupsIcon from "@mui/icons-material/Groups";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+import UserInfoSidebarItem from "./SidebarUserInfo";
 import CreateGroupButton from "../global/CreateGroupButton";
 import CreateGroupPopup from "../popup/CreateGroupPopup";
 import { GroupData } from "../../models/GroupData.model";
 import { fetchUserGroups } from "../../services/group.service";
 
 export default function GroupsSidebar() {
-  /*
-    At the moment the sidebar items don't route.
-    after we add multiple groups, change to the path of the chosen group,
-    by setting the path to "/group-name"
-  */
- // const groups = {title: 'All Groups',}
- // const [groups, setGroups] = useState(null);
+  // TODO: change username to the current user
 
   // Temporary hard coded user ID
   const userId = 'b1f8e925-2129-473d-bc09-b3a2a331f839'
@@ -35,7 +30,9 @@ export default function GroupsSidebar() {
   const closePopup = () => setIsPopupOpen(false);
 
   return (
+
     <div className="groups-sidebar-container">
+      <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
       <ul className="groups-list">
         <GroupsSidebarItem
           title="All Groups"

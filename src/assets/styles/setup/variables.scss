@@ -5,6 +5,8 @@ $mainFont: "Wix Madefor Display", sans-serif;
 $secondaryFont: "Unica One", sans-serif;
 $errorFont: "Arvo", serif;
 
+$mainFontSize: 14px;
+
 // ** Background Colors **
 $mainBgColor0: peachpuff;
 $mainBgColor1: rgb(43, 43, 43);
@@ -16,6 +18,7 @@ $mainSidebarColor: #393a3d;
 $activeSidebarColor: rgb(31, 39, 47);
 $activeHighlightSidebarColor: rgb(189, 204, 219);
 $hoverSidebarColor: rgb(45, 58, 70);
+$sectionDividerColor: grey;
 
 // ** Components Colors **
 $active-vote-color: rgb(251, 207, 168);
@@ -23,7 +26,7 @@ $inactive-vote-color: #f3c380;
 $voting-checkbox-font-color: #000000;
 $loading-icon-color: rgb(6, 68, 36);
 
-// ** Main Colos **
+// ** Main Colors **
 $mainFontColor: black;
 $grayedOutFontColor: $active-vote-color;
 $mainColor-normal: #e48f17;
@@ -32,3 +35,6 @@ $mainColor-light1: #ffdab9;
 $mainColor-dark0: #c97f17;
 $mainColor-dark1: #9e6515;
 $errorColor: rgb(117, 26, 26);
+
+// **Form Colors **
+$removeColor: rgb(130, 20, 20);

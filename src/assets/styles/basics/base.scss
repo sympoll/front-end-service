@@ -8,6 +8,7 @@
 body {
   font-family: $mainFont;
   background-color: $mainBgColor0;
+  font-size: $mainFontSize;
   max-height: 100vh;
   overflow: hidden;
 }
@@ -71,6 +72,5 @@ body {
   min-height: fit-content;
   padding-top: 30px;
   z-index: 1;
-  overflow: auto;
   row-gap: 24px;
 }

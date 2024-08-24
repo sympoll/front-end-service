@@ -33,7 +33,7 @@ export default function GroupsSidebar() {
 
     <div className="groups-sidebar-container">
       <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
-      <ul className="groups-list">
+      <ul className="groups-sidebar-groups-list">
         <GroupsSidebarItem
           title="All Groups"
           Icon={FormatListBulletedIcon}

@@ -1,6 +1,6 @@
-import React, { useState, FormEvent, useEffect } from 'react';
-import { createNewGroup } from '../../services/group.service';
-import { GroupData } from '../../models/GroupData.model';
+import React, { useState, FormEvent, useEffect } from "react";
+import { createNewGroup } from "../../services/group.service";
+import { GroupData } from "../../models/GroupData.model";
 
 interface CreateGroupPopupProps {
   userId: string;
@@ -8,32 +8,39 @@ interface CreateGroupPopupProps {
   groups: GroupData[] | undefined;
 }
 
-export default function CreateGroupPopup({ userId, onClose, groups}: CreateGroupPopupProps) {
-  const [groupName, setGroupName] = useState<string>('');
-  const [groupDescription, setGroupDescription] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [submitButtonText, setSubmitButtonText] = useState<string>('Create Group');
+export default function CreateGroupPopup({ userId, onClose, groups }: CreateGroupPopupProps) {
+  const [groupName, setGroupName] = useState<string>("");
+  const [groupDescription, setGroupDescription] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [submitButtonText, setSubmitButtonText] = useState<string>("Create Group");
   const [isCreating, setIsCreating] = useState(false);
-  
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      if(!groups){
+      if (!groups) {
         return;
       }
-      
-      groups.push(await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText));
-      console.log('New Group Created:', groupName);
+
+      groups.push(
+        await createNewGroup(
+          groupName,
+          groupDescription,
+          userId,
+          setIsCreating,
+          setSubmitButtonText
+        )
+      );
+      console.log("New Group Created:", groupName);
       onClose(); // Close the popup after submission
-    } catch(err) {
+    } catch (err) {
       setErrorMessage(String(err));
     }
   };
 
   useEffect(() => {
     if (isCreating) {
-      const texts = ['Creating...', 'Creating..', 'Creating.', 'Creating'];
+      const texts = ["Creating...", "Creating..", "Creating.", "Creating"];
       let index = 0;
       const interval = setInterval(() => {
         setSubmitButtonText(texts[index]);
@@ -50,25 +57,29 @@ export default function CreateGroupPopup({ userId, onClose, groups}: CreateGroup
         <button className="create-group-popup-close-button" onClick={onClose}>
           ×
         </button>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="create-group-popup-form">
           <h2>Create New Group</h2>
+          <div className="create-group-popup-text-fields">
             <input
-                type="text"
-                value={groupName}
-                onChange={(e) => setGroupName(e.target.value)}
-                placeholder="Group Name"
-                required
+              type="text"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Group Name"
+              required
             />
             <textarea
-                value={groupDescription}
-                onChange={(e) => setGroupDescription(e.target.value)}
-                placeholder="Description"
-                required
+              value={groupDescription}
+              onChange={(e) => setGroupDescription(e.target.value)}
+              placeholder="Description"
+              required
             />
-          <button type="submit" className='create-group-popup-form-button'>{submitButtonText}</button>
+          </div>
+          <button type="submit" className="create-group-popup-form-button">
+            {submitButtonText}
+          </button>
           <label>{errorMessage}</label>
         </form>
       </div>
     </div>
   );
-};
+}

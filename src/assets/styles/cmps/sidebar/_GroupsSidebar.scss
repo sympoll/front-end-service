@@ -21,27 +21,25 @@
   scrollbar-width: none; /* Hide scrollbar for Firefox */
 }
 
-.groups-list::-webkit-scrollbar {
+.groups-sidebar-groups-list::-webkit-scrollbar {
   width: 0; /* Hide scrollbar for WebKit browsers */
 }
 
-.groups-list::-webkit-scrollbar-thumb {
+.groups-sidebar-groups-list::-webkit-scrollbar-thumb {
   background-color: transparent; /* Ensure no visible thumb */
 }
 
-.groups-list::-webkit-scrollbar-track {
+.groups-sidebar-groups-list::-webkit-scrollbar-track {
   background-color: transparent; /* Ensure no visible track */
 }
 
 .create-group-button {
-  position: sticky;
-  bottom: 0;
-  background-color: $mainSidebarColor;
   padding: 10px;
+  margin-top: auto; /* Pushes the button to the bottom */
+
   button {
     width: 100%;
-    background-color: $mainColor-normal;
-    color: white;
+    background-color: $mainColor-light0;
     border: none;
     padding: 10px;
     cursor: pointer;
@@ -51,8 +49,12 @@
     font-size: 16px;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+
+    color: $mainFontColor;
+    font-size: $mainFontSize;
+
     &:hover {
-      background-color: $mainColor-normal; 
+      background-color: $mainColor-normal;
     }
     .button-icon {
       margin-right: 8px;

@@ -1,100 +1,93 @@
 .create-group-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .create-group-popup-container {
-    text-align: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 100%;
-    position: relative;
-  }
-  
-  .create-group-popup-close-button {
-    background: none;
-    border: none;
-    font-size: 30px;
-    font-weight: normal;
-    cursor: pointer;
-    animation: textColorChange forwards;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-  }
-  
-  .create-group-popup-container h2 {
-    color: black;
-    margin-top: 0;
-    margin-bottom: 15px;
-  }
-  
-  .create-group-popup-container label {
-    color: black;
-    display: block;
-    margin-bottom: 15px;
-  }
-  
-  .create-group-popup-container input {
-    width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border-radius: 4px;
-    border: 1px solid #ddd;
-  }
-  
-  .create-group-popup-container button {
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 10px;
-    cursor: pointer;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  .create-group-popup-form-button {
-    margin-top: 20px;
-  }
+.create-group-popup-container {
+  text-align: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 100%;
+  position: relative;
+}
 
-  form input,
-  form textarea {
-    width: 100%;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    padding: 10px;
-    font-size: 16px; /* Ensure the text inside both elements is the same size */
-    border: 1px solid #ccc; /* Match the border style */
-    border-radius: 4px; /* Match the border radius */
-    outline: none; /* Remove the default outline */
+.create-group-popup-close-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  animation: textColorChange forwards;
+  position: absolute;
+  height: 20px;
+  width: 20px;
+  top: 10px;
+  right: 10px;
+}
+
+.create-group-popup-container h2 {
+  color: black;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.create-group-popup-text-fields {
+  @include flex-column;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.create-group-popup-container textarea {
+  height: 80px;
+  resize: none;
+}
+
+.create-group-popup-container textarea,
+.create-group-popup-container input {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  font-family: $mainFont;
+  font-size: $mainFontSize;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.create-group-popup-form-button {
+  color: $mainFontColor;
+  font-size: $mainFontSize;
+  background-color: $mainColor-light0;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.create-group-popup-form {
+  width: 100%;
+}
+
+@keyframes textColorChange {
+  100% {
+    color: black;
   }
-  
-  form input:focus,
-  form textarea:focus {
-    border-color: #0066cc; /* Change the border color on focus */
-  }
-  
-  form textarea {
-    height: 80px;
-    resize: none;
-  }
-  
-  @keyframes textColorChange {
-    100% {
-      color: black; 
-    }
-  }
-  
+}

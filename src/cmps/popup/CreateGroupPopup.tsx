@@ -4,9 +4,10 @@ import { createNewGroup } from '../../services/group.service';
 interface CreateGroupPopupProps {
   userId: string;
   onClose: () => void;
+  triggerGroupsChange: () => void;
 }
 
-export default function CreateGroupPopup({ userId, onClose }: CreateGroupPopupProps) {
+export default function CreateGroupPopup({ userId, onClose, triggerGroupsChange: handleGroupsChange}: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>('');
   const [groupDescription, setGroupDescription] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -19,6 +20,7 @@ export default function CreateGroupPopup({ userId, onClose }: CreateGroupPopupPr
     try {
       await createNewGroup(groupName, groupDescription, userId, setIsCreating, setSubmitButtonText);
       console.log('New Group Created:', groupName);
+      handleGroupsChange();
       onClose(); // Close the popup after submission
     } catch(err) {
       setErrorMessage(String(err));

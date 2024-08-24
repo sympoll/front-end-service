@@ -20,6 +20,9 @@ export default function GroupsSidebar() {
   const userId = 'b1f8e925-2129-473d-bc09-b3a2a331f839'
 
   const [groups, setGroups] = useState<GroupData[]>();
+  const [trigger, setTrigger] = useState(false);
+
+  const triggerGroupsChange = () => setTrigger(!trigger);
 
   useEffect(() => {
     setGroups(undefined);
@@ -29,7 +32,7 @@ export default function GroupsSidebar() {
       console.log("Fetching user groups data: ", data);
       setGroups(data);
     })
-  }, []);
+  }, [trigger]);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
@@ -63,12 +66,12 @@ export default function GroupsSidebar() {
           <GroupsSidebarItem
             title={group.groupName}
             Icon={GroupsIcon}
-            path={"/feed/" + group.groupName}
+            path={"/feed/" + group.groupId}
             />
         ))}
       </ul>
       <CreateGroupButton onClick = {openPopup} />
-      {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} />}
+      {isPopupOpen && <CreateGroupPopup userId = {userId} onClose = {closePopup} triggerGroupsChange={triggerGroupsChange} />}
     </div>
   );
 }

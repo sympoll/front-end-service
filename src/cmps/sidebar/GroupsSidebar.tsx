@@ -33,7 +33,6 @@ export default function GroupsSidebar() {
       <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
       <ul className="groups-sidebar-groups-list">
         <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
-        <GroupsSidebarItem title="shit" Icon={GroupsIcon} path={"/feed/" + "shit"} />
         {groups?.map((group) => (
           <GroupsSidebarItem
             title={group.groupName}

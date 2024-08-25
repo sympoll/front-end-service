@@ -16,7 +16,7 @@ export default function App() {
         <Route path="/feed/*" element={<FeedPage />} />
         <Route path="/feed/:groupId" element={<FeedPage />} />
         <Route path="/*" element={<NotFoundPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/:username" element={<ProfilePage />} />
       </Routes>
     </BrowserRouter>
   );

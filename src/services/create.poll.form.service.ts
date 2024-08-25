@@ -74,6 +74,8 @@ export async function handleSubmit(
     }
 
     try {
+        // Format the deadline to ISO string
+        formData.deadline = new Date(formData.deadline).toISOString();
         const response = await fetch(pollServiceUrl, {
             method: "POST",
             headers: {

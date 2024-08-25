@@ -126,7 +126,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
     <div className="poll-form">
       <form onSubmit={handleSubmit} className="poll-form__body">
         <button className="poll-form__close-button" onClick={closePollFunction}>
-          X
+          ×
         </button>
         <div className="poll-form__body__title">Create Poll</div>
         <input

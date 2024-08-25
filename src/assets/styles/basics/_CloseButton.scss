@@ -1,0 +1,48 @@
+.global-close-button {
+  width: var(--btn-size);
+  height: var(--btn-size);
+  font-size: calc(var(--btn-size) / 2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+
+  color: initial;
+  transition: color 0.3s ease-in-out; // Smooth transition for color change
+
+  &:hover {
+    color: #e74c3c; // Change color on hover
+  }
+
+  &:focus {
+    outline: none; // Remove focus outline
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: currentColor;
+    top: 50%;
+    left: 50%;
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  &::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+}

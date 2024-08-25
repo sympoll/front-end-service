@@ -26,22 +26,6 @@
   position: relative;
 }
 
-.create-group-popup-close-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: none;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  animation: textColorChange forwards;
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  top: 10px;
-  right: 10px;
-}
-
 .create-group-popup-container h2 {
   color: black;
   margin-top: 0;

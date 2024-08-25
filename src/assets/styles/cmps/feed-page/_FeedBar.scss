@@ -1,3 +1,7 @@
+.feed-bar-container {
+  @include mid-page-content-container;
+}
+
 .feed-bar {
   @include feed-item;
   text-align: center;

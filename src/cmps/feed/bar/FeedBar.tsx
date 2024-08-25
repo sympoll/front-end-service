@@ -20,7 +20,7 @@ export default function FeedBar({ groupId }: FeedBarProps) {
   };
 
   return (
-    <div className="feed-header">
+    <div className="feed-bar-container">
       {isFeedBarVisible && (
         <div className="feed-bar">
           {/* Add buttons to feed bar here. */}

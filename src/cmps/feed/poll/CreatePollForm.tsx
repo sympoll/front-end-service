@@ -8,6 +8,7 @@ import {
   isDeadlineValid,
   getCurrentDateTime
 } from "../../../services/create.poll.form.service";
+import CloseButton from "../../global/CloseButton";
 
 interface CreatePollFormProps {
   groupId: string;
@@ -21,7 +22,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
-    nofAnswersAllowed: 1,
+    nofAnswersAllowed: undefined,
     creatorId: "", // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
@@ -79,7 +80,9 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
       setFormData((prevFormData) => ({
         ...prevFormData,
         votingItems: updatedVotingItems,
-        nofAnswersAllowed: Math.min(prevFormData.nofAnswersAllowed, updatedVotingItems.length)
+        nofAnswersAllowed: prevFormData.nofAnswersAllowed
+          ? Math.min(prevFormData.nofAnswersAllowed, updatedVotingItems.length)
+          : undefined
       }));
     } else {
       displayErrorPopup("You must have at least two voting items.");
@@ -125,9 +128,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
   return (
     <div className="poll-form">
       <form onSubmit={handleSubmit} className="poll-form__body">
-        <button className="poll-form__close-button" onClick={closePollFunction}>
-          X
-        </button>
+        <CloseButton size="16px" onClose={closePollFunction} />
         <div className="poll-form__body__title">Create Poll</div>
         <input
           type="text"
@@ -146,18 +147,18 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
           <input
             type="number"
             name="nofAnswersAllowed"
-            placeholder="Number of options a voter can pick"
-            value={formData.nofAnswersAllowed >= 1 ? formData.nofAnswersAllowed : ""}
+            placeholder="Number of answers"
+            value={formData.nofAnswersAllowed ? formData.nofAnswersAllowed : "N/A"}
             onChange={handleNofAnswersAllowedChange}
           />
           <input
             type="datetime-local"
             name="deadline"
-            placeholder="Choose deadline"
             value={formData.deadline}
             onChange={handleInputChange}
             min={getCurrentDateTime()}
             onFocus={(e) => e.target.blur()}
+            className={formData.deadline ? "deadline-filled" : "deadline-empty"}
           />
         </div>
         {formData.votingItems.map((votingItem, index) => (
@@ -167,7 +168,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
               onClick={() => removeVotingItem(index)}
               className="poll-form__remove-btn"
             >
-              -
+              ⊖
             </button>
             <input
               type="text"
@@ -177,10 +178,15 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
             />
           </div>
         ))}
-        <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
-          +
-        </button>
-        <CustomButton type="submit">Submit</CustomButton>
+        <div className="poll-form__body__add-option-container">
+          <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
+            +
+          </button>
+          <p>Add New Option</p>
+        </div>
+        <div className="poll-form__body__submit-button-container">
+          <CustomButton type="submit">Submit</CustomButton>
+        </div>
         <p>
           {isErrorPopupVisible && (
             <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />

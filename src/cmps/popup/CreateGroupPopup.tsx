@@ -1,6 +1,7 @@
 import React, { useState, FormEvent, useEffect } from "react";
 import { createNewGroup } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
+import CloseButton from "../global/CloseButton";
 
 interface CreateGroupPopupProps {
   userId: string;
@@ -54,9 +55,7 @@ export default function CreateGroupPopup({ userId, onClose, groups }: CreateGrou
   return (
     <div className="create-group-popup-overlay" onClick={onClose}>
       <div className="create-group-popup-container" onClick={(e) => e.stopPropagation()}>
-        <button className="create-group-popup-close-button" onClick={onClose}>
-          ×
-        </button>
+        <CloseButton size="14px" onClose={onClose} />
         <form onSubmit={handleSubmit} className="create-group-popup-form">
           <h2>Create New Group</h2>
           <div className="create-group-popup-text-fields">

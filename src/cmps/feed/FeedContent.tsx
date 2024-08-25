@@ -58,9 +58,7 @@ export default function FeedContent() {
   // Use for testing animations/frontend stuff that don't require the server.
   // return (
   //   <div className="feed-container">
-  //     <div className="feed-header">
-  //       {groupId && <FeedBar groupId={groupId} />}
-  //     </div>
+  //     <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>
   //     <div className="feed-content-container">
   //       {getSamplePolls().map((poll) => (
   //         <Poll

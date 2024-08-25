@@ -1,5 +1,6 @@
 .feed-bar-container {
   @include mid-page-content-container;
+  @include fadeIn;
 }
 
 .feed-bar {

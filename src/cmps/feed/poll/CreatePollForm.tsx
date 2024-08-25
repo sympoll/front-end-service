@@ -93,7 +93,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
     setIsSubmitting(true);
     setSubmitButtonText("Submitting...");
 
-    const result = await handleSubmit(formData, setErrorMessage);
+    const result = await handleSubmit(formData, displayErrorPopup);
 
     setIsSubmitting(false);
     setSubmitButtonText("Submit");

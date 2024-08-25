@@ -17,11 +17,10 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
   const [submitButtonText, setSubmitButtonText] = useState("Submit");
 
   const [formData, setFormData] = useState<CreatePollData>({
-    userId: "0f3ffe0d-cc0b-4510-960f-4430a1a64a76", // Placeholder ID
     title: "",
     description: "",
     nofAnswersAllowed: undefined,
-    creatorId: "", // Replace with actual creatorId
+    creatorId: "0f3ffe0d-cc0b-4510-960f-4430a1a64a76", // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""]

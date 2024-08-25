@@ -155,7 +155,6 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
             value={formData.deadline}
             onChange={handleInputChange}
             min={getCurrentDateTime()}
-            onFocus={(e) => e.target.blur()}
             className={formData.deadline ? "deadline-filled" : "deadline-empty"}
           />
         </div>

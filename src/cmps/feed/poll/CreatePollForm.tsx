@@ -8,6 +8,7 @@ import {
   isDeadlineValid,
   getCurrentDateTime
 } from "../../../services/create.poll.form.service";
+import CloseButton from "../../global/CloseButton";
 
 interface CreatePollFormProps {
   groupId: string;
@@ -125,9 +126,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
   return (
     <div className="poll-form">
       <form onSubmit={handleSubmit} className="poll-form__body">
-        <button className="poll-form__close-button" onClick={closePollFunction}>
-          ×
-        </button>
+        <CloseButton size="16px" onClose={closePollFunction} />
         <div className="poll-form__body__title">Create Poll</div>
         <input
           type="text"

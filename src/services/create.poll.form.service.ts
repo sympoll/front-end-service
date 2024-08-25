@@ -64,12 +64,12 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
 
 export async function handleSubmit(
     formData: CreatePollData,
-    setErrors: (errors: string) => void
+    displayErrorMessage: (errors: string) => void
 ): Promise<SubmitResult> {
     const { isValid, errors } = validatePollForm(formData);
 
     if (!isValid) {
-        setErrors(errors);
+        displayErrorMessage(errors);
         return { success: false, errors };
     }
 
@@ -93,7 +93,7 @@ export async function handleSubmit(
     } catch (error) {
         console.log("Error while trying to create poll:", error);
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
-        setErrors(errorMessage);
+        displayErrorMessage(errorMessage);
         return { success: false, errors: errorMessage };
     }
 }

@@ -13,7 +13,7 @@ interface CreatePollFormProps {
 export default function CreatePollForm({ groupId, closePollFunction }: CreatePollFormProps) {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitButtonText, setSubmitButtonText] = useState("Submit");
 
   const [formData, setFormData] = useState<CreatePollData>({
@@ -183,9 +183,11 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
           <p>Add New Option</p>
         </div>
         <div className="poll-form__body__submit-button-container">
-          <CustomButton type="submit" disabled={!isSubmitting} theme="dark">
-            {submitButtonText}
-          </CustomButton>
+          {groupId && (
+            <CustomButton type="submit" disabled={isSubmitting} theme="dark">
+              {submitButtonText}
+            </CustomButton>
+          )}
         </div>
         <p>
           {isErrorPopupVisible && (

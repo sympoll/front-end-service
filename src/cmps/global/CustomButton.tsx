@@ -9,7 +9,14 @@ interface BtnProps {
   theme?: "dark" | "light";
 }
 
-export default function btn({ children, onClick, type, name, disabled, theme = "light" }: BtnProps) {
+export default function btn({
+  children,
+  onClick,
+  type,
+  name,
+  disabled = false,
+  theme = "light"
+}: BtnProps) {
   return (
     <button
       className={`custom-button custom-button__${theme}`}

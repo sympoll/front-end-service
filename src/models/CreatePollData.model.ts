@@ -1,4 +1,5 @@
 export interface CreatePollData {
+    userId: string;
     title: string;
     description: string;
     nofAnswersAllowed: number | undefined;

@@ -6,7 +6,7 @@ const voteServiceUrl =
   import.meta.env.VITE_VOTE_SERVICE_URL;
 
 // TODO: once session mechanism is in place, replace this.
-const userId = "0f3ffe0d-cc0b-4510-960f-4430a1a64a76";
+const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
 
 // Helper function to handle API requests
 async function sendVoteRequest(

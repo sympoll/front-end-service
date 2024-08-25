@@ -41,7 +41,14 @@ export default function UserProfile({
           <br />
           {description}
         </p>
-        <p className="user-profile__user-info">SHIT</p>
+        <p className="user-profile__user-info">
+          <h3>Info:</h3>
+          <br />
+          Some info about the user... <br />
+          Time created.... <br />
+          How many groups the user is in... <br />
+          etc...
+        </p>
       </div>
     </div>
   );

@@ -1,5 +1,7 @@
 .poll-container {
   @include feed-item;
+  row-gap: 6px;
+  word-wrap: break-word;
 }
 
 .poll-title {

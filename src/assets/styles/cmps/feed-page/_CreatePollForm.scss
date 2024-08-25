@@ -1,5 +1,5 @@
 .poll-form {
-  @include basic-feed-item;
+  @include feed-item;
   margin: 0 auto; // Center the form horizontally
   margin-top: 10px;
   min-width: 400px;

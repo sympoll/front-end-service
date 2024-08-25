@@ -1,7 +1,6 @@
 .user-profile {
-  display: block;
   margin: 0 auto;
-  padding: 20px;
+  margin-top: 20px;
   min-width: 80%;
   max-width: 80%;
   max-height: 100vh;
@@ -11,36 +10,45 @@
   border-radius: 20px;
 
   &__header {
+    @include flex-column;
     position: relative;
     margin-bottom: 20px;
+    width: 100%;
+    background: $mainColor-light0;
   }
 
   &__banner-img {
-    width: 100%;
-    height: 120px;
+    align-self: center;
+    margin-top: 20px;
+    max-width: 90%;
+    width: 600px;
+    height: 200px;
     object-fit: cover;
     border-radius: 10px;
   }
 
   &__details {
+    align-self: center;
     display: flex;
     align-items: center;
+    max-width: 90%;
+    width: 600px;
     padding: 20px;
     padding-top: 10px;
-    background: $mainColor-light0;
-    border-radius: 0 0 12px 12px;
-    margin-top: -30px;
+    margin-inline: 30px;
+    margin-top: -20px;
   }
 
   &__profile-picture {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     border: 4px solid #ffe4b5;
     background-color: #ffe4b5;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     object-fit: cover;
     margin-right: 20px;
+    margin-left: 20px;
   }
 
   &__title {
@@ -62,22 +70,80 @@
 
   &__divider {
     border: none;
-    border-top: 1px solid $mainFontColor;
+    border-top: 2px solid $mainFontColor;
     opacity: 0.2;
-    margin-inline: 10px;
+    width: 100%;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 1);
   }
 
-  &__user-info {
-    margin-inline: 20px;
+  &__info-container {
     text-align: left;
     background: $mainColor-light0;
     border-radius: 12px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px;
   }
 
   &__description {
     font-size: $mainFontSize;
-    padding: 20px;
     color: #4b3832;
+  }
+
+  &__user-info {
+    color: #4b3832;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    &__banner-img {
+      border-radius: 10px;
+    }
+    &__banner-img,
+    &__details {
+      width: 100%; /* Make the banner and details take up full width */
+      height: auto; /* Adjust height automatically */
+    }
+
+    &__profile-picture {
+      width: 80px; /* Reduce profile picture size */
+      height: 80px; /* Reduce profile picture size */
+      margin-right: 10px; /* Adjust margins for smaller size */
+      margin-left: 10px; /* Adjust margins for smaller size */
+    }
+
+    &__username {
+      font-size: 24px; /* Reduce font size for username */
+    }
+
+    &__email {
+      font-size: 16px; /* Reduce font size for email */
+    }
+
+    &__details {
+      flex-direction: column; /* Stack profile picture and text vertically */
+      align-items: center; /* Center-align the items */
+      text-align: center; /* Center-align text */
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__banner-img {
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    &__profile-picture {
+      width: 60px; /* Further reduce profile picture size */
+      height: 60px; /* Further reduce profile picture size */
+    }
+
+    &__username {
+      font-size: 20px; /* Further reduce font size for username */
+    }
+
+    &__email {
+      font-size: 14px; /* Further reduce font size for email */
+    }
   }
 }

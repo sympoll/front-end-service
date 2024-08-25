@@ -28,8 +28,13 @@ export default function UserProfile({
         </div>
         <hr className="user-profile__divider" />
       </div>
-      <div className="user-profile__user-info">
-        <p className="user-profile__description">{description}</p>
+      <div className="user-profile__info-container">
+        <p className="user-profile__description">
+          <h3>Description:</h3>
+          <br />
+          {description}
+        </p>
+        <p className="user-profile__user-info">SHIT</p>
       </div>
     </div>
   );

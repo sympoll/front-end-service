@@ -27,14 +27,13 @@ export default function FeedBar({ groupId }: FeedBarProps) {
           <CustomButton onClick={toggleCreatePollForm} name="create-btn">
             Create Poll
           </CustomButton>
+
+          <CustomButton>Fetch polls</CustomButton>
         </div>
       )}
 
       {isCreatePollFormVisible && (
-        <CreatePollForm
-          groupId={groupId}
-          closePollFunction={toggleCreatePollForm}
-        />
+        <CreatePollForm groupId={groupId} closePollFunction={toggleCreatePollForm} />
       )}
     </div>
   );

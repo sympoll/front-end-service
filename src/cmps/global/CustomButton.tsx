@@ -8,7 +8,7 @@ interface BtnProps {
   disabled?: boolean;
 }
 
-export default function btn({ children, onClick, type, name, disabled }: BtnProps) {
+export default function btn({ children, onClick, type, name, disabled = false }: BtnProps) {
   return (
     <button className="custom-button" onClick={onClick} type={type} name={name} disabled={disabled}>
       {children}

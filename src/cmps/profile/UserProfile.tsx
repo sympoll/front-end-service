@@ -15,6 +15,13 @@ export default function UserProfile({
   email,
   description
 }: UserProfileParams) {
+  function capitalizeWords(input: string): string {
+    return input
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
+
   return (
     <div className="user-profile">
       <div className="user-profile__header">
@@ -22,7 +29,7 @@ export default function UserProfile({
         <div className="user-profile__details">
           <img src={profilePictureUrl} alt="Profile" className="user-profile__profile-picture" />
           <div className="user-profile__title">
-            <h1 className="user-profile__username">{username}</h1>
+            <h1 className="user-profile__username">{capitalizeWords(username)}</h1>
             <h2 className="user-profile__email">{email}</h2>
           </div>
         </div>

@@ -61,12 +61,10 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     };
 }
 
-function formatDateForInput(deadline: string) {
-    // Convert to ISO date time
-    const isoDeadline = new Date(deadline);
-
-    // Convert to backend date time
-    const date = new Date(isoDeadline);
+function formatDateForInput(dateTime: string) {
+    // Convert to the format expected by datetime-local
+    isoDateTime = 
+    const date = new Date(dateTime);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
@@ -89,8 +87,8 @@ export async function handleSubmit(
     }
 
     try {
-        // Format the deadline to ISO string
-        formData.deadline = formatDateForInput(formData.deadline);
+        const deadlineDate = new Date(formData.deadline);
+        formData.deadline = deadlineDate.toISOString();
         const response = await fetch(pollServiceUrl, {
             method: "POST",
             headers: {

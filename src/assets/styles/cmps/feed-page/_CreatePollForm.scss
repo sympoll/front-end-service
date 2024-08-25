@@ -1,7 +1,6 @@
 .poll-form {
   @include feed-item;
   margin-top: 10px;
-  min-width: 400px;
   row-gap: 6px;
   width: 45vw;
   position: relative; // Ensure the close button is positioned relative to the poll form

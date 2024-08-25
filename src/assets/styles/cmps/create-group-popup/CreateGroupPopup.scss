@@ -15,7 +15,6 @@
   text-align: center;
   justify-content: center;
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 10px;
   background: white;
@@ -24,6 +23,12 @@
   width: 400px;
   max-width: 100%;
   position: relative;
+}
+
+.create-group-popup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
 }
 
 .create-group-popup-container h2 {
@@ -64,6 +69,10 @@
   border-radius: 4px;
   padding: 10px;
   cursor: pointer;
+}
+
+.create-group-popup-error-lable{
+  color: $mainFontColor;
 }
 
 .create-group-popup-form {

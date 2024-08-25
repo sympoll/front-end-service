@@ -9,7 +9,7 @@ interface CreateGroupPopupProps {
   groups: GroupData[] | undefined;
 }
 
-export default function CreateGroupPopup({ userId, onClose, groups }: CreateGroupPopupProps) {
+export default function CreateGroupPopup({ userId, onClose, groups=[] }: CreateGroupPopupProps) {
   const [groupName, setGroupName] = useState<string>("");
   const [groupDescription, setGroupDescription] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -18,7 +18,7 @@ export default function CreateGroupPopup({ userId, onClose, groups }: CreateGrou
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    try {
+     try {
       if (!groups) {
         return;
       }
@@ -76,7 +76,7 @@ export default function CreateGroupPopup({ userId, onClose, groups }: CreateGrou
           <button type="submit" className="create-group-popup-form-button">
             {submitButtonText}
           </button>
-          <label>{errorMessage}</label>
+          <label className="create-group-popup-error-lable">{errorMessage}</label>
         </form>
       </div>
     </div>

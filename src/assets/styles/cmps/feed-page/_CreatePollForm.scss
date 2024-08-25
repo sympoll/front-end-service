@@ -91,16 +91,22 @@
       }
     }
 
+    &__add-option-container {
+      display: flex;
+      align-self: center;
+      gap: 10px;
+      align-items: center;
+    }
+
     &__add-btn {
       background-color: transparent;
-      align-self: center;
-      border: 3px solid $mainFontColor;
+      border: 2px solid $mainFontColor;
       color: $mainFontColor;
       cursor: pointer;
-      padding: 10px;
+      padding: 9px;
       border-radius: 50%;
-      width: 20px;
-      height: 20px;
+      width: 10px;
+      height: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -108,7 +114,7 @@
       line-height: 0;
     }
 
-    .poll-form__submit-button-container {
+    &__submit-button-container {
       display: flex;
       justify-content: center;
       margin-top: 10px !important;

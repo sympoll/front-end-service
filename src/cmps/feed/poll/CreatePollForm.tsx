@@ -178,10 +178,13 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
             />
           </div>
         ))}
-        <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
-          +
-        </button>
-        <div className="poll-form__submit-button-container">
+        <div className="poll-form__body__add-option-container">
+          <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
+            +
+          </button>
+          <p>Add New Option</p>
+        </div>
+        <div className="poll-form__body__submit-button-container">
           <CustomButton type="submit">Submit</CustomButton>
         </div>
         <p>

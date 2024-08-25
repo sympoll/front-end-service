@@ -20,7 +20,6 @@
 @import "cmps/app-header/AppHeader";
 
 // * Sidebar *
-@import "cmps/create-group-popup/CreateGroupPopup.scss";
 @import "cmps/sidebar/SidebarUserInfo";
 @import "cmps/sidebar/GroupsSidebarItem";
 @import "cmps/sidebar/GroupsSidebar";
@@ -39,6 +38,9 @@
 @import "cmps/feed-page/FeedPage";
 @import "cmps/feed-page/CreatePollForm";
 @import "cmps/feed-page/FeedBar";
+
+// * Popup *
+@import "cmps/create-group-popup/CreateGroupPopup.scss";
 
 // * Not Found Page *
 @import "cmps/not-found-page/NotFoundPage";

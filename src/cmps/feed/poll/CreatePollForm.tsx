@@ -22,7 +22,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
-    nofAnswersAllowed: 1,
+    nofAnswersAllowed: undefined,
     creatorId: "", // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
@@ -80,7 +80,9 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
       setFormData((prevFormData) => ({
         ...prevFormData,
         votingItems: updatedVotingItems,
-        nofAnswersAllowed: Math.min(prevFormData.nofAnswersAllowed, updatedVotingItems.length)
+        nofAnswersAllowed: prevFormData.nofAnswersAllowed
+          ? Math.min(prevFormData.nofAnswersAllowed, updatedVotingItems.length)
+          : undefined
       }));
     } else {
       displayErrorPopup("You must have at least two voting items.");
@@ -145,18 +147,18 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
           <input
             type="number"
             name="nofAnswersAllowed"
-            placeholder="Number of options a voter can pick"
-            value={formData.nofAnswersAllowed >= 1 ? formData.nofAnswersAllowed : ""}
+            placeholder="Number of answers"
+            value={formData.nofAnswersAllowed ? formData.nofAnswersAllowed : "N/A"}
             onChange={handleNofAnswersAllowedChange}
           />
           <input
             type="datetime-local"
             name="deadline"
-            placeholder="Choose deadline"
             value={formData.deadline}
             onChange={handleInputChange}
             min={getCurrentDateTime()}
             onFocus={(e) => e.target.blur()}
+            className={formData.deadline ? "deadline-filled" : "deadline-empty"}
           />
         </div>
         {formData.votingItems.map((votingItem, index) => (
@@ -166,7 +168,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
               onClick={() => removeVotingItem(index)}
               className="poll-form__remove-btn"
             >
-              -
+              ⊖
             </button>
             <input
               type="text"
@@ -179,7 +181,9 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
         <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
           +
         </button>
-        <CustomButton type="submit">Submit</CustomButton>
+        <div className="poll-form__submit-button-container">
+          <CustomButton type="submit">Submit</CustomButton>
+        </div>
         <p>
           {isErrorPopupVisible && (
             <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />

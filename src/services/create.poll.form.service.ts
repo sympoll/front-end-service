@@ -52,7 +52,7 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     }
 
     if (!isDeadlineValid(formData.deadline)) {
-        errors.push("Deadline should be a valid date in the future\n");
+        errors.push("Deadline should be a valid date in the future.\n");
     }
 
     return {

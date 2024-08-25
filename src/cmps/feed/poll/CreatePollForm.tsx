@@ -20,7 +20,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
     title: "",
     description: "",
     nofAnswersAllowed: undefined,
-    creatorId: "0f3ffe0d-cc0b-4510-960f-4430a1a64a76", // Replace with actual creatorId
+    creatorId: "b1f8e925-2129-473d-bc09-b3a2a331f839", // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""]

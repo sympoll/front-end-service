@@ -44,6 +44,7 @@ export default function MembersSidebar() {
               name={member.username}
               Icon={PersonIcon}
               path={"/" + member.username}
+              role={member.roleName}
             />
           ))}
       </ul>

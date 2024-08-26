@@ -8,6 +8,8 @@
   min-width: fit-content;
   column-gap: 10px;
   font-size: 15px;
+  justify-content: space-between;
+  align-items: center;
   @include fadeIn(0.2s);
 }
 
@@ -17,11 +19,20 @@
 }
 
 #members-sidebar-item-icon {
-  flex: 30%;
+  flex: 0 0 auto; 
   display: grid;
   place-items: center;
 }
 
 #members-sidebar-item-name {
-  flex: 70%;
+  flex: 1;
+}
+
+.members-sidebar-item-role {
+  flex: 0 0 auto;
+  color: $roleNameFontColor;
+  margin-left: auto;
+  text-overflow: ellipsis;
+  overflow: hidden; 
+  max-width: 120px;
 }

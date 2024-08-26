@@ -13,19 +13,24 @@ export default function MembersSidebar() {
   */
   const {groupId} = useParams();
   const [members, setMembers] = useState<GroupMember[]>();
+  const [isAllGroups, setIsAllGroups] = useState(true);
 
   useEffect(() => {
     if(groupId){
+      setIsAllGroups(false);
       fetchGroupMembers(groupId).then((data) => {
         console.log("Fetching group users data: ", data);
         setMembers(data);
       })
+    } else {
+      setIsAllGroups(true);
+      setMembers([]);
     }
   }, [groupId]);
 
   return (
     <div className="members-sidebar-container">
-      <div className="members-sidebar-title">Group Members:</div>
+      <div className="members-sidebar-title">{!isAllGroups && "Group Members:"}</div>
       <ul className="members-sidebar-members-container">
         {members?.map((member) =>
           <MembersSidebarItem name={member.username} Icon={PersonIcon} path={"/"+member.username} />

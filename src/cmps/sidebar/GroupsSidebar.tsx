@@ -7,14 +7,12 @@ import CreateGroupButton from "../global/CreateGroupButton";
 import CreateGroupPopup from "../popup/CreateGroupPopup";
 import { GroupData } from "../../models/GroupData.model";
 import { fetchUserGroups } from "../../services/group.service";
-import FeedLoadingAnimation from "../global/LoadingAnimation";
-import { useParams } from "react-router-dom";
+import LoadingAnimation from "../global/LoadingAnimation";
 
 export default function GroupsSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   // TODO: change username to the current user
-
   // Temporary hard coded user ID
   const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
 
@@ -44,7 +42,7 @@ export default function GroupsSidebar() {
       <ul className="groups-sidebar-groups-list">
         <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
         {isLoading && (
-          <FeedLoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
+          <LoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
           groups?.map((group) => (

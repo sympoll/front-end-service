@@ -8,6 +8,7 @@
   min-width: fit-content;
   column-gap: 10px;
   font-size: 15px;
+  @include fadeIn(0.2s);
 }
 
 .members-sidebar-item-container:hover {

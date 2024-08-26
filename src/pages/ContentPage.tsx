@@ -3,14 +3,21 @@ import AppHeader from "../cmps/app-header/AppHeader";
 import GroupsSidebar from "../cmps/sidebar/GroupsSidebar";
 import Feed from "../cmps/feed/FeedContent";
 import MembersSidebar from "../cmps/sidebar/MembersSidebar";
+import UserProfile from "../cmps/profile/UserProfile";
 
-export default function FeedPage() {
+interface ContentPageProps {
+  content: "feed" | "user-profile";
+}
+
+export default function ContentPage({ content }: ContentPageProps) {
   return (
-    <section className="feed-page-container">
+    <section className="content-page-container">
       <AppHeader />
       <GroupsSidebar />
       <MembersSidebar />
-      <Feed />
+
+      {content === "feed" && <Feed />}
+      {content === "user-profile" && <UserProfile />}
     </section>
   );
 }

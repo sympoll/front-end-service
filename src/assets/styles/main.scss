@@ -31,15 +31,20 @@
 // * Landing Page *
 @import "cmps/landing-page/LandingPage";
 
+// * Content Page *
+@import "cmps/content-page/ContentPage";
+
 // * Feed *
-@import "cmps/feed-page/VotingCheckbox";
-@import "cmps/feed-page/VotingBar";
-@import "cmps/feed-page/VotingItem";
-@import "cmps/feed-page/FeedContent";
-@import "cmps/feed-page/Poll";
-@import "cmps/feed-page/FeedPage";
-@import "cmps/feed-page/CreatePollForm";
-@import "cmps/feed-page/FeedBar";
+@import "cmps/feed/VotingCheckbox";
+@import "cmps/feed/VotingBar";
+@import "cmps/feed/VotingItem";
+@import "cmps/feed/FeedContent";
+@import "cmps/feed/Poll";
+@import "cmps/feed/CreatePollForm";
+@import "cmps/feed/FeedBar";
+
+// * User Profile *
+@import "cmps/user-profile/UserProfile";
 
 // * Popup *
 @import "cmps/create-group-popup/CreateGroupPopup.scss";
@@ -49,7 +54,3 @@
 
 // * Login Page *
 @import "cmps/login-page/LoginPage";
-
-// * User Profile Page *
-@import "cmps/user-profile-page/UserProfile";
-@import "cmps/user-profile-page/UserProfilePage";

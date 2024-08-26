@@ -121,15 +121,16 @@ function convertSecondsPassedToString(diffInSeconds: number): string {
   const daysStr = days > 0 ? (days === 1 ? `${days} day` : `${days} days`) : undefined;
   const hoursStr = hours > 0 ? (hours === 1 ? `${hours} hour` : `${hours} hours`) : undefined;
   const minutesStr = minutes > 0 ? (minutes === 1 ? `${minutes} minute` : `${minutes} minutes`) : undefined;
-  const secondsStr = seconds > 10 ? (seconds === 1 ? `${seconds} second` : `${seconds} seconds`) : "now";
+  const secondsStr = (seconds === 1 ? `${seconds} second` : `${seconds} seconds`);
 
   const delimiter = ", ";
+  
   if (daysStr) {
     return daysStr + delimiter + hoursStr;
   } else if (hoursStr) {
     return hoursStr + delimiter + minutesStr;
   } else if (minutesStr) {
-    return minutesStr + delimiter + secondsStr;
+    return minutesStr;
   } else {
     return secondsStr;
   }

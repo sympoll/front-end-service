@@ -35,7 +35,7 @@ export default function MembersSidebar() {
         </div>
       <ul className="members-sidebar-members-container">
         {members?.map((member) =>
-          <MembersSidebarItem name={member.username} Icon={PersonIcon} path={"/"+member.username} />
+          <MembersSidebarItem name={member.username} Icon={PersonIcon} path={"/"+member.userId} />
         )}
       </ul>
     </div>

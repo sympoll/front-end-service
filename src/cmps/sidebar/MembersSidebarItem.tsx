@@ -22,7 +22,7 @@ export default function MembersSidebarItem({
   const [isRegularMember, setIsRegularMember] = useState(true)
 
   useEffect(() => {
-    if(role !== 'member') {
+    if(role !== 'Member') {
       setIsRegularMember(false);
     } else {
       setIsRegularMember(true);

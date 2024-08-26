@@ -19,7 +19,7 @@ export default function MembersSidebar() {
       setIsAllGroups(false);
       fetchGroupMembers(groupId).then((data) => {
         console.log("Fetching group users data: ", data);
-        setMembers(data);
+        setMembers(sortMembers(data));
         setIsLoading(false);
       });
     } else {
@@ -28,6 +28,21 @@ export default function MembersSidebar() {
       setIsLoading(false);
     }
   }, [groupId]);
+
+  const sortMembers = (members: GroupMember[]) => {
+    return members.sort((a, b) => {
+      const roleOrder: { [key: string]: number } = {
+        'Admin': 1,
+        'Moderator': 2,
+        'Member': 4
+      };
+      // Give a higher order number to roles that are not 'Member'
+      const aRoleOrder = roleOrder[a.roleName] || 3;
+      const bRoleOrder = roleOrder[b.roleName] || 3;
+
+      return aRoleOrder - bRoleOrder;
+    });
+  };
 
   return (
     <div className="members-sidebar-container">

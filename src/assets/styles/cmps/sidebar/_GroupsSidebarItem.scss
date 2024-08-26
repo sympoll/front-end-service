@@ -8,6 +8,7 @@
   min-height: 50px;
   column-gap: 10px;
   font-size: 15px;
+  @include fadeIn(0.2s);
 }
 
 .groups-sidebar-item-container:hover {

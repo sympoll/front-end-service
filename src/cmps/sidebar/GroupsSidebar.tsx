@@ -7,8 +7,12 @@ import CreateGroupButton from "../global/CreateGroupButton";
 import CreateGroupPopup from "../popup/CreateGroupPopup";
 import { GroupData } from "../../models/GroupData.model";
 import { fetchUserGroups } from "../../services/group.service";
+import FeedLoadingAnimation from "../global/LoadingAnimation";
+import { useParams } from "react-router-dom";
 
 export default function GroupsSidebar() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   // TODO: change username to the current user
 
   // Temporary hard coded user ID
@@ -17,10 +21,16 @@ export default function GroupsSidebar() {
   const [groups, setGroups] = useState<GroupData[]>();
 
   useEffect(() => {
-    fetchUserGroups(userId).then((data) => {
-      console.log("Fetching user groups data: ", data);
-      setGroups(data);
-    });
+    fetchUserGroups(userId)
+      .then((data) => {
+        console.log("Fetching user groups data: ", data);
+        setGroups(data);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching user groups data.");
+        setIsLoading(false);
+      });
   }, []);
 
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
@@ -33,13 +43,17 @@ export default function GroupsSidebar() {
       <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
       <ul className="groups-sidebar-groups-list">
         <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
-        {groups?.map((group) => (
-          <GroupsSidebarItem
-            title={group.groupName}
-            Icon={GroupsIcon}
-            path={"/feed/" + group.groupId}
-          />
-        ))}
+        {isLoading && (
+          <FeedLoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
+        )}
+        {!isLoading &&
+          groups?.map((group) => (
+            <GroupsSidebarItem
+              title={group.groupName}
+              Icon={GroupsIcon}
+              path={"/feed/" + group.groupId}
+            />
+          ))}
       </ul>
       <CreateGroupButton onClick={openPopup} />
       {isPopupOpen && <CreateGroupPopup userId={userId} onClose={closePopup} groups={groups} />}

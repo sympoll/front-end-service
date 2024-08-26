@@ -13,6 +13,8 @@ export default function MembersSidebar() {
   const [isAllGroups, setIsAllGroups] = useState(true);
 
   useEffect(() => {
+    setIsLoading(true);
+
     if (groupId) {
       setIsAllGroups(false);
       fetchGroupMembers(groupId).then((data) => {

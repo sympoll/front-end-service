@@ -86,7 +86,8 @@ export function getTimePassed(postTimestamp: string): string {
     (now.getTime() - postedDate.getTime()) / 1000
   );
 
-  return convertSecondsPassedToString(diffInSeconds) + " ago";
+  const timePassedStr = convertSecondsPassedToString(diffInSeconds);
+  return timePassedStr === "now" ? "now" : timePassedStr + " ago";
 }
 
 /**
@@ -117,13 +118,19 @@ function convertSecondsPassedToString(diffInSeconds: number): string {
   const minutes = Math.floor((diffInSeconds % secondsInHour) / secondsInMinute);
   const seconds = diffInSeconds % secondsInMinute;
 
-  if (days > 0) {
-    return days === 1 ? `${days} day` : `${days} days`;
-  } else if (hours > 0) {
-    return hours === 1 ? `${hours} hour` : `${hours} hours`;
-  } else if (minutes > 0) {
-    return minutes === 1 ? `${minutes} minute` : `${minutes} minutes`;
+  const daysStr = days > 0 ? (days === 1 ? `${days} day` : `${days} days`) : undefined;
+  const hoursStr = hours > 0 ? (hours === 1 ? `${hours} hour` : `${hours} hours`) : undefined;
+  const minutesStr = minutes > 0 ? (minutes === 1 ? `${minutes} minute` : `${minutes} minutes`) : undefined;
+  const secondsStr = seconds > 10 ? (seconds === 1 ? `${seconds} second` : `${seconds} seconds`) : "now";
+
+  const delimiter = ", ";
+  if (daysStr) {
+    return daysStr + delimiter + hoursStr;
+  } else if (hoursStr) {
+    return hoursStr + delimiter + minutesStr;
+  } else if (minutesStr) {
+    return minutesStr + delimiter + secondsStr;
   } else {
-    return seconds === 1 ? `${seconds} second` : `${seconds} seconds`;
+    return secondsStr;
   }
 }

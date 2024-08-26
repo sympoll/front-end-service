@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Poll from "./poll/Poll";
 import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
-import FeedLoadingAnimation from "./messege/FeedLoadingAnimation";
+import FeedLoadingAnimation from "../global/LoadingAnimation";
 import FeedErrorMessage from "./messege/FeedErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
@@ -80,7 +80,7 @@ export default function FeedContent() {
   //   </div>
   // );
 
-  if (isLoading) return <FeedLoadingAnimation />;
+  if (isLoading) return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
   if (!polls) {
     return <FeedErrorMessage error={error} />;
   }

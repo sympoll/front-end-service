@@ -1,3 +1,17 @@
+import axios from "axios";
+import { CreatePollData } from "../models/CreatePollData.model";
+import { useState } from "react";
+
+const pollServiceUrl =
+  import.meta.env.VITE_BASE_URL +
+  import.meta.env.VITE_API_GATEWAY_URL +
+  import.meta.env.VITE_POLL_SERVICE_URL;
+
+interface SubmitResult {
+    success: boolean;
+    errors?: string;
+}
+
 export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     return votingItems.every(item => item !== "");
   }
@@ -25,3 +39,61 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     const minutes = String(now.getMinutes()).padStart(2, "0");
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   }
+
+  export function validatePollForm(formData: CreatePollData): { isValid: boolean; errors: string } {
+    let errors: string[] = [];
+
+    if (!isTitleDefined(formData.title)) {
+        errors.push("Title is required.\n");
+    }
+
+    if (!isAllVotingItemsDefined(formData.votingItems)) {
+        errors.push("All voting options should be defined.\n");
+    }
+
+    if (!isDeadlineValid(formData.deadline)) {
+        errors.push("Deadline should be a valid date in the future.\n");
+    }
+
+    return {
+        isValid: errors.length === 0,
+        errors: errors.join(""),
+    };
+}
+
+
+export async function handleSubmit(
+    formData: CreatePollData,
+    displayErrorMessage: (errors: string) => void
+): Promise<SubmitResult> {
+    const { isValid, errors } = validatePollForm(formData);
+
+    if (!isValid) {
+        displayErrorMessage(errors);
+        return { success: false, errors };
+    }
+
+    try {
+        const deadlineDate = new Date(formData.deadline);
+        formData.deadline = deadlineDate.toISOString();
+        const response = await fetch(pollServiceUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+
+        console.log("Poll created successfully:", await response.json());
+        return { success: true };
+    } catch (error) {
+        console.log("Error while trying to create poll:", error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        displayErrorMessage(errorMessage);
+        return { success: false, errors: errorMessage };
+    }
+}

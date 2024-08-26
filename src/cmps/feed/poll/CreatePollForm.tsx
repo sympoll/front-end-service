@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { CreatePollData } from "../../../models/CreatePollData.model";
 import ErrorPopup from "../../popup/ErrorPopup";
 import CustomButton from "../../global/CustomButton";
-import {
-  isAllVotingItemsDefined,
-  isTitleDefined,
-  isDeadlineValid,
-  getCurrentDateTime
-} from "../../../services/create.poll.form.service";
+import { handleSubmit, getCurrentDateTime } from "../../../services/create.poll.form.service";
 import CloseButton from "../../global/CloseButton";
 
 interface CreatePollFormProps {
@@ -18,12 +13,14 @@ interface CreatePollFormProps {
 export default function CreatePollForm({ groupId, closePollFunction }: CreatePollFormProps) {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitButtonText, setSubmitButtonText] = useState("Submit");
 
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
     nofAnswersAllowed: undefined,
-    creatorId: "", // Replace with actual creatorId
+    creatorId: "b1f8e925-2129-473d-bc09-b3a2a331f839", // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""]
@@ -89,19 +86,20 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
     }
   };
 
-  // Validates the form contents, If everything is ok submits the form in the else case
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleOnSubmit = async (event: React.FormEvent) => {
+    // Prevents from automatically submitting the form
     event.preventDefault();
-    // Handle form submission logic with formData
-    if (!isAllVotingItemsDefined(formData.votingItems)) {
-      displayErrorPopup("All options need to contain a value");
-    } else if (!isTitleDefined(formData.title)) {
-      displayErrorPopup("Poll needs to have title.");
-    } else if (!isDeadlineValid(formData.deadline)) {
-      displayErrorPopup("Deadline need to be a valid date in the future");
-    } else {
-      closePollFunction(); //
-      console.log("Form submitted", formData);
+
+    setIsSubmitting(true);
+    setSubmitButtonText("Submitting...");
+
+    const result = await handleSubmit(formData, displayErrorPopup);
+
+    setIsSubmitting(false);
+    setSubmitButtonText("Submit");
+
+    if (result.success) {
+      closePollFunction();
     }
   };
 
@@ -127,7 +125,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
 
   return (
     <div className="poll-form">
-      <form onSubmit={handleSubmit} className="poll-form__body">
+      <form onSubmit={handleOnSubmit} className="poll-form__body">
         <CloseButton size="16px" onClose={closePollFunction} />
         <div className="poll-form__body__title">Create Poll</div>
         <input
@@ -157,7 +155,6 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
             value={formData.deadline}
             onChange={handleInputChange}
             min={getCurrentDateTime()}
-            onFocus={(e) => e.target.blur()}
             className={formData.deadline ? "deadline-filled" : "deadline-empty"}
           />
         </div>
@@ -185,7 +182,11 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
           <p>Add New Option</p>
         </div>
         <div className="poll-form__body__submit-button-container">
-          <CustomButton type="submit">Submit</CustomButton>
+          {groupId && (
+            <CustomButton type="submit" disabled={isSubmitting}>
+              {submitButtonText}
+            </CustomButton>
+          )}
         </div>
         <p>
           {isErrorPopupVisible && (

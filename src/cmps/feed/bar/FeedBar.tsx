@@ -31,10 +31,7 @@ export default function FeedBar({ groupId }: FeedBarProps) {
       )}
 
       {isCreatePollFormVisible && (
-        <CreatePollForm
-          groupId={groupId}
-          closePollFunction={toggleCreatePollForm}
-        />
+        <CreatePollForm groupId={groupId} closePollFunction={toggleCreatePollForm} />
       )}
     </div>
   );

@@ -5,11 +5,12 @@ interface BtnProps {
   name?: string;
   onClick?(): void;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
-export default function btn({ children, onClick, type, name }: BtnProps) {
+export default function btn({ children, onClick, type, name, disabled = false }: BtnProps) {
   return (
-    <button className="custom-button" onClick={onClick} type={type} name={name}>
+    <button className="custom-button" onClick={onClick} type={type} name={name} disabled={disabled}>
       {children}
     </button>
   );

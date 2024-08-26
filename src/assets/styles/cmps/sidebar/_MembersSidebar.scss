@@ -24,6 +24,7 @@
   width: 100%;
   min-width: max-content;
   margin-bottom: 8px;
+  @include fadeIn(0.2s);
   
   &.with-border {
     border-bottom: 1px solid $sectionDividerColor;

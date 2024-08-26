@@ -43,7 +43,7 @@ export default function MembersSidebar() {
             <MembersSidebarItem
               name={member.username}
               Icon={PersonIcon}
-              path={"/" + member.userId}
+              path={"/" + member.username}
             />
           ))}
       </ul>

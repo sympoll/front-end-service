@@ -183,7 +183,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
         </div>
         <div className="poll-form__body__submit-button-container">
           {groupId && (
-            <CustomButton type="submit" disabled={isSubmitting}>
+            <CustomButton type="submit" disabled={isSubmitting} theme="dark">
               {submitButtonText}
             </CustomButton>
           )}

@@ -8,15 +8,22 @@ import CreateGroupPopup from "../popup/CreateGroupPopup";
 import { GroupData } from "../../models/GroupData.model";
 import { fetchUserGroups } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
+import { useParams } from "react-router-dom";
 
 export default function GroupsSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { groupId } = useParams();
 
   // TODO: change username to the current user
   // Temporary hard coded user ID
   const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
 
   const [groups, setGroups] = useState<GroupData[]>();
+
+  // Every time group ID changes, set the loading to true
+  useEffect(() => {
+    setIsLoading(true);
+  }, [groupId]);
 
   useEffect(() => {
     fetchUserGroups(userId)

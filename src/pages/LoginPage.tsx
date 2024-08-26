@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { invokeSignUp, validateUserData } from "../services/signup.service";
 import { UserData } from "../models/UserData.model";
 import ErrorPopup from "../cmps/popup/ErrorPopup";
+import CustomButton from "../cmps/global/CustomButton";
 
 const SPACE = " ";
 const EMPTY_STR = "";
@@ -180,9 +181,7 @@ export default function LoginPage() {
           ) : (
             <></>
           )}
-          <button type="submit" className="custom-button">
-            {isSignIn ? "Log In" : "Sign Up"}
-          </button>
+          <CustomButton type="submit">{isSignIn ? "Log In" : "Sign Up"}</CustomButton>
         </form>
       </div>
     </section>

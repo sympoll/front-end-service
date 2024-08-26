@@ -24,5 +24,8 @@
   width: 100%;
   min-width: max-content;
   margin-bottom: 8px;
-  border-bottom: 1px solid $sectionDividerColor;
+  
+  &.with-border {
+    border-bottom: 1px solid $sectionDividerColor;
+  }
 }

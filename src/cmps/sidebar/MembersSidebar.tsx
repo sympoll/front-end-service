@@ -30,7 +30,9 @@ export default function MembersSidebar() {
 
   return (
     <div className="members-sidebar-container">
-      <div className="members-sidebar-title">{!isAllGroups && "Group Members:"}</div>
+      <div className={`members-sidebar-title ${!isAllGroups ? 'with-border' : ''}`}>
+        {!isAllGroups && "Group Members:"}
+        </div>
       <ul className="members-sidebar-members-container">
         {members?.map((member) =>
           <MembersSidebarItem name={member.username} Icon={PersonIcon} path={"/"+member.username} />

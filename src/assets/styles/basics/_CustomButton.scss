@@ -1,14 +1,11 @@
 .custom-button {
   @include center;
-  background-color: $mainColor-dark3;
   border: 0;
   border-radius: 100px;
   box-sizing: border-box;
-  color: $mainFontColor;
-  cursor: pointer;
-  display: flex; // Or block, depending on layout needs
-  justify-content: center;
-  align-items: center;
+  text-align: center;
+  align-self: center;
+  display: flex;
   font-family: $secondaryFont;
   font-size: 16px;
   font-weight: 600;
@@ -20,29 +17,55 @@
   padding: 0px;
   padding-left: 20px;
   padding-right: 20px;
-  text-align: center;
-  align-self: center;
+  cursor: pointer;
   touch-action: manipulation;
   transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s,
     box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
   user-select: none;
   -webkit-user-select: none;
   vertical-align: middle;
-}
 
-.custom-button:hover,
-.custom-button:focus {
-  background-color: $mainColor-dark0;
-  color: $secondaryFontColor;
-}
+  &__dark {
+    background-color: $mainColor-dark1;
+    color: $secondaryFontColor;
 
-.custom-button:active {
-  background: $mainColor-dark1;
-  color: rgb(255, 255, 255, 0.7);
-}
+    &:hover,
+    &:focus {
+      background-color: $mainColor-dark0;
+      color: $secondaryFontColor;
+    }
 
-.custom-button:disabled {
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, 0.08);
-  color: rgba(0, 0, 0, 0.3);
+    &:active {
+      background: $mainColor-dark1;
+      color: rgb(255, 255, 255, 0.7);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background: rgba(0, 0, 0, 0.08);
+      color: rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &__light {
+    background-color: $mainColor-dark3;
+    color: $mainFontColor;
+
+    &:hover,
+    &:focus {
+      background-color: $mainColor-dark0;
+      color: $secondaryFontColor;
+    }
+
+    &:active {
+      background: $mainColor-dark1;
+      color: rgb(255, 255, 255, 0.7);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background: rgba(0, 0, 0, 0.08);
+      color: rgba(0, 0, 0, 0.3);
+    }
+  }
 }

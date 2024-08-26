@@ -185,7 +185,9 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
           <p>Add New Option</p>
         </div>
         <div className="poll-form__body__submit-button-container">
-          <CustomButton type="submit">Submit</CustomButton>
+          <CustomButton type="submit" theme="dark">
+            Submit
+          </CustomButton>
         </div>
         <p>
           {isErrorPopupVisible && (

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { GroupData } from "../models/GroupData.model";
+import { GroupMember } from "../models/GroupMember.model";
 
 const groupServiceUrl = 
     import.meta.env.VITE_BASE_URL +
@@ -58,6 +59,27 @@ export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
     return response.data;
   } catch (err){
     console.error("Error fetching '" + memberId + "' groups");
+    throw err;
+  }
+}
+
+export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]> {
+  console.log("Send request to get '" + groupId + "' members");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .get(import.meta.env.VITE_GROUP_SERVICE_GET_ALL_MEMBERS, {params: {groupId}});
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching '" + groupId + "' members");
     throw err;
   }
 }

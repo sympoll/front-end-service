@@ -1,3 +1,4 @@
 export interface GroupMember{
-    userId: string;
+    userId: string,
+    username: string;
 }

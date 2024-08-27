@@ -101,6 +101,10 @@
     border-radius: 8px;
     color: #4b3832;
     flex-basis: 40%;
+
+    &__label {
+      font-weight: 800;
+    }
   }
 
   /* Responsive adjustments */

@@ -8,7 +8,7 @@ $errorFont: "Arvo", serif;
 $mainFontSize: 14px;
 
 // ** Main Colors **
-$grayedOutFontColor: $active-vote-color;
+$grayedOutFontColor: #fbcfa8;
 $mainColor-normal: #e48f17;
 $mainColor-light0: #f3c380;
 $mainColor-light1: #ffdab9;
@@ -37,7 +37,7 @@ $roleNameBgColor: $mainColor-light0;
 $roleNameFontColor: $mainFontColor;
 
 // ** Components Colors **
-$active-vote-color: rgb(251, 207, 168);
+$active-vote-color: $grayedOutFontColor;
 $inactive-vote-color: #f3c380;
 $voting-checkbox-font-color: #000000;
 $loading-icon-color: rgb(6, 68, 36);

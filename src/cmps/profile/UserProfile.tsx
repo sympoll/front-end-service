@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
 import { fetchUserData } from "../../services/user.profile.service";
+import LoadingAnimation from "../global/LoadingAnimation";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -21,6 +22,7 @@ export default function UserProfile() {
     fetchUserData(userId)
       .then((data) => {
         console.log("Fetched user data for user with ID: ", userId);
+        console.log("Fetched user: ", data);
         setUserData(data);
       })
       .catch((error) => {
@@ -35,17 +37,15 @@ export default function UserProfile() {
       .join(" ");
   }
 
-  return (
+  return userData ? (
     <div className="user-profile">
       <div className="user-profile__header">
         <img src={bannerPictureUrl} alt="Banner" className="user-profile__banner-img" />
         <div className="user-profile__details">
           <img src={profilePictureUrl} alt="Profile" className="user-profile__profile-picture" />
           <div className="user-profile__title">
-            <h1 className="user-profile__username">
-              {capitalizeWords(userData ? userData.username : "Error getting user data")}
-            </h1>
-            <h2 className="user-profile__email">{userData?.email}</h2>
+            <h1 className="user-profile__username">{capitalizeWords(userData.username)}</h1>
+            <h2 className="user-profile__email">{userData.email}</h2>
           </div>
         </div>
         <hr className="user-profile__divider" />
@@ -59,10 +59,12 @@ export default function UserProfile() {
         <div className="user-profile__user-info">
           <h3>Info:</h3>
           <br />
-          Time Created: {userData?.timeCreated} <br />
-          User ID: {userData?.userId}
+          Time Created: {userData.timeCreated} <br />
+          User ID: {userData.userId}
         </div>
       </div>
     </div>
+  ) : (
+    <LoadingAnimation message="Loading user profile" dots="off" />
   );
 }

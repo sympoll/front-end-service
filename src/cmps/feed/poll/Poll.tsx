@@ -3,13 +3,10 @@ import VotingItem from "./VotingItem";
 import {
   VotingItemData,
   VotingItemIsChecked,
-  VotingItemProgress,
+  VotingItemProgress
 } from "../../../models/VotingitemData.model";
 import ErrorPopup from "../../popup/ErrorPopup";
-import {
-  getTimePassed,
-  getTimeToDeadline,
-} from "../../../services/poll.service";
+import { getTimePassed, getTimeToDeadline } from "../../../services/poll.service";
 import { voteOnItem, removeVoteFromItem } from "../../../services/vote.service"; // Import your service functions
 
 interface PollProps {
@@ -18,6 +15,7 @@ interface PollProps {
   description: string;
   nofAnswersAllowed: number;
   creatorId: string;
+  creatorName: string;
   groupId: string;
   timeCreated: string;
   timeUpdated: string;
@@ -32,18 +30,16 @@ export default function Poll({
   description,
   nofAnswersAllowed,
   creatorId,
+  creatorName,
   groupId,
   timeCreated,
   timeUpdated,
   deadline,
   votingItems,
-  isSpecificGroup,
+  isSpecificGroup
 }: PollProps) {
-  const [votingItemsData, setVotingItemsData] =
-    useState<VotingItemData[]>(votingItems);
-  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
-    []
-  ); // States array of the checked state of each voting item (checked/unchecked)
+  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
 
@@ -65,7 +61,7 @@ export default function Poll({
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
       votingItemId: vItemData.votingItemId,
-      progress: getProgress(vItemData.votingItemId),
+      progress: getProgress(vItemData.votingItemId)
     }))
   ); // initialized using votingItemsData states array
 
@@ -82,7 +78,7 @@ export default function Poll({
     setProgresses(
       votingItemsData.map((item) => ({
         votingItemId: item.votingItemId,
-        progress: getProgress(item.votingItemId),
+        progress: getProgress(item.votingItemId)
       }))
     );
   }, [votingItemsData]);
@@ -90,11 +86,7 @@ export default function Poll({
   // Don't change the states if the user has already chosen the maximum amount of voting choices,
   // and is trying to choose another (only on a multiple choices poll)
   const shouldPreventProgressUpdate = (inputIsInc: boolean) => {
-    return (
-      !isSingleChoice() &&
-      inputIsInc &&
-      nofAnswersAllowed === countCheckedItems()
-    );
+    return !isSingleChoice() && inputIsInc && nofAnswersAllowed === countCheckedItems();
   };
 
   // On checkbox click, progress and voting count is updated
@@ -103,9 +95,7 @@ export default function Poll({
     if (shouldPreventProgressUpdate(inputIsInc)) return false;
 
     if (isSingleChoice() && inputIsInc) {
-      const previouslySelectedItem = isCheckedStates.find(
-        (item) => item.isChecked
-      );
+      const previouslySelectedItem = isCheckedStates.find((item) => item.isChecked);
       if (previouslySelectedItem) {
         sendRequestToVoteService(false, previouslySelectedItem.votingItemId);
       }
@@ -121,10 +111,7 @@ export default function Poll({
     return true;
   }
 
-  async function sendRequestToVoteService(
-    isChecked: boolean,
-    votingItemId: string
-  ) {
+  async function sendRequestToVoteService(isChecked: boolean, votingItemId: string) {
     try {
       if (isChecked) {
         // If the checkbox is checked, cast a vote
@@ -146,7 +133,7 @@ export default function Poll({
       if (item.votingItemId === inputId)
         return {
           ...item,
-          voteCount: inputIsInc ? item.voteCount + 1 : item.voteCount - 1,
+          voteCount: inputIsInc ? item.voteCount + 1 : item.voteCount - 1
         };
 
       // This item was not clicked
@@ -171,7 +158,7 @@ export default function Poll({
       if (item.votingItemId === inputId)
         return {
           votingItemId: item.votingItemId,
-          isChecked: inputIsInc,
+          isChecked: inputIsInc
         };
 
       // This item was not clicked
@@ -179,7 +166,7 @@ export default function Poll({
         // Uncheck all previously checked checkboxes
         return {
           votingItemId: item.votingItemId,
-          isChecked: false,
+          isChecked: false
         };
       }
 
@@ -189,7 +176,7 @@ export default function Poll({
       );
       return {
         votingItemId: item.votingItemId,
-        isChecked: getIsChecked(item.votingItemId),
+        isChecked: getIsChecked(item.votingItemId)
       };
     });
   };
@@ -204,17 +191,15 @@ export default function Poll({
       totalCount += vItemData.voteCount;
     });
 
-    if (changedItem)
-      return (changedItem.voteCount / (totalCount ? totalCount : 1)) * 100;
+    if (changedItem) return (changedItem.voteCount / (totalCount ? totalCount : 1)) * 100;
     return 0;
   }
 
   // true if the voting item is checked, false if not
   function getIsChecked(votingItemId: string) {
     return (
-      isCheckedStates.find(
-        (isCheckedState) => isCheckedState.votingItemId === votingItemId
-      )?.isChecked || false
+      isCheckedStates.find((isCheckedState) => isCheckedState.votingItemId === votingItemId)
+        ?.isChecked || false
     );
   }
 
@@ -224,36 +209,22 @@ export default function Poll({
         // Display Group info only on all groups tab
         isSpecificGroup ? (
           <div className="poll-info-title-container">
-            <div className="poll-info-title-row1">
-              {
-                //TODO: change to creator name
-                creatorId
-              }
-            </div>
+            <div className="poll-info-title-row1">{creatorName}</div>
             <div className="poll-info-title-row2">{timePassed}</div>
             <div className="poll-info-title-row3">
-              <div className="poll-deadline">
-                {"Deadline is in " + getTimeToDeadline(deadline)}
-              </div>
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>
         ) : (
           <div className="poll-info-title-container">
             <div className="poll-info-title-row1">{groupId}</div>
             <div className="poll-info-title-row2">
-              <div className="poll-info-title-creator-name">
-                {
-                  //TODO: change to creator name
-                  creatorId
-                }
-              </div>
+              <div className="poll-info-title-creator-name">{creatorName}</div>
               <div className="poll-info-title-separator">•</div>
               <div className="poll-info-title-time-posted">{timePassed}</div>
             </div>
             <div className="poll-info-title-row3">
-              <div className="poll-deadline">
-                {"Deadline is in " + getTimeToDeadline(deadline)}
-              </div>
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>
         )
@@ -274,19 +245,15 @@ export default function Poll({
               votingItemID={vItem.votingItemId}
               description={vItem.description}
               voteCount={
-                votingItemsData.find(
-                  (vItemData) => vItemData.votingItemId === vItem.votingItemId
-                )?.voteCount || 0
+                votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                  ?.voteCount || 0
               }
               progress={
-                progresses.find(
-                  (pItem) => pItem.votingItemId === vItem.votingItemId
-                )?.progress || 0
+                progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
               }
               isChecked={
-                isCheckedStates.find(
-                  (cItem) => cItem.votingItemId === vItem.votingItemId
-                )?.isChecked || false
+                isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                  ?.isChecked || false
               }
               handleNewProgress={handleNewProgress}
               showErrorPopup={showErrorPopup}

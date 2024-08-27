@@ -6,6 +6,7 @@ export interface PollData {
     description: string;
     nofAnswersAllowed: number;
     creatorId: string;
+    creatorName: string;
     groupId: string;
     timeCreated: string;
     timeUpdated: string;

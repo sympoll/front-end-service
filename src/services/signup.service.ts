@@ -1,6 +1,7 @@
 import axios from "axios";
-import { UserData } from "../models/UserData.model";
+import { UserSignupData } from "../models/UserSignupData.model";
 import { throwAxiosErr } from "./error.service";
+import { UserData } from "../models/UserData.model";
 
 const userServiceUrl = 
     import.meta.env.VITE_BASE_URL + 
@@ -14,7 +15,7 @@ const userServiceUrl =
  * @param setError 
  */
 export async function validateUserData(
-    userData : UserData,
+    userData : UserSignupData,
     passwordConfirm : string,
     setErrorMessage : React.Dispatch<React.SetStateAction<string>>
 ) : Promise<boolean>   {
@@ -180,8 +181,9 @@ export async function checkEmailTaken(email : string) : Promise<boolean> {
 /**
  * Send a request to user-service to signup the user.
  * @param userData Information of the user, filled in the sign up form.
+ * @returns Full information of the signed up user.
  */
-export async function invokeSignUp(userData : UserData) {
+export async function invokeSignUp(userData : UserSignupData) : Promise<UserData>{
     try {
         const response = await axios
             .create({
@@ -193,7 +195,7 @@ export async function invokeSignUp(userData : UserData) {
             })
             .post("", userData);
 
-        return response;
+        return response.data;
     } catch (err) {
         console.error("Error signing up the user: " + userData + ".");
         throw throwAxiosErr(err);

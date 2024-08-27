@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { UserData } from "../../models/UserData.model";
+import { fetchUserData } from "../../services/user.profile.service";
 
 export default function UserProfile() {
-  const { username } = useParams();
-  // TODO: Request from the user-service info of the user received in the params.
+  const { userId } = useParams();
+  const [userData, setUserData] = useState<UserData>();
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -14,7 +16,17 @@ export default function UserProfile() {
   const desc =
     "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua Ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat Duis aute irure dolor in reprehenderit in voluptate velit esse cillum.";
 
-  const email = username + "@gmail.com";
+  useEffect(() => {
+    if (!userId) throw new Error("Error getting user ID param");
+    fetchUserData(userId)
+      .then((data) => {
+        console.log("Fetched user data for user with ID: ", userId);
+        setUserData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data for user with ID: ", userId);
+      });
+  }, []);
 
   function capitalizeWords(input: string): string {
     return input
@@ -31,9 +43,9 @@ export default function UserProfile() {
           <img src={profilePictureUrl} alt="Profile" className="user-profile__profile-picture" />
           <div className="user-profile__title">
             <h1 className="user-profile__username">
-              {capitalizeWords(username ? username : "Error getting username param")}
+              {capitalizeWords(userData ? userData.username : "Error getting user data")}
             </h1>
-            <h2 className="user-profile__email">{email}</h2>
+            <h2 className="user-profile__email">{userData?.email}</h2>
           </div>
         </div>
         <hr className="user-profile__divider" />
@@ -47,10 +59,8 @@ export default function UserProfile() {
         <div className="user-profile__user-info">
           <h3>Info:</h3>
           <br />
-          Some info about the user... <br />
-          Time created.... <br />
-          How many groups the user is in... <br />
-          etc...
+          Time Created: {userData?.timeCreated} <br />
+          User ID: {userData?.userId}
         </div>
       </div>
     </div>

@@ -60,10 +60,9 @@ export default function UserProfile() {
         <div className="user-profile__user-info">
           <h3>Info:</h3>
           <br />
-          <h3 className="user-profile__user-info__label">Created:</h3>
-          <br />
-          {getTimePassed(userData.timeCreated)} <br />
-          <h3 className="user-profile__user-info__label">User ID:</h3> {userData.userId}
+          <h4 className="user-profile__user-info__label">Created:</h4>
+          {getTimePassed(userData.timeCreated)} <br /> <br />
+          <h4 className="user-profile__user-info__label">User ID:</h4> {userData.userId}
         </div>
       </div>
     </div>

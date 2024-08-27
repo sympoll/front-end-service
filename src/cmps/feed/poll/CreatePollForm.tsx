@@ -40,7 +40,7 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
     }, 5000); // Hide after 5 seconds
   };
 
-  // Each time there is an input change, this sets the form's returned parametes.
+  // Each time there is an input change, this sets the form's returned parameters.
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({

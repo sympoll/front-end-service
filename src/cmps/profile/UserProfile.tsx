@@ -61,6 +61,7 @@ export default function UserProfile() {
           <h3>Info:</h3>
           <br />
           <h3 className="user-profile__user-info__label">Created:</h3>
+          <br />
           {getTimePassed(userData.timeCreated)} <br />
           <h3 className="user-profile__user-info__label">User ID:</h3> {userData.userId}
         </div>

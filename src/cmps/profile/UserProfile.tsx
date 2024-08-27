@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
 import { fetchUserData } from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
+import { getTimePassed } from "../../services/poll.service";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -59,7 +60,7 @@ export default function UserProfile() {
         <div className="user-profile__user-info">
           <h3>Info:</h3>
           <br />
-          Time Created: {userData.timeCreated} <br />
+          Created: {getTimePassed(userData.timeCreated)} <br />
           User ID: {userData.userId}
         </div>
       </div>

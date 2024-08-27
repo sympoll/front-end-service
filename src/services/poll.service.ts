@@ -20,7 +20,7 @@ export async function fetchAllUserGroupsPolls(
   const groupIds = ["group1", "group2"]; // Temporary
   console.log("Trying to fetch polls by group IDs: " + groupIds);
 
-  // Send a request to the Poll Managemenet Service to get all polls of the specified groups.
+  // Send a request to the Poll Service to get all polls of the specified groups.
   try {
     const response = await axios
       .create({
@@ -54,7 +54,7 @@ export async function fetchAllUserGroupsPolls(
  */
 export async function fetchPollsByGroupId(groupId: string) {
   console.log("Trying to fetch polls by group ID: " + groupId);
-  // Send a request to the Poll Managemenet Service to get all polls of the specified groups.
+  // Send a request to the Poll Service to get all polls of the specified groups.
   try {
     const response = await axios
       .create({

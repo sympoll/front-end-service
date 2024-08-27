@@ -21,11 +21,15 @@ export default function FeedBar({ groupId }: FeedBarProps) {
 
   return (
     <div className="feed-bar-container">
-      {isFeedBarVisible && (
+      {groupId && isFeedBarVisible && (
         <div className="feed-bar">
           {/* Add buttons to feed bar here. */}
           <CustomButton onClick={toggleCreatePollForm} name="create-btn" theme="dark">
             Create Poll
+          </CustomButton>
+
+          <CustomButton name="fetch-updates-btn" theme="dark">
+            Update feed
           </CustomButton>
         </div>
       )}

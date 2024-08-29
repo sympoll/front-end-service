@@ -9,6 +9,7 @@ import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
+import FeedMessage from "./messege/FeedMessage";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -55,45 +56,23 @@ export default function FeedContent() {
     }
   }, [polls]);
 
-  // Use for testing animations/frontend stuff that don't require the server.
-  // return (
-  //   <div className="feed-container">
-  //     <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>
-  //     <div className="feed-content-container">
-  //       {getSamplePolls().map((poll) => (
-  //         <Poll
-  //           key={poll.pollId}
-  //           pollId={poll.pollId}
-  //           title={poll.title}
-  //           description={poll.description}
-  //           nofAnswersAllowed={poll.nofAnswersAllowed}
-  //           creatorId={poll.creatorId}
-  //           groupId={poll.groupId}
-  //           timeCreated={poll.timeCreated}
-  //           timeUpdated={poll.timeUpdated}
-  //           deadline={poll.deadline}
-  //           votingItems={poll.votingItems}
-  //           isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-  //         />
-  //       ))}
-  //     </div>
-  //   </div>
-  // );
-
   if (isLoading) return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
   if (!polls) {
     return <FeedErrorMessage error={error} />;
   }
   if (polls.length === 0) {
     return (
-      <FeedErrorMessage
-        error={
-          groupId
-            ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
-            : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
-        }
-      />
-    ); // TODO: add tutorial for admins only (members wont see the tutorail)
+      <div className="feed-container">
+        {groupId && <FeedBar groupId={groupId} />}
+        <FeedMessage
+          msgText={
+            groupId
+              ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
+              : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
+          }
+        />
+      </div>
+    );
   }
   return (
     <div className="feed-container">

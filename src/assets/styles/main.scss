@@ -35,6 +35,8 @@
 @import "cmps/content-page/ContentPage";
 
 // * Feed *
+@import "cmps/feed/message/FeedMessage";
+@import "cmps/feed/message/FeedErrorMessage";
 @import "cmps/feed/VotingCheckbox";
 @import "cmps/feed/VotingBar";
 @import "cmps/feed/VotingItem";

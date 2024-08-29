@@ -4,13 +4,19 @@ import ErrorPopup from "../../popup/ErrorPopup";
 import CustomButton from "../../global/CustomButton";
 import { handleSubmit, getCurrentDateTime } from "../../../services/create.poll.form.service";
 import CloseButton from "../../global/CloseButton";
+import { PollData } from "../../../models/PollData.model";
 
 interface CreatePollFormProps {
   groupId: string;
   closePollFunction: () => void;
+  addNewPoll: (newPoll: PollData) => void;
 }
 
-export default function CreatePollForm({ groupId, closePollFunction }: CreatePollFormProps) {
+export default function CreatePollForm({
+  groupId,
+  closePollFunction,
+  addNewPoll
+}: CreatePollFormProps) {
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -100,6 +106,8 @@ export default function CreatePollForm({ groupId, closePollFunction }: CreatePol
 
     if (result.success) {
       closePollFunction();
+      if (result.pollData) addNewPoll(result.pollData);
+      else throw new Error("Did not receive newly created poll's data from the Poll-Service");
     }
   };
 

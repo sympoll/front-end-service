@@ -3,13 +3,13 @@ import Poll from "./poll/Poll";
 import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
-import FeedErrorMessage from "./messege/FeedErrorMessage";
+import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
-import FeedMessage from "./messege/FeedMessage";
+import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -56,15 +56,19 @@ export default function FeedContent() {
     }
   }, [polls]);
 
-  if (isLoading) return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
-  if (!polls) {
-    return <FeedErrorMessage error={error} />;
+  if (isLoading) {
+    return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
   }
+
+  if (!polls) {
+    return <ContentPageErrorMessage error={error} />;
+  }
+
   if (polls.length === 0) {
     return (
       <div className="feed-container">
         {groupId && <FeedBar groupId={groupId} />}
-        <FeedMessage
+        <ContentPageMessage
           msgText={
             groupId
               ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
@@ -74,6 +78,7 @@ export default function FeedContent() {
       </div>
     );
   }
+
   return (
     <div className="feed-container">
       <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>

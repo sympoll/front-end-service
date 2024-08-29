@@ -27,10 +27,6 @@ export default function FeedBar({ groupId }: FeedBarProps) {
           <CustomButton onClick={toggleCreatePollForm} name="create-btn" theme="dark">
             Create Poll
           </CustomButton>
-
-          <CustomButton name="fetch-updates-btn" theme="dark">
-            Update feed
-          </CustomButton>
         </div>
       )}
 

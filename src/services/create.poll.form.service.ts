@@ -12,25 +12,7 @@ interface SubmitResult {
     errors?: string;
 }
 
-export function isAllVotingItemsDefined(votingItems: string[]): boolean {
-    return votingItems.every(item => item !== "");
-  }
-  
-  export function isTitleDefined(title: string): boolean {
-    return title.trim() !== "";
-  }
-  
-  export function isDeadlineValid(deadline: string): boolean {
-    const deadlineDate = new Date(deadline);
-    if (isNaN(deadlineDate.getTime())) {
-      return false; // Invalid date
-    }
-  
-    const now = new Date();
-    return deadlineDate > now;
-  }
-  
-  export function getCurrentDateTime(): string {
+export function getCurrentDateTime(): string {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -38,9 +20,9 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     return `${year}-${month}-${day}T${hours}:${minutes}`;
-  }
+}
 
-  export function validatePollForm(formData: CreatePollData): { isValid: boolean; errors: string } {
+export function validatePollForm(formData: CreatePollData): { isValid: boolean; errors: string } {
     let errors: string[] = [];
 
     if (!isTitleDefined(formData.title)) {
@@ -51,6 +33,10 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
         errors.push("All voting options should be defined.\n");
     }
 
+    if (isDuplicateVotingItemsDefined(formData.votingItems)) {
+        errors.push("Duplicate voting options are not allowed.")
+    }
+
     if (!isDeadlineValid(formData.deadline)) {
         errors.push("Deadline should be a valid date in the future.\n");
     }
@@ -59,6 +45,29 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
         isValid: errors.length === 0,
         errors: errors.join(""),
     };
+}
+
+
+function isAllVotingItemsDefined(votingItems: string[]): boolean {
+    return votingItems.every(item => item !== "");
+}
+
+function isDuplicateVotingItemsDefined(votingItems: string[]): boolean {
+    const uniqueItems = new Set(votingItems);
+    return uniqueItems.size !== votingItems.length;
+}
+
+function isTitleDefined(title: string): boolean {
+    return title.trim() !== "";
+}
+
+function isDeadlineValid(deadline: string): boolean {
+    const deadlineDate = new Date(deadline);
+    if (isNaN(deadlineDate.getTime())) {
+        return false; // Invalid date
+    }
+    const now = new Date();
+    return deadlineDate > now;
 }
 
 

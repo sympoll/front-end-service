@@ -1,36 +1,29 @@
 .app-header-container {
-  @include sticky-top(0);
-  @include center;
+  position: relative;
   grid-column: 1 / 4;
   grid-row: 1;
   display: flex;
-  justify-content: center; // Center the title horizontally
-  align-items: center; // Align content vertically
+  justify-content: center;
+  align-items: center;
   background-color: $mainBgColor1;
-  color: $mainBgColor0;
-  font-size: 30px;
-  font-family: $secondaryFont;
-  font-weight: 400;
-  font-style: normal;
   z-index: 10;
-  width: 100%; // Make the container span the entire width of the page
-  padding: 0 20px; // Optional: Add padding to the left and right
-  position: relative; // Ensure positioning context for absolute elements
+  width: 100%;
 }
 
 .header-content {
   display: flex;
   width: 100%;
-  justify-content: space-between; // Space out the title and button
 }
 
 #app-header-title {
+  font-family: $secondaryFont;
+  color: $mainBgColor0;
+  font-size: 30px;
   cursor: pointer;
-  text-align: center; // Center text within the title container
+  text-align: center;
 }
 
-update-btn {
-  right: 20px; // Push the button to the far right
-  top: 50%;
-  position: absolute; // Ensure it stays aligned to the right
+#update-btn {
+  right: 20px;
+  position: absolute;
 }

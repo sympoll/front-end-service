@@ -12,7 +12,7 @@ export default function AppHeader() {
       <div id="app-header-title" onClick={() => navigate("/")}>
         Sympoll™
       </div>
-      <CustomButton name="update-btn" theme="dark">
+      <CustomButton name="update-btn" theme="light">
         Update
       </CustomButton>
     </div>

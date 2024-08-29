@@ -19,6 +19,7 @@ export default function App() {
         <Route path="/feed/*" element={<ContentPage content="feed" />} />
         <Route path="/feed/:groupId" element={<ContentPage content="feed" />} />
         <Route path="/:userId" element={<ContentPage content="user-profile" />} />
+        <Route path="/group/:groupId" element={<ContentPage content="group-info" />} />
       </Routes>
     </BrowserRouter>
   );

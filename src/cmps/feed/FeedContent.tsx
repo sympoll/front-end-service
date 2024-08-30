@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Poll from "./poll/Poll";
 import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
-import FeedErrorMessage from "./messege/FeedErrorMessage";
+import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
 import { useParams, matchPath, useLocation } from "react-router-dom";
 import { getSamplePolls } from "../../services/demo.data.service";
 import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
-import FeedMessage from "./messege/FeedMessage";
+import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>();
@@ -56,14 +56,46 @@ export default function FeedContent() {
     }
   }, [polls]);
 
-  if (isLoading) return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
-  if (!polls) {
-    return <FeedErrorMessage error={error} />;
+  const addNewPoll = (newPoll: PollData) => {
+    console.log("Adding newly created poll to feed. ", newPoll);
+    setPolls((prevPolls) => {
+      if (!prevPolls) return [newPoll];
+      return [newPoll, ...prevPolls]; // Prepend the new poll to the beginning of the array
+    });
+  };
+
+  const renderedPolls = useMemo(() => {
+    return polls?.map((poll) => (
+      <Poll
+        key={poll.pollId}
+        pollId={poll.pollId}
+        title={poll.title}
+        description={poll.description}
+        nofAnswersAllowed={poll.nofAnswersAllowed}
+        creatorId={poll.creatorId}
+        creatorName={poll.creatorName}
+        groupId={poll.groupId}
+        timeCreated={poll.timeCreated}
+        timeUpdated={poll.timeUpdated}
+        deadline={poll.deadline}
+        votingItems={poll.votingItems}
+        isSpecificGroup={groupId ? true : false}
+      />
+    ));
+  }, [polls]);
+
+  if (isLoading) {
+    return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
   }
+
+  if (!polls) {
+    return <ContentPageErrorMessage error={error} />;
+  }
+
   if (polls.length === 0) {
     return (
       <div className="feed-container">
-        {groupId && <FeedBar groupId={groupId} />}
+        {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
         <FeedMessage
           msgText={
             groupId
@@ -74,28 +106,13 @@ export default function FeedContent() {
       </div>
     );
   }
+
   return (
     <div className="feed-container">
-      <div className="feed-header">{groupId && <FeedBar groupId={groupId} />}</div>
-      <div className="feed-content-container">
-        {polls.map((poll) => (
-          <Poll
-            key={poll.pollId}
-            pollId={poll.pollId}
-            title={poll.title}
-            description={poll.description}
-            nofAnswersAllowed={poll.nofAnswersAllowed}
-            creatorId={poll.creatorId}
-            creatorName={poll.creatorName}
-            groupId={poll.groupId}
-            timeCreated={poll.timeCreated}
-            timeUpdated={poll.timeUpdated}
-            deadline={poll.deadline}
-            votingItems={poll.votingItems}
-            isSpecificGroup={groupId ? true : false} // Check if chosen a specific group, or currently on all groups tab
-          />
-        ))}
+      <div className="feed-header">
+        {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
       </div>
+      <div className="feed-content-container">{renderedPolls}</div>
     </div>
   );
 }

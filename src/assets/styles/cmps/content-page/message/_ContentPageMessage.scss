@@ -1,8 +1,8 @@
-.feed-error-message-container {
+.content-page-message-container {
   @include flex-column;
   @include fadeIn;
-  text-align: center;
   height: fit-content;
+  text-align: center;
   width: 100%;
   align-items: center;
   justify-content: center;

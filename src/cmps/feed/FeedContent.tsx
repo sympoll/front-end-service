@@ -67,12 +67,6 @@ export default function FeedContent() {
     }
   }, [polls]);
 
-<<<<<<< HEAD
-  if (isLoading) return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
-
-  if (!polls) {
-    return <FeedErrorMessage error={error} />;
-=======
   const addNewPoll = (newPoll: PollData) => {
     console.log("Adding newly created poll to feed. ", newPoll);
     setPolls((prevPolls) => {
@@ -103,7 +97,6 @@ export default function FeedContent() {
 
   if (isLoading) {
     return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
->>>>>>> main
   }
 
   if (!polls) {
@@ -112,16 +105,6 @@ export default function FeedContent() {
 
   if (polls.length === 0) {
     return (
-<<<<<<< HEAD
-      <FeedErrorMessage
-        error={
-          groupId
-            ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
-            : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
-        }
-      />
-    ); // TODO: add tutorial for admins only (members wont see the tutorial)
-=======
       <div className="feed-container">
         {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
         <ContentPageMessage
@@ -133,7 +116,6 @@ export default function FeedContent() {
         />
       </div>
     );
->>>>>>> main
   }
 
   return (

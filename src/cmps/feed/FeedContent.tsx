@@ -96,7 +96,7 @@ export default function FeedContent() {
     return (
       <div className="feed-container">
         {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
-        <FeedMessage
+        <ContentPageMessage
           msgText={
             groupId
               ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."

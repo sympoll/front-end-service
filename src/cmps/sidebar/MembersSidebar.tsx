@@ -10,102 +10,72 @@ export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
   const [members, setMembers] = useState<GroupMember[]>([]);
-  const [fetchedMembers, setFetchedMembers] = useState<GroupMember[]>([]);
-  const [isAllGroups, setIsAllGroups] = useState(true);
+  const [isInGroup, setIsInGroup] = useState(false);
 
   const cmpName = "MEMBERS_SIDEBAR ";
 
   // Fetch initial data
   useEffect(() => {
-    setIsLoading(true);
+    const fetchMembers = async () => {
+      setIsLoading(true);
 
-    if (groupId) {
-      setIsAllGroups(false);
-      fetchGroupMembers(groupId)
-        .then((data) => {
+      if (groupId) {
+        setIsInGroup(true);
+        try {
+          const data = await fetchGroupMembers(groupId);
           logDataReceived(data);
-          const sortedMembers = sortMembers(data);
-          setMembers(sortedMembers);
-          setFetchedMembers(sortedMembers);
-        })
-        .catch((error) => {
+          setMembers(data);
+        } catch (error) {
           console.error(cmpName + error);
-        });
-    } else {
-      setIsAllGroups(true);
-      setMembers([]);
-      setFetchedMembers([]);
-    }
-    setIsLoading(false);
+        }
+      } else {
+        setIsInGroup(false);
+        setMembers([]);
+      }
+
+      setIsLoading(false);
+    };
+
+    fetchMembers();
   }, [groupId]);
 
-  const updateMembers = () => {
+  const updateMembers = async () => {
     if (groupId) {
-      fetchGroupMembers(groupId)
-        .then((data) => {
-          setFetchedMembers(data);
-        })
-        .catch((error) => {
-          console.error(cmpName + error);
-          setIsLoading(false);
+      try {
+        const fetchedMembers = await fetchGroupMembers(groupId);
+        logDataReceived(fetchedMembers);
+
+        // Merge new members with existing ones, ensuring uniqueness by userId
+        setMembers((prevMembers) => {
+          const membersMap = new Map(
+            [...prevMembers, ...fetchedMembers].map((member) => [member.userId, member])
+          );
+          return Array.from(membersMap.values());
         });
+      } catch (error) {
+        console.error(cmpName + error);
+      }
     }
   };
 
-  // Memoize the updated members array to avoid unnecessary re-renders.
-  // This combines the fetched members with existing ones:
-  // - Updates existing members by merging new details.
-  // - Adds any new members not already in the state.
-  const memoizedMembers = useMemo(() => {
-    return fetchedMembers.map((fetchedMember) => {
-      const existingMember = members.find((member) => (member.userId = fetchedMember.userId));
-      if (existingMember) {
-        // Update the existing member with new details
-        return { ...existingMember, ...fetchedMember };
-      } else {
-        // Add a new member
-        return fetchedMember;
-      }
-    });
-  }, [fetchedMembers, members]);
-
-  // Update the groups state only with new or changed groups
-  useEffect(() => {
-    if (memoizedMembers.length > 0) {
-      setMembers((prevMembers) => [...prevMembers, ...memoizedMembers]);
-    }
-  }, [memoizedMembers]);
+  // Memoize the members array to prevent unnecessary re-renders
+  const memoizedMembers = useMemo(() => members, [members]);
 
   const logDataReceived = (data: GroupMember[]) => {
-    console.log(cmpName + "got data " + data);
-  };
-
-  const sortMembers = (members: GroupMember[]) => {
-    return members.sort((a, b) => {
-      const roleOrder: { [key: string]: number } = {
-        Admin: 1,
-        Moderator: 2,
-        Member: 4
-      };
-      // Give a higher order number to roles that are not 'Member'
-      const aRoleOrder = roleOrder[a.roleName] || 3;
-      const bRoleOrder = roleOrder[b.roleName] || 3;
-
-      return aRoleOrder - bRoleOrder;
-    });
+    console.log(cmpName + "got data", JSON.stringify(data, null, 2));
   };
 
   return (
     <div className="members-sidebar-container">
-      <div className={`members-sidebar-title ${!isAllGroups ? "with-border" : ""}`}>
-        {!isAllGroups && "Group Members:"}
+      <div className={`members-sidebar-title ${!isInGroup ? "with-border" : ""}`}>
+        {!isInGroup && "Group Members:"}
       </div>
       <ul className="members-sidebar-members-container">
         {isLoading && (
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
-          members?.map((member) => (
+          memoizedMembers.map((member) => (
             <MembersSidebarItem
               key={member.userId}
               name={member.username}

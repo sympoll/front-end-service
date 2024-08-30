@@ -10,94 +10,83 @@ import { fetchUserGroups } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 
 export default function GroupsSidebar() {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Tracks loading state
+  const [groups, setGroups] = useState<GroupData[]>([]); // Stores groups data
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false); // Controls popup visibility
 
-  // TODO: change username to the current user
-  // Temporary hard coded user ID
-  const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
-  const cmpName = "GROUP_SIDEBAR ";
+  // TODO: Change username to the current user dynamically
+  const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839"; // Hardcoded user ID for demo purposes
+  const cmpName = "GROUP_SIDEBAR "; // Component name for logging purposes
 
-  const [groups, setGroups] = useState<GroupData[]>([]);
-  const [fetchedGroups, setFetchedGroups] = useState<GroupData[]>([]); // Store all groups fetched
-
-  // Fetch initial data
+  // Effect to fetch groups data on component mount or userId change
   useEffect(() => {
-    fetchUserGroups(userId)
-      .then((data) => {
+    const fetchGroups = async () => {
+      try {
+        const data = await fetchUserGroups(userId);
         logDataReceived(data);
         setGroups(data);
-        setFetchedGroups(data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error(cmpName + error);
-      });
-    setIsLoading(false);
-  }, []);
-
-  const updateGroups = () => {
-    fetchUserGroups(userId)
-      .then((data) => {
-        logDataReceived(data);
-        setFetchedGroups(data); // Update all groups with new data
-      })
-      .catch((error) => {
-        console.error(cmpName + error);
+      } finally {
         setIsLoading(false);
+      }
+    };
+
+    fetchGroups();
+  }, [userId]); // Dependency array includes userId
+
+  // Function to update groups with the latest data
+  const updateGroups = async () => {
+    try {
+      const fetchedGroups = await fetchUserGroups(userId);
+      logDataReceived(fetchedGroups);
+
+      // Merge new groups with existing ones, ensuring uniqueness by groupId
+      setGroups((prevGroups) => {
+        const groupsMap = new Map(
+          [...prevGroups, ...fetchedGroups].map((group) => [group.groupId, group])
+        );
+        return Array.from(groupsMap.values());
       });
+    } catch (error) {
+      console.error(cmpName + error);
+    }
   };
 
-  // Memoize the updated groups array to avoid unnecessary re-renders.
-  // This combines the fetched groups with existing ones:
-  // - Updates existing groups by merging new details.
-  // - Adds any new groups not already in the state.
-  const memoizedGroups = useMemo(() => {
-    return fetchedGroups.map((fetchedGroup) => {
-      const existingGroup = groups.find((group) => group.groupId === fetchedGroup.groupId);
-      if (existingGroup) {
-        // Update the existing group with new details
-        return { ...existingGroup, ...fetchedGroup };
-      } else {
-        // Add new group
-        return fetchedGroup;
-      }
-    });
-  }, [fetchedGroups, groups]);
-
-  // Update the groups state only with new or changed groups
-  useEffect(() => {
-    if (memoizedGroups.length > 0) {
-      setGroups((prevGroups) => [...prevGroups, ...memoizedGroups]);
-    }
-  }, [memoizedGroups]);
-
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+  // Memoize the groups array to prevent unnecessary re-renders
+  const memoizedGroups = useMemo(() => groups, [groups]);
 
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
 
   const logDataReceived = (data: GroupData[]) => {
-    console.log(cmpName + "got data " + data);
+    console.log(cmpName + "got data", JSON.stringify(data, null, 2));
   };
 
   return (
     <div className="groups-sidebar-container">
+      {/* User info item displaying username and email */}
       <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
       <ul className="groups-sidebar-groups-list">
+        {/* Static sidebar item for "All Groups" */}
         <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
-        {isLoading && (
+        {/* Conditionally render loading animation or groups list */}
+        {isLoading ? (
           <LoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
-        )}
-        {!isLoading &&
-          groups?.map((group) => (
+        ) : (
+          memoizedGroups.map((group) => (
             <GroupsSidebarItem
-              key={group.groupId}
+              key={group.groupId} // Unique key for each group item
               title={group.groupName}
               Icon={GroupsIcon}
-              path={"/feed/" + group.groupId}
+              path={"/feed/" + group.groupId} // Dynamic path for each group
             />
-          ))}
+          ))
+        )}
       </ul>
+      {/* Button to trigger the group creation popup */}
       <CreateGroupButton onClick={openPopup} />
+      {/* Conditionally render the group creation popup */}
       {isPopupOpen && <CreateGroupPopup userId={userId} onClose={closePopup} groups={groups} />}
     </div>
   );

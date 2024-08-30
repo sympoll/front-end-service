@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
+import { useParams } from "react-router-dom";
 
 export default function GroupInfo(){
+    const { groupId } = useParams(); 
 
       // TODO: pull image urls from server
     const profilePictureUrl =

@@ -38,7 +38,7 @@ export default function UserProfile() {
         setErrorMessage("User with ID '" + userId + "' does not exist...");
         setIsLoading(false);
       });
-  }, []);
+  }, [userId]);
 
   function capitalizeWords(input: string): string {
     return input

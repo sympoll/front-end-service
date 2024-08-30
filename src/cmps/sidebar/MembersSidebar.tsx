@@ -9,13 +9,13 @@ import LoadingAnimation from "../global/LoadingAnimation";
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
+  const { userId } = useParams();
   const [members, setMembers] = useState<GroupMember[]>();
   const [isAllGroups, setIsAllGroups] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-
-    if (groupId) {
+    if (groupId && !userId) {
+      setIsLoading(true);
       setIsAllGroups(false);
       fetchGroupMembers(groupId).then((data) => {
         console.log("Fetching group users data: ", data);
@@ -23,11 +23,13 @@ export default function MembersSidebar() {
         setIsLoading(false);
       });
     } else {
-      setIsAllGroups(true);
-      setMembers([]);
-      setIsLoading(false);
+      if(!userId) {
+        setIsAllGroups(true);
+        setMembers([]);
+        setIsLoading(false);
+      } 
     }
-  }, [groupId]);
+  }, [groupId, userId]);
 
   const sortMembers = (members: GroupMember[]) => {
     return members.sort((a, b) => {

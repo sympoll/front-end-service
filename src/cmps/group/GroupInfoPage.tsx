@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
+import CustomButton from "../global/CustomButton";
 
 export default function GroupInfo(){
 
@@ -16,6 +17,26 @@ export default function GroupInfo(){
           .join(" ");
       }
 
+    const onExitGroupClick = () => {
+
+    }
+
+    const onAddMemberClick = () => {
+
+    }
+
+    const onDeleteMemberClick = () => {
+
+    }
+
+    const onDeleteGroupClick = () => {
+
+    }
+
+    const onModifyRolesClick = () => {
+
+    }
+
     return (
         <div className="group-info">
           <div className="group-info__header">
@@ -27,6 +48,13 @@ export default function GroupInfo(){
               </div>
             </div>
             <hr className="group-info__divider" />
+          </div>
+          <div className="group-info__commands-bar">
+              <CustomButton onClick={onExitGroupClick} name="exit-group-btn" theme="dark">Exit Group</CustomButton>
+              <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">Add Member</CustomButton>
+              <CustomButton onClick={onDeleteMemberClick} name="delete-member-btn" theme="dark">Delete Member</CustomButton>
+              <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="dark">Delete Group</CustomButton>
+              <CustomButton onClick={onModifyRolesClick} name="modify-roles-btn" theme="dark">Modify Roles</CustomButton>
           </div>
           <div className="group-info__info-container">
             <div className="group-info__description">

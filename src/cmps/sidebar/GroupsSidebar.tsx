@@ -18,7 +18,7 @@ export default function GroupsSidebar() {
   const cmpName = "GROUP_SIDEBAR ";
 
   const [groups, setGroups] = useState<GroupData[]>([]);
-  const [allGroups, setAllGroups] = useState<GroupData[]>([]); // Store all groups fetched
+  const [fetchedGroups, setFetchedGroups] = useState<GroupData[]>([]); // Store all groups fetched
 
   // Fetch initial data
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function GroupsSidebar() {
       .then((data) => {
         logDataReceived(data);
         setGroups(data);
-        setAllGroups(data);
+        setFetchedGroups(data);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -39,7 +39,7 @@ export default function GroupsSidebar() {
     fetchUserGroups(userId)
       .then((data) => {
         logDataReceived(data);
-        setAllGroups(data); // Update all groups with new data
+        setFetchedGroups(data); // Update all groups with new data
       })
       .catch((error) => {
         console.error(cmpName + error);
@@ -47,12 +47,22 @@ export default function GroupsSidebar() {
       });
   };
 
+  // Memoize the updated groups array to avoid unnecessary re-renders.
+  // This combines the fetched groups with existing ones:
+  // - Updates existing groups by merging new details.
+  // - Adds any new groups not already in the state.
   const memoizedGroups = useMemo(() => {
-    // Return only groups that are newly added or have changed
-    return allGroups.filter(
-      (newGroup) => !groups.some((existingGroup) => existingGroup.groupId === newGroup.groupId)
-    );
-  }, [allGroups, groups]);
+    return fetchedGroups.map((fetchedGroup) => {
+      const existingGroup = groups.find((group) => group.groupId === fetchedGroup.groupId);
+      if (existingGroup) {
+        // Update the existing group with new details
+        return { ...existingGroup, ...fetchedGroup };
+      } else {
+        // Add new group
+        return fetchedGroup;
+      }
+    });
+  }, [fetchedGroups, groups]);
 
   // Update the groups state only with new or changed groups
   useEffect(() => {

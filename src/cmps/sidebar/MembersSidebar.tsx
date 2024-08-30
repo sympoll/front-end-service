@@ -1,16 +1,18 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import MembersSidebarItem from "./MembersSidebarItem";
 import PersonIcon from "@mui/icons-material/Person";
 import { useParams } from "react-router-dom";
 import { GroupMember } from "../../models/GroupMember.model";
 import { fetchGroupMembers } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
+import { useUpdateContext } from "../../context/UpdateContext";
 
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
   const [members, setMembers] = useState<GroupMember[]>([]);
   const [isInGroup, setIsInGroup] = useState(false);
+  const { registerForUpdate } = useUpdateContext(); // Access context
 
   const cmpName = "MEMBERS_SIDEBAR ";
 
@@ -39,7 +41,7 @@ export default function MembersSidebar() {
     fetchMembers();
   }, [groupId]);
 
-  const updateMembers = async () => {
+  const updateMembers = useCallback(async () => {
     if (groupId) {
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
@@ -56,7 +58,15 @@ export default function MembersSidebar() {
         console.error(cmpName + error);
       }
     }
-  };
+  }, [groupId]);
+
+  useEffect(() => {
+    // Register the updateGroups function and handle unregistration
+    const unregister = registerForUpdate(updateMembers);
+    return () => {
+      unregister();
+    };
+  }, [registerForUpdate, updateMembers]);
 
   // Memoize the members array to prevent unnecessary re-renders
   const memoizedMembers = useMemo(() => members, [members]);

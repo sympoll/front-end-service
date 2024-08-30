@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Poll from "./poll/Poll";
 import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
@@ -9,12 +9,15 @@ import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
+import { useUpdateContext } from "../../context/UpdateContext";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
+  const { registerForUpdate } = useUpdateContext(); // Access context
+
   const cmpName = "FEED ";
 
   // Effect to fetch polls data on component mount or groupId change
@@ -44,25 +47,34 @@ export default function FeedContent() {
   }, [groupId]);
 
   // Function to update polls with the latest data
-  const updatePolls = async () => {
+  const updatePolls = useCallback(async () => {
     try {
       if (groupId) {
         const fetchedPolls = await fetchPollsByGroupId(groupId);
         logDataReceived(fetchedPolls);
 
-        // Merge new and existing polls, avoiding duplicates
         setPolls((prevPolls) => {
           const pollsMap = new Map(
             [...prevPolls, ...fetchedPolls].map((poll) => [poll.pollId, poll])
           );
-          return Array.from(pollsMap.values());
+          const updatedPolls = Array.from(pollsMap.values());
+
+          return [...updatedPolls];
         });
       }
     } catch (error) {
       console.error(cmpName + error);
       setIsLoading(false);
     }
-  };
+  }, [groupId]);
+
+  useEffect(() => {
+    // Register the updateGroups function and handle unregistration
+    const unregister = registerForUpdate(updatePolls);
+    return () => {
+      unregister();
+    };
+  }, [registerForUpdate, updatePolls]);
 
   const logDataReceived = (data: PollData[]) => {
     console.log(cmpName + "got data");

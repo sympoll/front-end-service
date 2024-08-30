@@ -23,8 +23,9 @@ export default function FeedContent() {
     setPolls([]); // Reset the polls state to an empty array
     setIsLoading(true); // Reset the initial state of isLoading.
 
-    if (!groupId) {
-      fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
+    if (groupId) {
+      // Search for the group specified in the path.
+      fetchPollsByGroupId(groupId)
         .then((data) => {
           logDataReceived(data);
           setPolls(data);
@@ -35,8 +36,8 @@ export default function FeedContent() {
           setError(error.message);
         });
     } else {
-      // Search for the group specified in the path.
-      fetchPollsByGroupId(groupId)
+      // Fetch all polls from all groups
+      fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
         .then((data) => {
           logDataReceived(data);
           setPolls(data);
@@ -53,6 +54,8 @@ export default function FeedContent() {
   const logDataReceived = (data: PollData[]) => {
     console.log(cmpName + "got data " + data);
   };
+
+  const updatePolls = () => {};
 
   // Log polls state whenever it changes.
   useEffect(() => {

@@ -4,8 +4,7 @@ import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/pol
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
 import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
-import { useParams, matchPath, useLocation } from "react-router-dom";
-import { getSamplePolls } from "../../services/demo.data.service";
+import { useParams } from "react-router-dom";
 import ErrorPopup from "../popup/ErrorPopup";
 import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
@@ -13,93 +12,75 @@ import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
-  const [fetchedPolls, setFetchedPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
-
   const cmpName = "FEED ";
 
+  // Effect to fetch polls data on component mount or groupId change
   useEffect(() => {
-    setPolls([]); // Reset the polls state to an empty array
-    setIsLoading(true); // Reset the initial state of isLoading.
+    const fetchPolls = async () => {
+      setIsLoading(true); // Start loading state
 
-    if (groupId) {
-      // Search for the group specified in the path.
-      fetchPollsByGroupId(groupId)
-        .then((data) => {
+      try {
+        if (groupId) {
+          const data = await fetchPollsByGroupId(groupId);
           logDataReceived(data);
           setPolls(data);
-          setFetchedPolls(data);
-        })
-        .catch((error) => {
-          console.log(cmpName + error);
-          setError(error.message);
-        });
-    } else {
-      // Fetch all polls from all groups
-      fetchAllUserGroupsPolls(0) // TODO: Change to user ID.
-        .then((data) => {
+        } else {
+          const data = await fetchAllUserGroupsPolls(0); // TODO: Change to user ID
           logDataReceived(data);
           setPolls(data);
-          setFetchedPolls(data);
-        })
-        .catch((error) => {
-          console.log(cmpName + error);
-          setError(error.message);
-        });
-    }
-    setIsLoading(false);
+        }
+      } catch (error) {
+        console.error(cmpName + error);
+        setError(error.message);
+      } finally {
+        setIsLoading(false); // End loading state
+      }
+    };
+
+    fetchPolls();
   }, [groupId]);
 
-  const logDataReceived = (data: PollData[]) => {
-    console.log(cmpName + "got data " + data);
-  };
+  // Function to update polls with the latest data
+  const updatePolls = async () => {
+    try {
+      if (groupId) {
+        const fetchedPolls = await fetchPollsByGroupId(groupId);
+        logDataReceived(fetchedPolls);
 
-  const updatePolls = () => {};
-
-  // Log polls state whenever it changes.
-  useEffect(() => {
-    // Only if the polls array is defined, end the loading phase.
-    if (polls) {
-      console.log("Polls object defined: ", polls);
+        // Merge new and existing polls, avoiding duplicates
+        setPolls((prevPolls) => {
+          const pollsMap = new Map(
+            [...prevPolls, ...fetchedPolls].map((poll) => [poll.pollId, poll])
+          );
+          return Array.from(pollsMap.values());
+        });
+      }
+    } catch (error) {
+      console.error(cmpName + error);
       setIsLoading(false);
     }
-  }, [polls]);
+  };
+
+  const logDataReceived = (data: PollData[]) => {
+    console.log(cmpName + "got data");
+  };
+
+  // Memoize the polls array to prevent unnecessary re-renders
+  const memoizedPolls = useMemo(() => polls, [polls]);
 
   const addNewPoll = (newPoll: PollData) => {
     console.log("Adding newly created poll to feed. ", newPoll);
-    setPolls((prevPolls) => {
-      if (!prevPolls) return [newPoll];
-      return [newPoll, ...prevPolls]; // Prepend the new poll to the beginning of the array
-    });
+    setPolls((prevPolls) => [newPoll, ...prevPolls]); // Prepend the new poll to the beginning of the array
   };
-
-  const renderedPolls = useMemo(() => {
-    return polls?.map((poll) => (
-      <Poll
-        key={poll.pollId}
-        pollId={poll.pollId}
-        title={poll.title}
-        description={poll.description}
-        nofAnswersAllowed={poll.nofAnswersAllowed}
-        creatorId={poll.creatorId}
-        creatorName={poll.creatorName}
-        groupId={poll.groupId}
-        timeCreated={poll.timeCreated}
-        timeUpdated={poll.timeUpdated}
-        deadline={poll.deadline}
-        votingItems={poll.votingItems}
-        isSpecificGroup={groupId ? true : false}
-      />
-    ));
-  }, [polls]);
 
   if (isLoading) {
     return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
   }
 
-  if (!polls) {
+  if (error) {
     return <ContentPageErrorMessage error={error} />;
   }
 
@@ -110,8 +91,8 @@ export default function FeedContent() {
         <ContentPageMessage
           msgText={
             groupId
-              ? "No polls are currently available for this group.&nPlease check back later or contact the group administrator for more information."
-              : "No polls are currently available for your groups.&nPlease check back later or contact a group administrator for more information."
+              ? "No polls are currently available for this group. Please check back later or contact the group administrator for more information."
+              : "No polls are currently available for your groups. Please check back later or contact a group administrator for more information."
           }
         />
       </div>
@@ -123,7 +104,25 @@ export default function FeedContent() {
       <div className="feed-header">
         {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
       </div>
-      <div className="feed-content-container">{renderedPolls}</div>
+      <div className="feed-content-container">
+        {memoizedPolls.map((poll) => (
+          <Poll
+            key={poll.pollId}
+            pollId={poll.pollId}
+            title={poll.title}
+            description={poll.description}
+            nofAnswersAllowed={poll.nofAnswersAllowed}
+            creatorId={poll.creatorId}
+            creatorName={poll.creatorName}
+            groupId={poll.groupId}
+            timeCreated={poll.timeCreated}
+            timeUpdated={poll.timeUpdated}
+            deadline={poll.deadline}
+            votingItems={poll.votingItems}
+            isSpecificGroup={!!groupId}
+          />
+        ))}
+      </div>
     </div>
   );
 }

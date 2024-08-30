@@ -62,7 +62,7 @@ export default function MembersSidebar() {
   const memoizedMembers = useMemo(() => members, [members]);
 
   const logDataReceived = (data: GroupMember[]) => {
-    console.log(cmpName + "got data", JSON.stringify(data, null, 2));
+    console.log(cmpName + "got data");
   };
 
   return (

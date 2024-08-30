@@ -60,7 +60,7 @@ export default function GroupsSidebar() {
   const closePopup = () => setIsPopupOpen(false);
 
   const logDataReceived = (data: GroupData[]) => {
-    console.log(cmpName + "got data", JSON.stringify(data, null, 2));
+    console.log(cmpName + "got data");
   };
 
   return (

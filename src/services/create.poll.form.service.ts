@@ -1,6 +1,6 @@
 import axios from "axios";
 import { CreatePollData } from "../models/CreatePollData.model";
-import { useState } from "react";
+import { PollData } from "../models/PollData.model";
 
 const pollServiceUrl =
   import.meta.env.VITE_BASE_URL +
@@ -10,27 +10,28 @@ const pollServiceUrl =
 interface SubmitResult {
     success: boolean;
     errors?: string;
+    pollData?: PollData;
 }
 
 export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     return votingItems.every(item => item !== "");
-  }
-  
-  export function isTitleDefined(title: string): boolean {
+}
+
+export function isTitleDefined(title: string): boolean {
     return title.trim() !== "";
-  }
-  
-  export function isDeadlineValid(deadline: string): boolean {
+}
+
+export function isDeadlineValid(deadline: string): boolean {
     const deadlineDate = new Date(deadline);
     if (isNaN(deadlineDate.getTime())) {
-      return false; // Invalid date
+        return false; // Invalid date
     }
-  
+
     const now = new Date();
     return deadlineDate > now;
-  }
-  
-  export function getCurrentDateTime(): string {
+}
+
+export function getCurrentDateTime(): string {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -38,9 +39,9 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     const hours = String(now.getHours()).padStart(2, "0");
     const minutes = String(now.getMinutes()).padStart(2, "0");
     return `${year}-${month}-${day}T${hours}:${minutes}`;
-  }
+}
 
-  export function validatePollForm(formData: CreatePollData): { isValid: boolean; errors: string } {
+export function validatePollForm(formData: CreatePollData): { isValid: boolean; errors: string } {
     let errors: string[] = [];
 
     if (!isTitleDefined(formData.title)) {
@@ -61,7 +62,6 @@ export function isAllVotingItemsDefined(votingItems: string[]): boolean {
     };
 }
 
-
 export async function handleSubmit(
     formData: CreatePollData,
     displayErrorMessage: (errors: string) => void
@@ -76,23 +76,19 @@ export async function handleSubmit(
     try {
         const deadlineDate = new Date(formData.deadline);
         formData.deadline = deadlineDate.toISOString();
-        const response = await fetch(pollServiceUrl, {
-            method: "POST",
+        const response = await axios.post<PollData>(pollServiceUrl, formData, {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(formData),
         });
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-
-        console.log("Poll created successfully:", await response.json());
-        return { success: true };
+        console.log("Poll created successfully:", response.data);
+        return { success: true, pollData: response.data };
     } catch (error) {
         console.log("Error while trying to create poll:", error);
-        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        const errorMessage = axios.isAxiosError(error) && error.response
+            ? `Error: ${error.response.statusText}`
+            : 'An unknown error occurred.';
         displayErrorMessage(errorMessage);
         return { success: false, errors: errorMessage };
     }

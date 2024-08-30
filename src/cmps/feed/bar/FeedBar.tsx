@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import CustomButton from "../../global/CustomButton";
 import CreatePollForm from "../poll/CreatePollForm";
+import { PollData } from "../../../models/PollData.model";
 
 interface FeedBarProps {
   groupId: string;
+  addNewPoll: (newPoll: PollData) => void;
 }
 
-export default function FeedBar({ groupId }: FeedBarProps) {
+export default function FeedBar({ groupId, addNewPoll }: FeedBarProps) {
   const [isFeedBarVisible, setIsFeedBarVisible] = useState(true);
   const [isCreatePollFormVisible, setIsCreatePollFormVisible] = useState(false);
 
@@ -31,7 +33,11 @@ export default function FeedBar({ groupId }: FeedBarProps) {
       )}
 
       {isCreatePollFormVisible && (
-        <CreatePollForm groupId={groupId} closePollFunction={toggleCreatePollForm} />
+        <CreatePollForm
+          addNewPoll={addNewPoll}
+          groupId={groupId}
+          closePollFunction={toggleCreatePollForm}
+        />
       )}
     </div>
   );

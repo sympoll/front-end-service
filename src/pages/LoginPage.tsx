@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { invokeSignUp, validateUserData } from "../services/signup.service";
-import { UserData } from "../models/UserData.model";
+import { UserSignupData } from "../models/UserSignupData.model";
 import ErrorPopup from "../cmps/popup/ErrorPopup";
 import CustomButton from "../cmps/global/CustomButton";
 
@@ -65,7 +65,7 @@ export default function LoginPage() {
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    const userData: UserData = { username: username, email: email, password: password };
+    const userData: UserSignupData = { username: username, email: email, password: password };
     const isValidData = await validateUserData(userData, passwordConfirm, setErrorMessage);
     if (!isValidData) {
       showErrorPopup();

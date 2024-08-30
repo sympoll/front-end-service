@@ -1,6 +1,8 @@
 .user-profile {
-  margin: 0 auto;
+  @include fadeIn;
+  justify-self: center;
   margin-top: 20px;
+  height: fit-content;
   min-width: 80%;
   max-width: 80%;
   max-height: 100vh;
@@ -101,6 +103,10 @@
     border-radius: 8px;
     color: #4b3832;
     flex-basis: 40%;
+
+    &__label {
+      font-weight: 800;
+    }
   }
 
   /* Responsive adjustments */

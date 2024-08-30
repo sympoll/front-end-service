@@ -5,35 +5,12 @@ $mainFont: "Wix Madefor Display", sans-serif;
 $secondaryFont: "Unica One", sans-serif;
 $errorFont: "Arvo", serif;
 
+// ** Font Sizes **
 $mainFontSize: 14px;
-
-// ** Font Colors **
-$mainFontColor: black;
-$secondaryFontColor: white;
-$roleNameFontColor: rgb(243, 136, 48);
-
-// ** Background Colors **
-$mainBgColor0: peachpuff;
-$mainBgColor1: rgb(43, 43, 43);
-$mainBgColor2: white;
-$secondaryBgColor0: rgb(233, 164, 107);
-$roleNameBgColor: rgb(246, 233, 223);
-
-// ** Sidebar Colors **
-$mainSidebarColor: #393a3d;
-$activeSidebarColor: rgb(31, 39, 47);
-$activeHighlightSidebarColor: rgb(189, 204, 219);
-$hoverSidebarColor: rgb(45, 58, 70);
-$sectionDividerColor: grey;
-
-// ** Components Colors **
-$active-vote-color: rgb(251, 207, 168);
-$inactive-vote-color: #f3c380;
-$voting-checkbox-font-color: #000000;
-$loading-icon-color: rgb(6, 68, 36);
+$FeedMessageSize: 18px;
 
 // ** Main Colors **
-$grayedOutFontColor: $active-vote-color;
+$grayedOutFontColor: #fbcfa8;
 $mainColor-normal: #e48f17;
 $mainColor-light0: #f3c380;
 $mainColor-light1: #ffdab9;
@@ -41,6 +18,31 @@ $mainColor-dark0: #c97f17;
 $mainColor-dark1: #9e6515;
 $mainColor-dark3: #e0b16f;
 $errorColor: rgb(117, 26, 26);
+
+// ** Font Colors **
+$mainFontColor: black;
+$secondaryFontColor: white;
+
+// ** Background Colors **
+$mainBgColor0: peachpuff;
+$mainBgColor1: rgb(43, 43, 43);
+$mainBgColor2: white;
+$secondaryBgColor0: #e9a46b;
+
+// ** Sidebar Colors **
+$mainSidebarColor: #393a3d;
+$activeSidebarColor: rgb(31, 39, 47);
+$activeHighlightSidebarColor: rgb(189, 204, 219);
+$hoverSidebarColor: rgb(45, 58, 70);
+$sectionDividerColor: grey;
+$roleNameBgColor: $mainColor-light0;
+$roleNameFontColor: $mainFontColor;
+
+// ** Components Colors **
+$active-vote-color: $grayedOutFontColor;
+$inactive-vote-color: #f3c380;
+$voting-checkbox-font-color: #000000;
+$loading-icon-color: rgb(6, 68, 36);
 
 // **Form Colors **
 $removeColor: rgb(130, 20, 20);

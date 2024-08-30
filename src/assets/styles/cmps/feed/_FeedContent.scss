@@ -21,7 +21,7 @@
 
 .feed-content-container {
   @include mid-page-content-container;
-  animation: slideUp 1.2s ease-in-out forwards;
+  animation: slideUp 1s ease-in-out forwards;
 
   @keyframes slideUp {
     from {
@@ -40,23 +40,4 @@
   border-radius: 10px;
   padding: 10px;
   background-color: $secondaryBgColor0;
-}
-
-.feed-content-error-fetching-polls-container {
-  text-align: center;
-  @include flex-column;
-  height: fit-content;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  margin-top: 8%;
-}
-
-.feed-content-error-fetching-polls-message {
-  font-size: 20px;
-  font-family: $secondaryFont;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
 }

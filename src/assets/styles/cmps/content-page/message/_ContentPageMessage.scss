@@ -1,0 +1,14 @@
+.content-page-message-container {
+  @include flex-column;
+  @include fadeIn;
+  height: fit-content;
+  text-align: center;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  font-size: $FeedMessageSize;
+  font-family: $secondaryFont;
+  display: flex;
+  position: relative;
+}

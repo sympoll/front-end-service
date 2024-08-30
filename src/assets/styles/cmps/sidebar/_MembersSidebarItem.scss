@@ -19,7 +19,7 @@
 }
 
 #members-sidebar-item-icon {
-  flex: 0 0 auto; 
+  flex: 0 0 auto;
   display: grid;
   place-items: center;
 }
@@ -37,6 +37,7 @@
   color: $roleNameFontColor;
   margin-left: auto;
   text-overflow: ellipsis;
-  overflow: hidden; 
+  overflow: hidden;
   max-width: 120px;
+  font-size: 12px;
 }

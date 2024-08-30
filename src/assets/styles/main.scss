@@ -33,6 +33,8 @@
 
 // * Content Page *
 @import "cmps/content-page/ContentPage";
+@import "cmps/content-page/message/ContentPageErrorMessage";
+@import "cmps/content-page/message/ContentPageMessage";
 
 // * Feed *
 @import "cmps/feed/VotingCheckbox";

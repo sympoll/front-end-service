@@ -4,7 +4,6 @@
   width: 45vw;
   position: relative; // Ensure the close button is positioned relative to the poll form
   font-family: $mainFont;
-  font-size: $mainFontSize;
 
   &__body {
     @include flex-column;
@@ -51,10 +50,12 @@
     input,
     textarea {
       background-color: $inactive-vote-color;
-      padding: 10px;
+      padding: 6px;
+      padding-inline: 10px;
       border-radius: 8px;
       border: none;
       font-family: $mainFont;
+      font-size: $mainFontSize - 2px;
       resize: none;
 
       &:focus {
@@ -80,6 +81,7 @@
       .poll-form__remove-btn {
         display: flex;
         justify-content: center;
+        align-items: center;
         background-color: transparent;
         border: none;
         color: $mainFontColor;
@@ -88,6 +90,7 @@
         width: fit-content;
         font-size: 34px;
         font-weight: 500;
+        height: 30px;
       }
     }
 
@@ -96,6 +99,7 @@
       align-self: center;
       gap: 10px;
       align-items: center;
+      font-size: $mainFontSize;
     }
 
     &__add-btn {

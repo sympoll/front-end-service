@@ -13,24 +13,6 @@ interface SubmitResult {
     pollData?: PollData;
 }
 
-export function isAllVotingItemsDefined(votingItems: string[]): boolean {
-    return votingItems.every(item => item !== "");
-}
-
-export function isTitleDefined(title: string): boolean {
-    return title.trim() !== "";
-}
-
-export function isDeadlineValid(deadline: string): boolean {
-    const deadlineDate = new Date(deadline);
-    if (isNaN(deadlineDate.getTime())) {
-        return false; // Invalid date
-    }
-
-    const now = new Date();
-    return deadlineDate > now;
-}
-
 export function getCurrentDateTime(): string {
     const now = new Date();
     const year = now.getFullYear();
@@ -52,6 +34,10 @@ export function validatePollForm(formData: CreatePollData): { isValid: boolean; 
         errors.push("All voting options should be defined.\n");
     }
 
+    if (isDuplicateVotingItemsDefined(formData.votingItems)) {
+        errors.push("Duplicate voting options are not allowed.")
+    }
+
     if (!isDeadlineValid(formData.deadline)) {
         errors.push("Deadline should be a valid date in the future.\n");
     }
@@ -61,6 +47,29 @@ export function validatePollForm(formData: CreatePollData): { isValid: boolean; 
         errors: errors.join(""),
     };
 }
+
+function isAllVotingItemsDefined(votingItems: string[]): boolean {
+    return votingItems.every(item => item !== "");
+}
+
+function isDuplicateVotingItemsDefined(votingItems: string[]): boolean {
+    const uniqueItems = new Set(votingItems);
+    return uniqueItems.size !== votingItems.length;
+}
+
+function isTitleDefined(title: string): boolean {
+    return title.trim() !== "";
+}
+
+function isDeadlineValid(deadline: string): boolean {
+    const deadlineDate = new Date(deadline);
+    if (isNaN(deadlineDate.getTime())) {
+        return false; // Invalid date
+    }
+    const now = new Date();
+    return deadlineDate > now;
+}
+
 
 export async function handleSubmit(
     formData: CreatePollData,

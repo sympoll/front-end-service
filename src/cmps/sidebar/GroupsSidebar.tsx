@@ -15,38 +15,34 @@ export default function GroupsSidebar() {
   // TODO: change username to the current user
   // Temporary hard coded user ID
   const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
-  const cmpName = "GROUP_SIDEBAR: ";
+  const cmpName = "GROUP_SIDEBAR ";
 
   const [groups, setGroups] = useState<GroupData[]>([]);
   const [allGroups, setAllGroups] = useState<GroupData[]>([]); // Store all groups fetched
 
   // Fetch initial data
   useEffect(() => {
-    console.log(cmpName + "fetching user " + userId + " initial data");
     fetchUserGroups(userId)
       .then((data) => {
+        logDataReceived(data);
         setGroups(data);
         setAllGroups(data);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error(cmpName + "error fetching user's groups data.");
+        console.error(cmpName + error);
         setIsLoading(false);
       });
   }, []);
 
-  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
-
-  const openPopup = () => setIsPopupOpen(true);
-  const closePopup = () => setIsPopupOpen(false);
-
   const updateGroups = () => {
     fetchUserGroups(userId)
       .then((data) => {
+        logDataReceived(data);
         setAllGroups(data); // Update all groups with new data
       })
       .catch((error) => {
-        console.error(cmpName + "error fetching user's groups data.");
+        console.error(cmpName + error);
         setIsLoading(false);
       });
   };
@@ -64,6 +60,15 @@ export default function GroupsSidebar() {
       setGroups((prevGroups) => [...prevGroups, ...memoizedGroups]);
     }
   }, [memoizedGroups]);
+
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
+  const openPopup = () => setIsPopupOpen(true);
+  const closePopup = () => setIsPopupOpen(false);
+
+  const logDataReceived = (data: GroupData[]) => {
+    console.log(cmpName + "got data " + data);
+  };
 
   return (
     <div className="groups-sidebar-container">

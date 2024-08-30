@@ -27,12 +27,11 @@ export default function GroupsSidebar() {
         logDataReceived(data);
         setGroups(data);
         setFetchedGroups(data);
-        setIsLoading(false);
       })
       .catch((error) => {
         console.error(cmpName + error);
-        setIsLoading(false);
       });
+    setIsLoading(false);
   }, []);
 
   const updateGroups = () => {

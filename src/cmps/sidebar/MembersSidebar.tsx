@@ -27,18 +27,16 @@ export default function MembersSidebar() {
           const sortedMembers = sortMembers(data);
           setMembers(sortedMembers);
           setFetchedMembers(sortedMembers);
-          setIsLoading(false);
         })
         .catch((error) => {
           console.error(cmpName + error);
-          setIsLoading(false);
         });
     } else {
       setIsAllGroups(true);
       setMembers([]);
       setFetchedMembers([]);
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }, [groupId]);
 
   const updateMembers = () => {

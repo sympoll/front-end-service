@@ -1,15 +1,15 @@
 import React from "react";
 
-interface FeedErrorMessageProps {
+interface ContentPageErrorMessageProps {
   error: string | null;
 }
 
 /**
  * Provide error message string with '&n' characters to start a new line.
  */
-export default function FeedErrorMessage({ error }: FeedErrorMessageProps) {
+export default function ContentPageErrorMessage({ error }: ContentPageErrorMessageProps) {
   return (
-    <div className="feed-error-message-container">
+    <div className="content-page-error-message-container">
       Error Fetching Polls...
       <br />
       {error

@@ -1,15 +1,15 @@
 import React from "react";
 
-interface FeedMessageProps {
+interface ContentPageMessageProps {
   msgText: string | null;
 }
 
 /**
  * Provide a message string with '&n' characters to start a new line.
  */
-export default function FeedMessage({ msgText }: FeedMessageProps) {
+export default function ContentPageMessage({ msgText }: ContentPageMessageProps) {
   return (
-    <div className="feed-message-container">
+    <div className="content-page-message-container">
       {msgText
         ? msgText.split("&n").map((line, index) => (
             <React.Fragment key={index}>

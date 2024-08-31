@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
 import { useParams } from "react-router-dom";
+import { fetchGroupData } from "../../services/group.service";
+import { GroupData } from "../../models/GroupData.model";
+import { getTimePassed } from "../../services/poll.service";
 
 export default function GroupInfo(){
     const { groupId } = useParams(); 
+    const [groupData, setGroupData] = useState<GroupData>();
 
       // TODO: pull image urls from server
     const profilePictureUrl =
@@ -12,12 +16,16 @@ export default function GroupInfo(){
     const bannerPictureUrl =
     "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e1fc0f08-7c3c-4224-b34b-1fe510feb6fd/d51vvz0-03d69283-b7d4-495e-82f8-5103f09d2b9a.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2UxZmMwZjA4LTdjM2MtNDIyNC1iMzRiLTFmZTUxMGZlYjZmZFwvZDUxdnZ6MC0wM2Q2OTI4My1iN2Q0LTQ5NWUtODJmOC01MTAzZjA5ZDJiOWEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.G5uPqH18xVbG7tywZNXVjRmX0W1_bfNbi1cvdR6XZXw";
 
-    function capitalizeWords(input: string): string {
-        return input
-          .split(" ")
-          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(" ");
+    useEffect(() => {
+      if(groupId){
+        fetchGroupData(groupId).then((data) => {
+          console.log("Fetched group data for group with ID: ", groupId, data);
+          setGroupData(data);
+        })
       }
+      
+    },[])
+
 
     const onExitGroupClick = () => {
 
@@ -46,7 +54,7 @@ export default function GroupInfo(){
             <div className="group-info__details">
               <img src={profilePictureUrl} alt="Profile" className="group-info__profile-picture" />
               <div className="group-info__title">
-                <h1 className="group-info__username">{capitalizeWords("meow")}</h1>
+                <h1 className="group-info__group-name">{groupData?.groupName}</h1>
               </div>
             </div>
             <hr className="group-info__divider" />
@@ -62,14 +70,14 @@ export default function GroupInfo(){
             <div className="group-info__description">
               <h3>Description:</h3>
               <br />
-              {"Meow meow"}
+              {groupData?.description}
             </div>
-            <div className="group-info__user-info">
+            <div className="group-info__group-info">
               <h3>Info:</h3>
               <br />
-              <h4 className="group-info__user-info__label">Created:</h4>
-              {"getTimePassed(userData.timeCreated)"} <br /> <br />
-              <h4 className="group-info__user-info__label">Group ID:</h4> {"placeholder"}
+              <h4 className="group-info__group-info__label">Created:</h4>
+              {getTimePassed(groupData?.timeCreated ?? "")} <br /> <br />
+              <h4 className="group-info__group-info__label">Group ID:</h4> {groupData?.groupId}
             </div>
           </div>
         </div>

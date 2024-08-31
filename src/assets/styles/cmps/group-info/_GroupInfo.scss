@@ -57,17 +57,11 @@
       flex-grow: 1;
     }
   
-    &__username {
+    &__group-name {
       font-size: 32px;
       font-weight: bold;
       margin: 0;
       color: #4b3832;
-    }
-  
-    &__email {
-      font-size: 18px;
-      color: #4b3832;
-      margin: 5px 0;
     }
   
     &__divider {
@@ -109,7 +103,7 @@
       flex-basis: 60%;
     }
   
-    &__user-info {
+    &__group-info {
       padding: 20px;
       background: $mainColor-light0;
       box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -140,12 +134,8 @@
         margin-left: 10px; /* Adjust margins for smaller size */
       }
   
-      &__username {
+      &__group-name {
         font-size: 24px; /* Reduce font size for username */
-      }
-  
-      &__email {
-        font-size: 16px; /* Reduce font size for email */
       }
   
       &__details {
@@ -166,12 +156,8 @@
         height: 60px; /* Further reduce profile picture size */
       }
   
-      &__username {
+      &__group-name {
         font-size: 20px; /* Further reduce font size for username */
-      }
-  
-      &__email {
-        font-size: 14px; /* Further reduce font size for email */
       }
     }
   }

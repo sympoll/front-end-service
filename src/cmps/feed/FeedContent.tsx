@@ -18,30 +18,11 @@ export default function FeedContent() {
 
   const cmpName = "FEED ";
 
-  // Effect to fetch polls data on component mount or groupId change
+  // Initial fetch on component render
   useEffect(() => {
-    const fetchPolls = async () => {
-      setIsLoading(true); // Start loading state
-
-      try {
-        if (groupId) {
-          const data = await fetchPollsByGroupId(groupId);
-          logDataReceived(data);
-          setPolls(data);
-        } else {
-          const data = await fetchAllUserGroupsPolls(0); // TODO: Change to user ID
-          logDataReceived(data);
-          setPolls(data);
-        }
-      } catch (error) {
-        console.error(cmpName + error);
-        setError(error.message);
-      } finally {
-        setIsLoading(false); // End loading state
-      }
-    };
-
-    fetchPolls();
+    setIsLoading(true); // Start loading state
+    updatePolls();
+    setIsLoading(false);
   }, [groupId]);
 
   // Function to update polls with the latest data
@@ -54,17 +35,11 @@ export default function FeedContent() {
         fetchedPolls = await fetchAllUserGroupsPolls(0); // TODO: Replace this with userId
       }
 
-      setPolls((prevPolls) => {
-        return [
-          ...fetchedPolls,
-          ...prevPolls.filter(
-            (poll) => !fetchedPolls.some((fp: PollData) => fp.pollId === poll.pollId)
-          )
-        ];
-      });
-    } catch (error) {
-      console.error(cmpName + error);
-      setError(error.message);
+      removeErrorFromFeed();
+      setPolls(fetchedPolls);
+    } catch (err) {
+      console.error(cmpName + err);
+      setError(err.message);
       setIsLoading(false);
     }
   }, [groupId]);
@@ -77,12 +52,12 @@ export default function FeedContent() {
     };
   }, [registerForUpdate, updatePolls]);
 
-  const logDataReceived = (data: PollData[]) => {
-    console.log(cmpName + "got data");
+  // If fetch successful remove error message from feed if exists
+  const removeErrorFromFeed = () => {
+    if (error) {
+      setError(null);
+    }
   };
-
-  // Memoize the polls array to prevent unnecessary re-renders
-  const memoizedPolls = useMemo(() => polls, [polls]);
 
   const addNewPoll = (newPoll: PollData) => {
     console.log("Adding newly created poll to feed. ", newPoll);
@@ -118,7 +93,7 @@ export default function FeedContent() {
         {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
       </div>
       <div className="feed-content-container">
-        {memoizedPolls.map((poll) => (
+        {polls.map((poll) => (
           <Poll
             key={poll.pollId}
             pollId={poll.pollId}

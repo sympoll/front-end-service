@@ -22,35 +22,16 @@ export default function GroupsSidebar() {
 
   // Effect to fetch groups data on component mount or userId change
   useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        const data = await fetchUserGroups(userId);
-        logDataReceived(data);
-        setGroups(data);
-      } catch (error) {
-        console.error(cmpName + error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchGroups();
+    setIsLoading(true); // Start loading state
+    updateGroups();
+    setIsLoading(false);
   }, [userId]);
 
   // Function to update groups with the latest data
   const updateGroups = useCallback(async () => {
     try {
-      let fetchedGroups = [];
-      fetchedGroups = await fetchUserGroups(userId);
-
-      setGroups((prevGroups) => {
-        return [
-          ...fetchedGroups,
-          ...prevGroups.filter(
-            (group) => !fetchedGroups.some((fg: GroupData) => fg.groupId === group.groupId)
-          )
-        ];
-      });
+      const fetchedGroups = await fetchUserGroups(userId);
+      setGroups(fetchedGroups);
     } catch (error) {
       console.error(cmpName + error);
       setIsLoading(false);
@@ -65,15 +46,8 @@ export default function GroupsSidebar() {
     };
   }, [registerForUpdate, updateGroups]);
 
-  // Memoize the groups array to prevent unnecessary re-renders
-  const memoizedGroups = useMemo(() => groups, [groups]);
-
   const openPopup = () => setIsPopupOpen(true);
   const closePopup = () => setIsPopupOpen(false);
-
-  const logDataReceived = (data: GroupData[]) => {
-    console.log(cmpName + "got data");
-  };
 
   return (
     <div className="groups-sidebar-container">
@@ -83,7 +57,7 @@ export default function GroupsSidebar() {
         {isLoading ? (
           <LoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
         ) : (
-          memoizedGroups.map((group) => (
+          groups.map((group) => (
             <GroupsSidebarItem
               key={group.groupId}
               title={group.groupName}

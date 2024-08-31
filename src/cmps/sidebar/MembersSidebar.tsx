@@ -16,46 +16,18 @@ export default function MembersSidebar() {
 
   const cmpName = "MEMBERS_SIDEBAR ";
 
-  // Fetch initial data
+  // Initial fetch on component render
   useEffect(() => {
-    const fetchMembers = async () => {
-      setIsLoading(true);
-
-      if (groupId) {
-        setIsInGroup(true);
-        try {
-          const data = await fetchGroupMembers(groupId);
-          logDataReceived(data);
-          setMembers(data);
-        } catch (error) {
-          console.error(cmpName + error);
-        }
-      } else {
-        setIsInGroup(false);
-        setMembers([]);
-      }
-
-      setIsLoading(false);
-    };
-
-    fetchMembers();
+    setIsLoading(true);
+    updateMembers();
+    setIsLoading(false);
   }, [groupId]);
 
   const updateMembers = useCallback(async () => {
     if (groupId) {
       try {
-        let fetchedMembers = [];
-        fetchedMembers = await fetchGroupMembers(groupId);
-
-        setMembers((prevMembers) => {
-          // Ensure a new reference to trigger React re-render
-          return [
-            ...fetchedMembers,
-            ...prevMembers.filter(
-              (member) => !fetchedMembers.some((fm: GroupMember) => fm.userId === member.userId)
-            )
-          ];
-        });
+        const fetchedMembers = await fetchGroupMembers(groupId);
+        setMembers(fetchedMembers);
       } catch (error) {
         console.error(cmpName + error);
         setIsLoading(false);
@@ -71,13 +43,6 @@ export default function MembersSidebar() {
     };
   }, [registerForUpdate, updateMembers]);
 
-  // Memoize the members array to prevent unnecessary re-renders
-  const memoizedMembers = useMemo(() => members, [members]);
-
-  const logDataReceived = (data: GroupMember[]) => {
-    console.log(cmpName + "got data");
-  };
-
   return (
     <div className="members-sidebar-container">
       <div className={`members-sidebar-title ${!isInGroup ? "with-border" : ""}`}>
@@ -88,7 +53,7 @@ export default function MembersSidebar() {
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
-          memoizedMembers.map((member) => (
+          members.map((member) => (
             <MembersSidebarItem
               key={member.userId}
               name={member.username}

@@ -11,6 +11,8 @@
   margin: 0 auto; // Center the form horizontally
   gap: 14px;
   margin-top: 10px;
+  display: flex;
+  flex-direction: row;
 }
 
 create-btn {

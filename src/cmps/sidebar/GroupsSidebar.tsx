@@ -5,19 +5,19 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import UserInfoSidebarItem from "./SidebarUserInfo";
 import CreateGroupButton from "../global/CreateGroupButton";
 import CreateGroupPopup from "../popup/CreateGroupPopup";
-import { GroupData } from "../../models/GroupData.model";
-import { fetchUserGroups } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { fetchUserGroups } from "../../services/group.service";
+import { useGroups } from "../../context/GroupContext";
 
 export default function GroupsSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [groups, setGroups] = useState<GroupData[]>([]);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const { registerForUpdate } = useUpdateContext(); // Access context
+  const { groups, setGroups } = useGroups();
 
   // TODO: Change username to the current user dynamically
-  const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
+  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const cmpName = "GROUP_SIDEBAR ";
 
   // Effect to fetch groups data on component mount or userId change
@@ -57,7 +57,7 @@ export default function GroupsSidebar() {
         {isLoading ? (
           <LoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
         ) : (
-          groups.map((group) => (
+          groups?.map((group) => (
             <GroupsSidebarItem
               key={group.groupId}
               title={group.groupName}

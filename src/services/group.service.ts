@@ -1,6 +1,8 @@
 import axios from "axios";
 import { GroupData } from "../models/GroupData.model";
 import { GroupMember } from "../models/GroupMember.model";
+import { throwAxiosErr } from "./error.service";
+
 
 const groupServiceUrl = 
     import.meta.env.VITE_BASE_URL +
@@ -37,7 +39,7 @@ export async function createNewGroup(
 
       } catch(err) {
         console.error(svcName, "Error creating group:" + groupName + "error info:" + err);
-        throw err;
+        throw throwAxiosErr(err);;
       } finally {
         setIsCreating(false);
         setSubmitButtonText('Create Group');
@@ -61,7 +63,7 @@ export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
     return response.data;
   } catch (err){
     console.error(svcName,"Error fetching '" + memberId + "' groups");
-    throw err;
+    throw throwAxiosErr(err);;
   }
 }
 
@@ -82,6 +84,48 @@ export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]>
     return response.data;
   } catch (err) {
     console.error(svcName,"Error fetching '" + groupId + "' members");
-    throw err;
+    throw throwAxiosErr(err);;
+  }
+}
+
+export async function fetchGroupData(groupId:string) : Promise<GroupData> {
+  console.log("Send request to get '" + groupId + "' data");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .get(import.meta.env.VITE_GROUP_SERVICE_GET_GROUP_DATA, {params: {groupId}});
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching '" + groupId + "' data");
+    throw throwAxiosErr(err);;
+  }
+}
+
+export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<GroupMember>{
+  console.log("Send request to delete '" + userId + "' from the group '" + groupId +"'.");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .delete(import.meta.env.VITE_GROUP_SERVICE_REMOVE_MEMBER, {params: {groupId, userId}});
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error deleting '" + userId + "' from the group '" + groupId +"'.");
+    throw throwAxiosErr(err);;
   }
 }

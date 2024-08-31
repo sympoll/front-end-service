@@ -2,13 +2,18 @@ import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
 import { useParams } from "react-router-dom";
-import { fetchGroupData } from "../../services/group.service";
+import { fetchGroupData, removeMemberFromGroup } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
+import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 
 export default function GroupInfo(){
+     // Temporary hard coded user ID
+    const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
     const { groupId } = useParams(); 
     const [groupData, setGroupData] = useState<GroupData>();
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [errorMessage, setErrorMessage] = useState<string>();
 
       // TODO: pull image urls from server
     const profilePictureUrl =
@@ -18,17 +23,25 @@ export default function GroupInfo(){
 
     useEffect(() => {
       if(groupId){
+        setIsLoading(true);
         fetchGroupData(groupId).then((data) => {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
-        })
+          setIsLoading(false);
+        }).catch((error) => {
+          console.log("Unable to fetch group data with ID " + groupId);
+          setErrorMessage("Group with ID '" + groupId + "' does not exist...");
+          setIsLoading(false);
+        });
       }
       
     },[])
 
 
     const onExitGroupClick = () => {
-
+      if(groupId){
+        removeMemberFromGroup(groupId, userId);
+      }
     }
 
     const onAddMemberClick = () => {
@@ -45,6 +58,18 @@ export default function GroupInfo(){
 
     const onModifyRolesClick = () => {
 
+    }
+
+    if (errorMessage) {
+      return <ContentPageMessage msgText={errorMessage} />;
+    }
+  
+    if (isLoading) {
+      return <LoadingAnimation message="Loading group information" dots="off" />;
+    }
+  
+    if (!groupData) {
+      return <ContentPageMessage msgText="Could not fetch group data" />;
     }
 
     return (
@@ -82,7 +107,4 @@ export default function GroupInfo(){
           </div>
         </div>
       );
-    // (
-    //     <LoadingAnimation message="Loading group information" dots="off" />
-    //   );
 }

@@ -105,3 +105,24 @@ export async function fetchGroupData(groupId:string) : Promise<GroupData> {
     throw err;
   }
 }
+
+export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<GroupMember>{
+  console.log("Send request to delete '" + userId + "' from the group '" + groupId +"'.");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .delete(import.meta.env.VITE_GROUP_SERVICE_GET_GROUP_DATA, {params: {groupId, userId}});
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error deleting '" + userId + "' from the group '" + groupId +"'.");
+    throw err;
+  }
+}

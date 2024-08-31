@@ -26,7 +26,7 @@ export default function CreatePollForm({
     title: "",
     description: "",
     nofAnswersAllowed: undefined,
-    creatorId: "b1f8e925-2129-473d-bc09-b3a2a331f839", // Replace with actual creatorId
+    creatorId: import.meta.env.VITE_DEBUG_USER_ID, // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""]

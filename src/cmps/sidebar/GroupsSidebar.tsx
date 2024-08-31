@@ -17,7 +17,7 @@ export default function GroupsSidebar() {
   const { groups, setGroups } = useGroups();
 
   // TODO: Change username to the current user dynamically
-  const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
+  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const cmpName = "GROUP_SIDEBAR ";
 
   // Effect to fetch groups data on component mount or userId change

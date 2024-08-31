@@ -44,24 +44,27 @@ export default function MembersSidebar() {
   const updateMembers = useCallback(async () => {
     if (groupId) {
       try {
-        const fetchedMembers = await fetchGroupMembers(groupId);
-        logDataReceived(fetchedMembers);
+        let fetchedMembers = [];
+        fetchedMembers = await fetchGroupMembers(groupId);
 
-        // Merge new members with existing ones, ensuring uniqueness by userId
         setMembers((prevMembers) => {
-          const membersMap = new Map(
-            [...prevMembers, ...fetchedMembers].map((member) => [member.userId, member])
-          );
-          return Array.from(membersMap.values());
+          // Ensure a new reference to trigger React re-render
+          return [
+            ...fetchedMembers,
+            ...prevMembers.filter(
+              (member) => !fetchedMembers.some((fm: GroupMember) => fm.userId === member.userId)
+            )
+          ];
         });
       } catch (error) {
         console.error(cmpName + error);
+        setIsLoading(false);
       }
     }
   }, [groupId]);
 
   useEffect(() => {
-    // Register the updateGroups function and handle unregistration
+    // Register the updateMembers function and handle unregistration
     const unregister = registerForUpdate(updateMembers);
     return () => {
       unregister();

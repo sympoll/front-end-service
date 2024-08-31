@@ -5,8 +5,6 @@ import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
 import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
 import { useParams } from "react-router-dom";
-import ErrorPopup from "../popup/ErrorPopup";
-import CreatePollForm from "./poll/CreatePollForm";
 import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useUpdateContext } from "../../context/UpdateContext";
@@ -53,17 +51,10 @@ export default function FeedContent() {
       if (groupId) {
         fetchedPolls = await fetchPollsByGroupId(groupId);
       } else {
-        fetchedPolls = await fetchAllUserGroupsPolls(0); // Assuming 0 is the user ID for now
+        fetchedPolls = await fetchAllUserGroupsPolls(0); // TODO: Replace this with userId
       }
 
-      // Use a Map to deduplicate polls by their unique IDs
       setPolls((prevPolls) => {
-        const pollsMap = new Map(
-          [...prevPolls, ...fetchedPolls].map((poll) => [poll.pollId, poll])
-        );
-        const updatedPolls = Array.from(pollsMap.values());
-
-        // Ensure a new reference to trigger React re-render
         return [
           ...fetchedPolls,
           ...prevPolls.filter(
@@ -79,6 +70,7 @@ export default function FeedContent() {
   }, [groupId]);
 
   useEffect(() => {
+    // Register the updatePolls function and handle unregistration
     const unregister = registerForUpdate(updatePolls);
     return () => {
       unregister();

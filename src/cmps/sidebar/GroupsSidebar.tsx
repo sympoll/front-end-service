@@ -40,15 +40,20 @@ export default function GroupsSidebar() {
   // Function to update groups with the latest data
   const updateGroups = useCallback(async () => {
     try {
-      const fetchedGroups = await fetchUserGroups(userId);
+      let fetchedGroups = [];
+      fetchedGroups = await fetchUserGroups(userId);
+
       setGroups((prevGroups) => {
-        const groupsMap = new Map(
-          [...prevGroups, ...fetchedGroups].map((group) => [group.groupId, group])
-        );
-        return Array.from(groupsMap.values());
+        return [
+          ...fetchedGroups,
+          ...prevGroups.filter(
+            (group) => !fetchedGroups.some((fg: GroupData) => fg.groupId === group.groupId)
+          )
+        ];
       });
     } catch (error) {
       console.error(cmpName + error);
+      setIsLoading(false);
     }
   }, [userId]);
 

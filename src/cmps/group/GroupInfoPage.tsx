@@ -6,7 +6,7 @@ import { fetchGroupData, removeMemberFromGroup } from "../../services/group.serv
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { useGroups } from "./GroupContext";
+import { useGroups } from "../../context/GroupContext";
 
 export default function GroupInfo(){
      // Temporary hard coded user ID
@@ -38,7 +38,7 @@ export default function GroupInfo(){
         });
       }
       
-    },[])
+    },[groupId])
 
 
     const onExitGroupClick = () => {

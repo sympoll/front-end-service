@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { GroupData } from '../../models/GroupData.model';
+import { GroupData } from '../models/GroupData.model';
 
 const GroupsContext = createContext<{
     groups: GroupData[] | undefined;

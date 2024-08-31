@@ -49,27 +49,36 @@ export default function FeedContent() {
   // Function to update polls with the latest data
   const updatePolls = useCallback(async () => {
     try {
+      let fetchedPolls = [];
       if (groupId) {
-        const fetchedPolls = await fetchPollsByGroupId(groupId);
-        logDataReceived(fetchedPolls);
-
-        setPolls((prevPolls) => {
-          const pollsMap = new Map(
-            [...prevPolls, ...fetchedPolls].map((poll) => [poll.pollId, poll])
-          );
-          const updatedPolls = Array.from(pollsMap.values());
-
-          return [...updatedPolls];
-        });
+        fetchedPolls = await fetchPollsByGroupId(groupId);
+      } else {
+        fetchedPolls = await fetchAllUserGroupsPolls(0); // Assuming 0 is the user ID for now
       }
+
+      // Use a Map to deduplicate polls by their unique IDs
+      setPolls((prevPolls) => {
+        const pollsMap = new Map(
+          [...prevPolls, ...fetchedPolls].map((poll) => [poll.pollId, poll])
+        );
+        const updatedPolls = Array.from(pollsMap.values());
+
+        // Ensure a new reference to trigger React re-render
+        return [
+          ...fetchedPolls,
+          ...prevPolls.filter(
+            (poll) => !fetchedPolls.some((fp: PollData) => fp.pollId === poll.pollId)
+          )
+        ];
+      });
     } catch (error) {
       console.error(cmpName + error);
+      setError(error.message);
       setIsLoading(false);
     }
   }, [groupId]);
 
   useEffect(() => {
-    // Register the updateGroups function and handle unregistration
     const unregister = registerForUpdate(updatePolls);
     return () => {
       unregister();

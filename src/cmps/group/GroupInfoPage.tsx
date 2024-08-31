@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchGroupData, removeMemberFromGroup } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
+import { useGroups } from "./GroupContext";
 
 export default function GroupInfo(){
      // Temporary hard coded user ID
     const userId = "b1f8e925-2129-473d-bc09-b3a2a331f839";
     const { groupId } = useParams(); 
+    const { groups, setGroups } = useGroups();
+    const navigate = useNavigate();
     const [groupData, setGroupData] = useState<GroupData>();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -30,7 +33,7 @@ export default function GroupInfo(){
           setIsLoading(false);
         }).catch((error) => {
           console.log("Unable to fetch group data with ID " + groupId);
-          setErrorMessage("Group with ID '" + groupId + "' does not exist...");
+          setErrorMessage(error);
           setIsLoading(false);
         });
       }
@@ -40,7 +43,14 @@ export default function GroupInfo(){
 
     const onExitGroupClick = () => {
       if(groupId){
-        removeMemberFromGroup(groupId, userId);
+        removeMemberFromGroup(groupId, userId)
+        .then(() => {
+          setGroups(prevGroups => prevGroups?.filter(group => group.groupId !== groupId));
+          navigate("/feed");
+        }).catch((error) => {
+          console.log("Unable to leave group data with ID " + groupId);
+          setErrorMessage(String(error));
+        })
       }
     }
 

@@ -7,8 +7,9 @@
   @include feed-item;
   text-align: center;
   justify-content: center;
+  flex-direction: row;
   margin: 0 auto; // Center the form horizontally
-  row-gap: 6px;
+  gap: 14px;
   margin-top: 10px;
   display: flex;
   flex-direction: row;
@@ -20,3 +21,4 @@ create-btn {
   margin: 0 auto; // Center the button horizontally
   display: inline-flex;
 }
+

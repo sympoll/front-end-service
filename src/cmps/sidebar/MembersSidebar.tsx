@@ -13,6 +13,7 @@ export default function MembersSidebar() {
   const [members, setMembers] = useState<GroupMember[]>([]);
   const [isInGroup, setIsInGroup] = useState(false);
   const { registerForUpdate } = useUpdateContext(); // Access context
+  const { userId } = useParams();
 
   const cmpName = "MEMBERS_SIDEBAR ";
 
@@ -24,16 +25,21 @@ export default function MembersSidebar() {
   }, [groupId]);
 
   const updateMembers = useCallback(async () => {
-    if (groupId) {
+    if (groupId && !userId) {
+      setIsInGroup(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
         setMembers(fetchedMembers);
       } catch (error) {
         console.error(cmpName + error);
-        setIsLoading(false);
+      }
+    } else {
+      if (!userId) {
+        setIsInGroup(true);
+        setMembers([]);
       }
     }
-  }, [groupId]);
+  }, [groupId, userId]);
 
   useEffect(() => {
     // Register the updateMembers function and handle unregistration

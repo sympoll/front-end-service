@@ -11,7 +11,7 @@ export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
   const [members, setMembers] = useState<GroupMember[]>([]);
-  const [isInGroup, setIsInGroup] = useState(false);
+  const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
 
@@ -26,7 +26,7 @@ export default function MembersSidebar() {
 
   const updateMembers = useCallback(async () => {
     if (groupId && !userId) {
-      setIsInGroup(false);
+      setIsShowingAllGroups(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
         setMembers(fetchedMembers);
@@ -35,7 +35,7 @@ export default function MembersSidebar() {
       }
     } else {
       if (!userId) {
-        setIsInGroup(true);
+        setIsShowingAllGroups(true);
         setMembers([]);
       }
     }
@@ -51,8 +51,8 @@ export default function MembersSidebar() {
 
   return (
     <div className="members-sidebar-container">
-      <div className={`members-sidebar-title ${!isInGroup ? "with-border" : ""}`}>
-        {!isInGroup && "Group Members:"}
+      <div className={`members-sidebar-title ${!isShowingAllGroups ? "with-border" : ""}`}>
+        {!isShowingAllGroups && "Group Members:"}
       </div>
       <ul className="members-sidebar-members-container">
         {isLoading && (

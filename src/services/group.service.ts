@@ -7,6 +7,8 @@ const groupServiceUrl =
     import.meta.env.VITE_API_GATEWAY_URL +
     import.meta.env.VITE_GROUP_SERVICE_URL;
 
+const svcName = "GROUP.SVC"
+
 
 export async function createNewGroup(
     groupName:string, 
@@ -20,7 +22,7 @@ export async function createNewGroup(
         creatorId: userId,
     };
 
-    console.log("Send request to create new group");
+    console.log(svcName, "Send request to create new group");
     setIsCreating(true);
     try {
         const response = await axios.post(groupServiceUrl, groupCreateRequestPayload, {
@@ -30,11 +32,11 @@ export async function createNewGroup(
             withCredentials: true,
           });
     
-        console.log("Group:" + groupName + "created successfully.");
+        console.log(svcName, "Group:" + groupName + "created successfully.");
         return response.data;
 
       } catch(err) {
-        console.error("Error creating group:" + groupName + "error info:" + err);
+        console.error(svcName, "Error creating group:" + groupName + "error info:" + err);
         throw err;
       } finally {
         setIsCreating(false);
@@ -43,7 +45,7 @@ export async function createNewGroup(
 }
 
 export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
-  console.log("Send request to get '" + memberId + "' groups");
+  console.log(svcName, "Send request to get '" + memberId + "' groups");
 
   try{
     const response = await axios
@@ -58,13 +60,13 @@ export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
       
     return response.data;
   } catch (err){
-    console.error("Error fetching '" + memberId + "' groups");
+    console.error(svcName,"Error fetching '" + memberId + "' groups");
     throw err;
   }
 }
 
 export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]> {
-  console.log("Send request to get '" + groupId + "' members");
+  console.log(svcName,"Send request to get '" + groupId + "' members");
 
   try{
     const response = await axios
@@ -79,7 +81,7 @@ export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]>
     
     return response.data;
   } catch (err) {
-    console.error("Error fetching '" + groupId + "' members");
+    console.error(svcName,"Error fetching '" + groupId + "' members");
     throw err;
   }
 }

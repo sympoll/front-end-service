@@ -7,6 +7,9 @@ const pollServiceUrl =
   import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_POLL_SERVICE_URL;
 
+const cmpName = "POLL.SVC";
+
+
 /**
  * Fetch all polls of a user, most recent polls first.
  * @param userId ID of the user to fetch his polls.
@@ -15,12 +18,12 @@ const pollServiceUrl =
 export async function fetchAllUserGroupsPolls(
   userId: number
 ): Promise<PollData[]> {
-  // Send a request to the User Management Service for the user's join groups list.
+  // Send a request to the poll service for the user's polls from all groups
   // !!! TODO !!!
   const groupIds = ["group1", "group2"]; // Temporary
-  console.log("Trying to fetch polls by group IDs: " + groupIds);
+  console.log(cmpName, "Trying to fetch polls by group IDs: " + groupIds);
 
-  // Send a request to the Poll Managemenet Service to get all polls of the specified groups.
+  // Send a request to the Poll Service to get all polls of the specified groups.
   try {
     const response = await axios
       .create({
@@ -35,10 +38,12 @@ export async function fetchAllUserGroupsPolls(
         groupIds
       );
 
+      console.log(cmpName, "get polls successful")
+
     return response.data;
   } catch (err) {
     console.error(
-      "Error fetching all joined groups' polls of user ID " +
+      cmpName, "Error fetching all joined groups' polls of user ID " +
         userId +
         ". Error info: " +
         err
@@ -53,8 +58,8 @@ export async function fetchAllUserGroupsPolls(
  * @returns A raw list of polls returned from poll-service microservice.
  */
 export async function fetchPollsByGroupId(groupId: string) {
-  console.log("Trying to fetch polls by group ID: " + groupId);
-  // Send a request to the Poll Managemenet Service to get all polls of the specified groups.
+  console.log(cmpName, "Trying to fetch polls by group ID: " + groupId);
+  // Send a request to the Poll Service to get all polls of the specified groups.
   try {
     const response = await axios
       .create({
@@ -68,9 +73,11 @@ export async function fetchPollsByGroupId(groupId: string) {
         params: { groupId },
       });
 
+    console.log(cmpName, "get polls successful")
+
     return response.data;
   } catch (err) {
-    console.error("Error fetching all polls of group with ID " + groupId + ".");
+    console.error(cmpName, "Error fetching all polls of group with ID " + groupId + ".");
     throw throwAxiosErr(err);
   }
 }

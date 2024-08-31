@@ -22,7 +22,7 @@ export default function btn({
       className={`custom-button custom-button__${theme}`}
       onClick={onClick}
       type={type}
-      name={name}
+      id={name}
       disabled={disabled}
     >
       {children}

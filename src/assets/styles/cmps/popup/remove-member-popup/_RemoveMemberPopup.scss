@@ -1,0 +1,98 @@
+.remove-member-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .remove-member-popup-container {
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 100%;
+    position: relative;
+  }
+  
+  .remove-member-popup-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+  }
+  
+  .remove-member-popup-container h2 {
+    color: black;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+  
+  .remove-member-popup-text-fields {
+    @include flex-column;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    gap: 10px;
+  }
+
+  .remove-member-popup-select{
+    padding: 5px;
+    font-family: $mainFont;
+    font-size: $mainFontSize;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+  }
+
+  .remove-member-popup-select:focus{
+    border-color:  rgba(164, 167, 170, 0.5); /* Blue border on focus */
+    box-shadow: 0 0 5px rgba(164, 167, 170, 0.5); /* Shadow effect */
+  }
+  
+  .remove-member-popup-container input {
+    display: flex;
+    width: 100%;
+    padding: 10px;
+    font-family: $mainFont;
+    font-size: $mainFontSize;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .remove-member-popup-form-button {
+    color: $mainFontColor;
+    font-size: $mainFontSize;
+    background-color: $mainColor-light0;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .remove-member-popup-error-label{
+    display: flex;
+    justify-content: center;
+    padding: 5px;
+    color: $mainFontColor;
+  }
+  
+  .remove-member-popup-form {
+    width: 100%;
+  }
+  
+  @keyframes textColorChange {
+    100% {
+      color: black;
+    }
+  }

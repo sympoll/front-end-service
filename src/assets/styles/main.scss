@@ -15,7 +15,7 @@
 @import "effects/ripple-loading";
 
 // ** Components **
-@import "cmps/error-popup/ErrorPopup";
+@import "cmps/popup/error-popup/ErrorPopup";
 @import "cmps/profile-picture/ProfilePicture";
 
 // * App Header *
@@ -52,8 +52,9 @@
 @import "cmps/group-info/GroupInfo";
 
 // * Popup *
-@import "cmps/create-group-popup/CreateGroupPopup.scss";
-@import "cmps/add-member-popup/AddMemberPopup";
+@import "cmps/popup/create-group-popup/CreateGroupPopup";
+@import "cmps/popup/add-member-popup/AddMemberPopup";
+@import "cmps/popup/remove-member-popup/RemoveMemberPopup";
 
 // * Not Found Page *
 @import "cmps/not-found-page/NotFoundPage";

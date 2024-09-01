@@ -7,46 +7,39 @@ const pollServiceUrl =
   import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_POLL_SERVICE_URL;
 
+// TODO: userId should be accessed from session.
 const cmpName = "POLL.SVC";
-
+const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 /**
  * Fetch all polls of a user, most recent polls first.
  * @param userId ID of the user to fetch his polls.
  * @returns Logged in user's polls from all his groups.
  */
-export async function fetchAllUserGroupsPolls(
-  userId: number
-): Promise<PollData[]> {
-  // Send a request to the poll service for the user's polls from all groups
-  // !!! TODO !!!
-  const groupIds = ["group1", "group2"]; // Temporary
-  console.log(cmpName, "Trying to fetch polls by group IDs: " + groupIds);
+export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
+  console.log(cmpName, "Trying to fetch polls by all user's polls");
 
-  // Send a request to the Poll Service to get all polls of the specified groups.
+  // Send a request to the Poll Service to get all polls of the user.
   try {
     const response = await axios
       .create({
         baseURL: pollServiceUrl,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        withCredentials: true,
+        withCredentials: true
       })
-      .post(
-        import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_MULTIPLE_GROUP_IDS,
-        groupIds
-      );
+      .get(import.meta.env.VITE_POLL_SERVICE_GET_ALL_USER_POLLS, {
+        params: { userId }
+      });
 
-      console.log(cmpName, "get polls successful")
+    console.log(cmpName, "get polls successful");
 
     return response.data;
   } catch (err) {
     console.error(
-      cmpName, "Error fetching all joined groups' polls of user ID " +
-        userId +
-        ". Error info: " +
-        err
+      cmpName,
+      "Error fetching all joined groups' polls of user ID " + userId + ". Error info: " + err
     );
     throw throwAxiosErr(err);
   }
@@ -65,15 +58,15 @@ export async function fetchPollsByGroupId(groupId: string) {
       .create({
         baseURL: pollServiceUrl,
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json"
         },
-        withCredentials: true,
+        withCredentials: true
       })
       .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, {
-        params: { groupId },
+        params: { groupId }
       });
 
-    console.log(cmpName, "get polls successful")
+    console.log(cmpName, "get polls successful");
 
     return response.data;
   } catch (err) {
@@ -89,9 +82,7 @@ export async function fetchPollsByGroupId(groupId: string) {
 export function getTimePassed(postTimestamp: string): string {
   const now = new Date();
   const postedDate = new Date(postTimestamp);
-  const diffInSeconds = Math.floor(
-    (now.getTime() - postedDate.getTime()) / 1000
-  );
+  const diffInSeconds = Math.floor((now.getTime() - postedDate.getTime()) / 1000);
 
   const timePassedStr = convertSecondsPassedToString(diffInSeconds);
   return timePassedStr === "now" ? "now" : timePassedStr + " ago";
@@ -104,9 +95,7 @@ export function getTimePassed(postTimestamp: string): string {
 export function getTimeToDeadline(deadlineTimestamp: string): string {
   const now = new Date();
   const deadlineDate = new Date(deadlineTimestamp);
-  const diffInSeconds = Math.floor(
-    (deadlineDate.getTime() - now.getTime()) / 1000
-  );
+  const diffInSeconds = Math.floor((deadlineDate.getTime() - now.getTime()) / 1000);
 
   return convertSecondsPassedToString(diffInSeconds);
 }
@@ -127,11 +116,12 @@ function convertSecondsPassedToString(diffInSeconds: number): string {
 
   const daysStr = days > 0 ? (days === 1 ? `${days} day` : `${days} days`) : undefined;
   const hoursStr = hours > 0 ? (hours === 1 ? `${hours} hour` : `${hours} hours`) : undefined;
-  const minutesStr = minutes > 0 ? (minutes === 1 ? `${minutes} minute` : `${minutes} minutes`) : undefined;
-  const secondsStr = (seconds === 1 ? `${seconds} second` : `${seconds} seconds`);
+  const minutesStr =
+    minutes > 0 ? (minutes === 1 ? `${minutes} minute` : `${minutes} minutes`) : undefined;
+  const secondsStr = seconds === 1 ? `${seconds} second` : `${seconds} seconds`;
 
   const delimiter = ", ";
-  
+
   if (daysStr) {
     return daysStr + delimiter + hoursStr;
   } else if (hoursStr) {

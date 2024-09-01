@@ -8,6 +8,7 @@ import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useGroups } from "../../context/GroupsContext";
 import AddMemberPopup from "../popup/AddMemberPopup";
+import RemoveMemberPopup from "../popup/RemoveMemberPopup";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
@@ -19,6 +20,7 @@ export default function GroupInfo() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
+  const [isRemoveMemberPopupOpen, setIsRemoveMemberPopupOpen] = useState<boolean>(false);
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -61,7 +63,9 @@ export default function GroupInfo() {
     setIsAddMemberPopupOpen(true);
   };
 
-  const onDeleteMemberClick = () => {};
+  const onRemoveMemberClick = () => {
+    setIsRemoveMemberPopupOpen(true);
+  };
 
   const onDeleteGroupClick = () => {};
 
@@ -99,8 +103,8 @@ export default function GroupInfo() {
         <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">
           Add Member
         </CustomButton>
-        <CustomButton onClick={onDeleteMemberClick} name="delete-member-btn" theme="dark">
-          Delete Member
+        <CustomButton onClick={onRemoveMemberClick} name="delete-member-btn" theme="dark">
+          Remove Member
         </CustomButton>
         <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="dark">
           Delete Group
@@ -110,6 +114,7 @@ export default function GroupInfo() {
         </CustomButton>
       </div>
       {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
+      {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>

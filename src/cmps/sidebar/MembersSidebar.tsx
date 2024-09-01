@@ -23,7 +23,7 @@ export default function MembersSidebar() {
     setIsLoading(true);
     updateMembers();
     setIsLoading(false);
-  }, [groupId]);
+  }, [groupId, userId]);
 
   const updateMembers = useCallback(async () => {
     if (groupId && !userId) {

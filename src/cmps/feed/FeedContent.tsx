@@ -20,6 +20,7 @@ export default function FeedContent() {
 
   // Initial fetch on component render
   useEffect(() => {
+    setPolls([]); // clear poll data in feed when changing groups
     updatePolls();
   }, [groupId]);
 

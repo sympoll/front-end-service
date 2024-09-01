@@ -20,9 +20,7 @@ export default function FeedContent() {
 
   // Initial fetch on component render
   useEffect(() => {
-    setIsLoading(true); // Start loading state
     updatePolls();
-    setIsLoading(false);
   }, [groupId]);
 
   // Function to update polls with the latest data
@@ -32,7 +30,7 @@ export default function FeedContent() {
       if (groupId) {
         fetchedPolls = await fetchPollsByGroupId(groupId);
       } else {
-        fetchedPolls = await fetchAllUserGroupsPolls(0); // TODO: Replace this with userId
+        fetchedPolls = await fetchAllUserGroupsPolls();
       }
 
       removeErrorFromFeed();
@@ -41,6 +39,8 @@ export default function FeedContent() {
       console.error(cmpName + err);
       setError(err.message);
       setIsLoading(false);
+    } finally {
+      if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
     }
   }, [groupId]);
 

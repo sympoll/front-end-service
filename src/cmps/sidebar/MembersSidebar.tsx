@@ -11,7 +11,7 @@ import { useMembers } from "../../context/MemebersContext";
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const {members, setMembers, isChanged } = useMembers();
+  const { members, setMembers, isChanged } = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -20,9 +20,7 @@ export default function MembersSidebar() {
 
   // Initial fetch on component render
   useEffect(() => {
-    setIsLoading(true);
     updateMembers();
-    setIsLoading(false);
   }, [groupId, userId]);
 
   const updateMembers = useCallback(async () => {
@@ -33,6 +31,8 @@ export default function MembersSidebar() {
         setMembers(sortMembers(fetchedMembers));
       } catch (error) {
         console.error(cmpName + error);
+      } finally {
+        if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
       }
     } else {
       if (!userId) {
@@ -51,17 +51,17 @@ export default function MembersSidebar() {
   }, [registerForUpdate, updateMembers]);
 
   useEffect(() => {
-    if(members){
+    if (members) {
       setMembers(sortMembers(members));
     }
-  },[isChanged])
+  }, [isChanged]);
 
   const sortMembers = (members: GroupMember[]) => {
     return members.sort((a, b) => {
       const roleOrder: { [key: string]: number } = {
-        'Admin': 1,
-        'Moderator': 2,
-        'Member': 4
+        Admin: 1,
+        Moderator: 2,
+        Member: 4
       };
       // Give a higher order number to roles that are not 'Member'
       const aRoleOrder = roleOrder[a.roleName] || 3;

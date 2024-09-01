@@ -20,9 +20,20 @@ interface AddMemberPopupProps {
             console.log("Member added to the group: ", memberUsername);
             onClose();
         } catch (err) {
-            setErrorMessage(String(err));
+            const error = err as Error;
+            setErrorMessage(parseErrorMessage(error.message));
         }
     }
+
+    const parseErrorMessage = (message: string): string => {
+        // Check if the error message matches the pattern for a username not existing
+        const match = message.match(/The username ([^"]+) does not exist/);
+        if (match) {
+            return `${match[1]} does not exist`;
+        }
+        
+        return message;
+    };
 
     return (
         <div className="add-member-popup-overlay" onClick={onClose}>

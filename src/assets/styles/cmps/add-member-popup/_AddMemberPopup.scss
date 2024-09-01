@@ -64,8 +64,11 @@
     padding: 10px;
     cursor: pointer;
   }
-  
-  .add-member-popup-error-lable{
+
+  .add-member-popup-error-label{
+    display: flex;
+    justify-content: center;
+    padding: 5px;
     color: $mainFontColor;
   }
   

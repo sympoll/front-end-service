@@ -38,8 +38,13 @@ export default function FeedContent() {
       removeErrorFromFeed();
       setPolls(fetchedPolls);
     } catch (err) {
-      console.error(cmpName + err);
-      setError(err.message);
+      if (err instanceof Error) {
+        console.error(cmpName + err.message);
+        setError(err.message);
+      } else {
+        console.error(cmpName + "Unknown error");
+        setError("An unknown error occurred");
+      }
       setIsLoading(false);
     }
   }, [groupId]);

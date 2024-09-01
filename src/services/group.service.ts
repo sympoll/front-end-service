@@ -131,7 +131,7 @@ export async function removeMemberFromGroup(groupId:string, userId:string) : Pro
   }
 }
 
-export async function addMemberToGroup(groupId:string, username:string) : Promise<UserData> {
+export async function addMemberToGroup(groupId:string, username:string) : Promise<GroupMember> {
   console.log("Send request to add '" + username + "' to the group '" + groupId +"'.");
 
   try{

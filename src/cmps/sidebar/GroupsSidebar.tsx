@@ -8,7 +8,7 @@ import CreateGroupPopup from "../popup/CreateGroupPopup";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
 import { fetchUserGroups } from "../../services/group.service";
-import { useGroups } from "../../context/GroupContext";
+import { useGroups } from "../../context/GroupsContext";
 
 export default function GroupsSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);

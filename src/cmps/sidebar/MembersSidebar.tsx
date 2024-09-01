@@ -6,11 +6,12 @@ import { GroupMember } from "../../models/GroupMember.model";
 import { fetchGroupMembers } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { useMembers } from "../../context/MemebersContext";
 
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const [members, setMembers] = useState<GroupMember[]>([]);
+  const {members, setMembers} = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -29,7 +30,7 @@ export default function MembersSidebar() {
       setIsShowingAllGroups(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
-        setMembers(fetchedMembers);
+        setMembers(sortMembers(fetchedMembers));
       } catch (error) {
         console.error(cmpName + error);
       }
@@ -49,6 +50,21 @@ export default function MembersSidebar() {
     };
   }, [registerForUpdate, updateMembers]);
 
+  const sortMembers = (members: GroupMember[]) => {
+    return members.sort((a, b) => {
+      const roleOrder: { [key: string]: number } = {
+        'Admin': 1,
+        'Moderator': 2,
+        'Member': 4
+      };
+      // Give a higher order number to roles that are not 'Member'
+      const aRoleOrder = roleOrder[a.roleName] || 3;
+      const bRoleOrder = roleOrder[b.roleName] || 3;
+
+      return aRoleOrder - bRoleOrder;
+    });
+  };
+
   return (
     <div className="members-sidebar-container">
       <div className={`members-sidebar-title ${!isShowingAllGroups ? "with-border" : ""}`}>
@@ -59,7 +75,7 @@ export default function MembersSidebar() {
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
-          members.map((member) => (
+          members?.map((member) => (
             <MembersSidebarItem
               key={member.userId}
               name={member.username}

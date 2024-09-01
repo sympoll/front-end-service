@@ -6,7 +6,7 @@ import { fetchGroupData, removeMemberFromGroup } from "../../services/group.serv
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { useGroups } from "../../context/GroupContext";
+import { useGroups } from "../../context/GroupsContext";
 import AddMemberPopup from "../popup/AddMemberPopup";
 
 export default function GroupInfo() {

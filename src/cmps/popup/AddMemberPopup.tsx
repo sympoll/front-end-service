@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import CloseButton from "../global/CloseButton";
 import { addMemberToGroup } from "../../services/group.service";
-import { log } from "winston";
+import { useMembers } from "../../context/MemebersContext";
 
 
 interface AddMemberPopupProps {
@@ -12,11 +12,14 @@ interface AddMemberPopupProps {
   export default function AddMemberPopup({ groupId, onClose } : AddMemberPopupProps) {
     const [memberUsername, setMemberUsername] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
+    const {members} = useMembers();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try{
-            await addMemberToGroup(groupId, memberUsername);
+            members?.push(
+                await addMemberToGroup(groupId, memberUsername)
+            );
             console.log("Member added to the group: ", memberUsername);
             onClose();
         } catch (err) {

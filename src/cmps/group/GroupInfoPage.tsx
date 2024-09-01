@@ -6,7 +6,8 @@ import { fetchGroupData, removeMemberFromGroup } from "../../services/group.serv
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { useGroups } from "../../context/GroupContext";
+import { useGroups } from "../../context/GroupsContext";
+import AddMemberPopup from "../popup/AddMemberPopup";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
@@ -17,6 +18,7 @@ export default function GroupInfo() {
   const [groupData, setGroupData] = useState<GroupData>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
+  const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -55,13 +57,16 @@ export default function GroupInfo() {
     }
   };
 
-  const onAddMemberClick = () => {};
+  const onAddMemberClick = () => {
+    setIsAddMemberPopupOpen(true);
+  };
 
   const onDeleteMemberClick = () => {};
 
   const onDeleteGroupClick = () => {};
 
   const onModifyRolesClick = () => {};
+
 
   if (errorMessage) {
     return <ContentPageMessage msgText={errorMessage} />;
@@ -104,6 +109,7 @@ export default function GroupInfo() {
           Modify Roles
         </CustomButton>
       </div>
+      {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>
@@ -119,5 +125,6 @@ export default function GroupInfo() {
         </div>
       </div>
     </div>
+    
   );
 }

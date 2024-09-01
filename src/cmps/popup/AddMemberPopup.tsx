@@ -12,7 +12,7 @@ interface AddMemberPopupProps {
   export default function AddMemberPopup({ groupId, onClose } : AddMemberPopupProps) {
     const [memberUsername, setMemberUsername] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const {members} = useMembers();
+    const {members, isChanged, setIsChanged} = useMembers();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -20,6 +20,7 @@ interface AddMemberPopupProps {
             members?.push(
                 await addMemberToGroup(groupId, memberUsername)
             );
+            setIsChanged(!isChanged);
             console.log("Member added to the group: ", memberUsername);
             onClose();
         } catch (err) {

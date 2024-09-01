@@ -11,7 +11,7 @@ import { useMembers } from "../../context/MemebersContext";
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const {members, setMembers} = useMembers();
+  const {members, setMembers, isChanged } = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -49,6 +49,12 @@ export default function MembersSidebar() {
       unregister();
     };
   }, [registerForUpdate, updateMembers]);
+
+  useEffect(() => {
+    if(members){
+      setMembers(sortMembers(members));
+    }
+  },[isChanged])
 
   const sortMembers = (members: GroupMember[]) => {
     return members.sort((a, b) => {

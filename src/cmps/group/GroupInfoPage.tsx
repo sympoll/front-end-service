@@ -114,7 +114,7 @@ export default function GroupInfo() {
         </CustomButton>
       </div>
       {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
-      {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
+      {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>

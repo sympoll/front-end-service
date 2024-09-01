@@ -6,19 +6,22 @@ import { useMembers } from "../../context/MemebersContext";
 
 interface RemoveMemberPopupProps {
     groupId: string;
+    userId: string;
     onClose: () => void;
   }
 
-  export default function RemoveMemberPopup({ groupId, onClose } : RemoveMemberPopupProps) {
+  export default function RemoveMemberPopup({ groupId, userId, onClose } : RemoveMemberPopupProps) {
     const [selectedMemberId, setSelectedMemberId] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const {members, isChanged, setIsChanged} = useMembers();
+    const {members, setMembers, isChanged, setIsChanged} = useMembers();
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try{
             if(selectedMemberId !== ""){
-               await removeMemberFromGroup(groupId, selectedMemberId)
+               const removedMember = await removeMemberFromGroup(groupId, selectedMemberId);
+               setMembers(members?.filter((member => member.userId !== removedMember.userId)));
+               setIsChanged(!isChanged);
                onClose();
             } else{
                 setErrorMessage("You must select a group member!")
@@ -44,7 +47,7 @@ interface RemoveMemberPopupProps {
                     <div className="remove-member-popup-text-fields">
                         <select className="remove-member-popup-select" value={selectedMemberId} onChange={handleMemberSelectChange}>
                             <option value="" disabled>Select a member</option>
-                            {members?.map((member) => (
+                            {members?.filter((member => member.userId !== userId)).map((member) => (
                                 <option key={member.userId} value={member.userId}>
                                     {member.username}
                                 </option>

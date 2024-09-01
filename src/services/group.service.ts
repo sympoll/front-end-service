@@ -132,22 +132,30 @@ export async function removeMemberFromGroup(groupId:string, userId:string) : Pro
 }
 
 export async function addMemberToGroup(groupId:string, username:string) : Promise<UserData> {
-  console.log("Send request to add '" + username + "' from the group '" + groupId +"'.");
+  console.log("Send request to add '" + username + "' to the group '" + groupId +"'.");
 
   try{
     const response = await axios
-      .create({
-        baseURL: groupServiceUrl,
-        headers: {
-                    "Content-Type": "application/json",
-                  },
-                  withCredentials: true,
-                })
-      .get(import.meta.env.VITE_GROUP_SERVICE_ADD_MEMBER, {params: {groupId, username}});
+    .create({
+      baseURL: groupServiceUrl,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    })
+    .post(
+      import.meta.env.VITE_GROUP_SERVICE_ADD_MEMBER,
+      null, 
+      { 
+        params: {
+          groupId: groupId,
+          username: username,
+        },
+      });
     
     return response.data;
   } catch (err) {
-    console.error("Error adding '" + username + "' from the group '" + groupId +"'.");
+    console.error("Error adding '" + username + "' to the group '" + groupId +"'.");
     throw throwAxiosErr(err);;
   }
 }

@@ -1,5 +1,7 @@
 import { FormEvent, useState } from "react";
 import CloseButton from "../global/CloseButton";
+import { addMemberToGroup } from "../../services/group.service";
+import { log } from "winston";
 
 
 interface AddMemberPopupProps {
@@ -13,13 +15,18 @@ interface AddMemberPopupProps {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        
+        try{
+            await addMemberToGroup(groupId, memberUsername);
+            console.log("Member added to the group: ", memberUsername);
+            onClose();
+        } catch (err) {
+            setErrorMessage(String(err));
+        }
     }
 
-
     return (
-        <div className="add-member-popup-ovelay">
-            <div className="add-member-popup-container">
+        <div className="add-member-popup-overlay" onClick={onClose}>
+            <div className="add-member-popup-container" onClick={(e) => e.stopPropagation()}>
                 <CloseButton size="14px" onClose={onClose} />
                 <form onSubmit={handleSubmit} className="add-member-popup-form">
                     <h2>Add New Member</h2>

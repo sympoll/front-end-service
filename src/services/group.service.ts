@@ -1,6 +1,7 @@
 import axios from "axios";
 import { GroupData } from "../models/GroupData.model";
 import { GroupMember } from "../models/GroupMember.model";
+import { UserData } from "../models/UserData.model";
 import { throwAxiosErr } from "./error.service";
 
 
@@ -126,6 +127,27 @@ export async function removeMemberFromGroup(groupId:string, userId:string) : Pro
     return response.data;
   } catch (err) {
     console.error("Error deleting '" + userId + "' from the group '" + groupId +"'.");
+    throw throwAxiosErr(err);;
+  }
+}
+
+export async function addMemberToGroup(groupId:string, username:string) : Promise<UserData> {
+  console.log("Send request to add '" + username + "' from the group '" + groupId +"'.");
+
+  try{
+    const response = await axios
+      .create({
+        baseURL: groupServiceUrl,
+        headers: {
+                    "Content-Type": "application/json",
+                  },
+                  withCredentials: true,
+                })
+      .get(import.meta.env.VITE_GROUP_SERVICE_ADD_MEMBER, {params: {groupId, username}});
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error adding '" + username + "' from the group '" + groupId +"'.");
     throw throwAxiosErr(err);;
   }
 }

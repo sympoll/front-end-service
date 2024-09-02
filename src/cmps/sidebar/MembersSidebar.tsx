@@ -25,15 +25,16 @@ export default function MembersSidebar() {
 
   const updateMembers = useCallback(async () => {
     if (groupId && !userId) {
+      setIsLoading(true);
       setIsShowingAllGroups(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
         setMembers(sortMembers(fetchedMembers));
+        setIsLoading(false);
       } catch (error) {
         console.error(cmpName + error);
-      } finally {
-        if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
-      }
+        setIsLoading(false);
+      } 
     } else {
       if (!userId) {
         setIsShowingAllGroups(true);
@@ -77,7 +78,7 @@ export default function MembersSidebar() {
         {!isShowingAllGroups && "Group Members:"}
       </div>
       <ul className="members-sidebar-members-container">
-        {isLoading && (
+        {isLoading && !isShowingAllGroups &&(
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&

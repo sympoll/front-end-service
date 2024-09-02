@@ -9,18 +9,26 @@ import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useGroups } from "../../context/GroupsContext";
 import AddMemberPopup from "../popup/AddMemberPopup";
 import RemoveMemberPopup from "../popup/RemoveMemberPopup";
+import ModifyRolesPopup from "../popup/ModifyRolesPopup";
+import { useMembers } from "../../context/MemebersContext";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
   const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const { groupId } = useParams();
-  const { groups, setGroups } = useGroups();
+  const { setGroups } = useGroups();
+  const { getMemberRole } = useMembers();
   const navigate = useNavigate();
   const [groupData, setGroupData] = useState<GroupData>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
   const [isRemoveMemberPopupOpen, setIsRemoveMemberPopupOpen] = useState<boolean>(false);
+  const [isModifyRolesPopupOpen, setIsModifyRolesPopupOpen] = useState<boolean>(false);
+  const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] = useState<boolean>(false);
+  const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] = useState<boolean>(false);
+  const [isUserHasPermissionToRmvGroup, setIsUserHasPermissionToRmvGroup] = useState<boolean>(false);
+  const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] = useState<boolean>(false);
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -43,7 +51,25 @@ export default function GroupInfo() {
           setIsLoading(false);
         });
     }
+
+    fetchUserPermissionsInCommandBar();
   }, [groupId]);
+
+  const fetchUserPermissionsInCommandBar = () => {
+    const userRole = getMemberRole(userId);
+
+    if(userRole === "Admin") {
+      setIsUserHasPermissionToAddMember(true);
+      setIsUserHasPermissionToRmvMember(true);
+      setIsUserHasPermissionToRmvGroup(true);
+      setIsUserHasPermissionToModRoles(true);
+    }else if(userRole === "Moderator"){
+      setIsUserHasPermissionToAddMember(true);
+      setIsUserHasPermissionToRmvMember(true);
+      setIsUserHasPermissionToRmvGroup(false);
+      setIsUserHasPermissionToModRoles(false);
+    }
+  }
 
   const onExitGroupClick = () => {
     if (groupId) {
@@ -81,7 +107,9 @@ export default function GroupInfo() {
     }
   };
 
-  const onModifyRolesClick = () => {};
+  const onModifyRolesClick = () => {
+    setIsModifyRolesPopupOpen(true);
+  };
 
 
   if (errorMessage) {
@@ -112,21 +140,30 @@ export default function GroupInfo() {
         <CustomButton onClick={onExitGroupClick} name="exit-group-btn" theme="dark">
           Exit Group
         </CustomButton>
+        {isUserHasPermissionToAddMember && (
         <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">
           Add Member
         </CustomButton>
+        )}
+        {isUserHasPermissionToRmvMember && (
         <CustomButton onClick={onRemoveMemberClick} name="delete-member-btn" theme="dark">
           Remove Member
         </CustomButton>
-        <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="dark">
-          Delete Group
-        </CustomButton>
+        )}
+        {isUserHasPermissionToModRoles && (
         <CustomButton onClick={onModifyRolesClick} name="modify-roles-btn" theme="dark">
           Modify Roles
         </CustomButton>
+        )}
+        {isUserHasPermissionToRmvGroup && (
+        <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="dark">
+          Delete Group
+        </CustomButton>
+        )}
       </div>
       {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
       {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
+      {isModifyRolesPopupOpen && groupId && <ModifyRolesPopup groupId={groupId} userId={userId} onClose={() => setIsModifyRolesPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>

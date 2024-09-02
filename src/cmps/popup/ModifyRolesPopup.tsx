@@ -1,7 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useMembers } from "../../context/MemebersContext";
 import CloseButton from "../global/CloseButton";
-import { createUserRole } from "../../services/group.service";
+import { createUserRole, deleteUserRole, updateUserRole } from "../../services/group.service";
 
 
 interface ModifyRolesPopupProps {
@@ -16,42 +16,46 @@ interface ModifyRolesPopupProps {
     const [selectedRole, setSelectedRole] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [isMemberSelected, setIsMemberSelected] = useState<boolean>(false);
-    const {members, setMembers, isChanged, setIsChanged} = useMembers();
+    const {members, setMembers, isChanged, setIsChanged, setNewRoleToUser} = useMembers();
     
     const [roles, setRoles] = useState<string[]>(["Admin", "Moderator", "Member"]);
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        try{
-            if(selectedMemberId !== ""){
-               
-               onClose();
-            } else{
-                setErrorMessage("You must select a group member!")
-            }
-            
-        } catch (err) {
-            const error = err as Error;
-            setErrorMessage(error.message);
-        }
-    }
-
-    const handleRoleSet = () => {
-        if(selectedRole === "Member"){
-            createUserRole(selectedMemberId, groupId, selectedRole)
+         // User set to be a simple member
+         if(selectedRole === "Member"){
+            deleteUserRole(selectedMemberId, groupId, selectedMemberRole)
             .then(() => {
-
+                setNewRoleToUser(selectedMemberId, "Member");
             })
-
+            .catch((error) => {
+                console.log("Unable to set role to " + userId);
+                setErrorMessage(String(error))
+            })
+            
+        // User set to have a role in the group
         }else {
+            // User is currently a simple member
             if(selectedMemberRole === "Member"){
-
-            }else{
-
+                createUserRole(selectedMemberId, groupId, selectedRole)
+                .then(() => {
+                    setNewRoleToUser(selectedMemberId, selectedRole);
+                })
+                .catch((error) => {
+                    console.log("Unable to set role to " + userId);
+                    setErrorMessage(String(error));
+                })
+            }else{ // User is currently not a simple member
+                updateUserRole(selectedMemberId, groupId, selectedRole)
+                .then(() => {
+                    setNewRoleToUser(selectedMemberId, selectedRole);
+                })
+                .catch((error) => {
+                    console.log("Unable to set role to " + userId);
+                    setErrorMessage(String(error));
+                })
             }
         }
-
-        
     }
 
     const handleMemberSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

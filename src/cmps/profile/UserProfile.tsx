@@ -45,7 +45,10 @@ export default function UserProfile() {
 
     if (file && userId) {
       try {
-        const response = await uploadProfilePicture(parseInt(userId), file);
+        console.log("uploading file: " + file?.name);
+        const response = await uploadProfilePicture(userId, file);
+
+        // Update the local user data to include the newly uploaded profile picture
         setUserData(
           (prevUserData) =>
             prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }

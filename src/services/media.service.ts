@@ -2,23 +2,29 @@ import axios from "axios";
 import { throwAxiosErr } from "./error.service";
 
 const mediaServiceUrl = 
+    import.meta.env.VITE_BASE_URL +
+    import.meta.env.VITE_API_GATEWAY_URL + 
     import.meta.env.VITE_MEDIA_SERVICE_URL;
 
     const cmpName = "Media-Service";
 
 export async function uploadProfilePicture(
-    userId: number,
+    userId: string,
     file: File
     ) {
     console.log(cmpName, "Uploading profile picture for user with ID: " + userId);
     
-        // Prepare the form data
+    // Prepare the form data
     const formData = new FormData();
     formData.append("file", file); // The file to be uploaded
-    formData.append(
-        "uploadInfo", 
-        JSON.stringify({ ownerUserId: userId }) // The additional data as a JSON string
-    );
+
+    // Create a Blob for the uploadInfo to specify the Content-Type as application/json
+    const uploadInfoBlob = new Blob([JSON.stringify({ ownerUserId: userId })], {
+        type: "application/json",
+    });
+
+    formData.append("uploadInfo", uploadInfoBlob);
+
 
     // Send a request to the Media Service to upload the profile picture of the user.
     try {
@@ -26,7 +32,7 @@ export async function uploadProfilePicture(
         .create({
             baseURL: mediaServiceUrl,
             headers: {
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
             },
             withCredentials: true,
         })

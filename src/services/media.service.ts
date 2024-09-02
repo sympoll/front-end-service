@@ -8,11 +8,15 @@ const mediaServiceUrl =
 
     const cmpName = "Media-Service";
 
-export async function uploadProfilePicture(
+export async function uploadProfileImage(
     userId: string,
-    file: File
+    file: File,
+    type: "profile picture" | "profile banner" | undefined
     ) {
-    console.log(cmpName, "Uploading profile picture for user with ID: " + userId);
+    if(type === undefined) {
+        console.error("cannot upload profile image, type is undefined.");
+    }
+    console.log(cmpName, "Uploading " + type + " for user with ID: " + userId);
     
     // Prepare the form data
     const formData = new FormData();
@@ -25,8 +29,7 @@ export async function uploadProfilePicture(
 
     formData.append("uploadInfo", uploadInfoBlob);
 
-
-    // Send a request to the Media Service to upload the profile picture of the user.
+    // Send a request to the Media Service to upload the profile image of the user.
     try {
         const response = await axios
         .create({
@@ -37,19 +40,21 @@ export async function uploadProfilePicture(
             withCredentials: true,
         })
         .post(
-            import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_PROFILE_PICTURE,
+            type === "profile picture" ? 
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_PROFILE_PICTURE : 
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_PROFILE_BANNER,
             formData
         );
     
-        console.log(cmpName, "Successfully uploaded profile picture for user with ID: " + userId);
+        console.log(cmpName, "Successfully uploaded " + type + " for user with ID: " + userId);
     
         return response.data;
     } catch (err) {
         console.error(
-        cmpName, "Error uploading profile picture for user with ID: " + userId +
+        cmpName, "Error uploading " + type + " for user with ID: " + userId +
             ". Error info: " +
             err
         );
         throw throwAxiosErr(err);
     }
-    }
+}

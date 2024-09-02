@@ -12,11 +12,62 @@
   border-radius: 20px;
 
   &__header {
-    @include flex-column;
     position: relative;
     margin-bottom: 20px;
     width: 100%;
     background: $mainColor-light0;
+  }
+
+  &__profile-banner-container {
+    position: relative;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    cursor: pointer;
+
+    &:hover .user-profile__profile-banner {
+      opacity: 0.8;
+    }
+  }
+
+  &__banner-img {
+    display: block;
+    height: auto;
+    border-radius: 10px;
+    width: 100%;
+    height: 200px;
+  }
+
+  &__upload-profile-banner-input {
+    display: none; // Hide the file input
+  }
+
+  &__profile-banner-menu {
+    position: absolute;
+    top: 102%;
+    left: 50%;
+    transform: translateX(-50%);
+    align-self: center;
+    width: fit-content;
+    background: rgb(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 6px;
+    z-index: 10;
+
+    button {
+      background: none;
+      border: none;
+      color: #4b3832;
+      font-weight: bold;
+      font-size: 12px;
+      cursor: pointer;
+
+      &:hover {
+        color: #ff7f50;
+      }
+    }
   }
 
   &__profile-picture-container {
@@ -32,9 +83,9 @@
     }
   }
 
-  &__profile-picture {
-    width: 100px;
-    height: 100px;
+  &__profile-img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     border: 4px solid #ffe4b5;
     background-color: #ffe4b5;
@@ -49,7 +100,7 @@
 
   &__profile-picture-menu {
     position: absolute;
-    top: 108px;
+    top: 102%;
     left: 0;
     width: fit-content;
     background: rgb(255, 255, 255, 0.8);
@@ -72,16 +123,6 @@
     }
   }
 
-  &__banner-img {
-    align-self: center;
-    margin-top: 20px;
-    max-width: 90%;
-    width: 600px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-  }
-
   &__details {
     align-self: center;
     display: flex;
@@ -90,9 +131,7 @@
     width: 600px;
     padding: 20px;
     padding-top: 10px;
-    margin-inline: 30px;
-    margin-top: -20px;
-    margin-left: 30px;
+    margin-top: -24px;
   }
 
   &__title {
@@ -163,11 +202,9 @@
       height: auto; /* Adjust height automatically */
     }
 
-    &__profile-picture {
+    &__profile-img {
       width: 80px; /* Reduce profile picture size */
       height: 80px; /* Reduce profile picture size */
-      margin-right: 10px; /* Adjust margins for smaller size */
-      margin-left: 10px; /* Adjust margins for smaller size */
     }
 
     &__username {
@@ -191,7 +228,7 @@
       border-radius: 6px;
     }
 
-    &__profile-picture {
+    &__profile-img {
       width: 60px; /* Further reduce profile picture size */
       height: 60px; /* Further reduce profile picture size */
     }

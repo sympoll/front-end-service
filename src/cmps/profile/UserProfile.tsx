@@ -5,7 +5,7 @@ import { fetchUserData } from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { uploadProfilePicture } from "../../services/media.service";
+import { uploadProfileImage } from "../../services/media.service";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -13,6 +13,7 @@ export default function UserProfile() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
+  const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
 
   const defaultProfilePictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_PICTURE;
   const defaultBannerPictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_BANNER;
@@ -39,22 +40,45 @@ export default function UserProfile() {
       });
   }, [userId]);
 
-  const handleProfilePictureUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     console.log("Profile picture was added, uploading...");
     const file = event.target.files?.[0];
 
     if (file && userId) {
-      try {
-        console.log("uploading file: " + file?.name);
-        const response = await uploadProfilePicture(userId, file);
+      const targetId = event.target.id;
 
-        // Update the local user data to include the newly uploaded profile picture
-        setUserData(
-          (prevUserData) =>
-            prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
-        );
-      } catch (error) {
-        console.error("Failed to upload profile picture: ", error);
+      if (targetId === "profile-picture-upload-input") {
+        console.log("Profile picture input was clicked");
+
+        try {
+          console.log("uploading file: " + file?.name);
+          const response = await uploadProfileImage(userId, file, "profile picture");
+
+          // Update the local user data to include the newly uploaded profile picture
+          setUserData(
+            (prevUserData) =>
+              prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
+          );
+        } catch (error) {
+          console.error("Failed to upload profile picture: ", error);
+        }
+      } else if (targetId === "profile-banner-upload-input") {
+        console.log("Profile banner input was clicked");
+
+        try {
+          console.log("uploading file: " + file?.name);
+          const response = await uploadProfileImage(userId, file, "profile banner");
+
+          // Update the local user data to include the newly uploaded profile banner
+          setUserData(
+            (prevUserData) =>
+              prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
+          );
+        } catch (error) {
+          console.error("Failed to upload profile banner: ", error);
+        }
+      } else {
+        console.error("Unknown input");
       }
     }
   };
@@ -68,6 +92,10 @@ export default function UserProfile() {
 
   const toggleProfilePictureMenu = () => {
     setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
+  };
+
+  const toggleProfileBannerMenu = () => {
+    setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
   };
 
   if (errorMessage) {
@@ -85,11 +113,32 @@ export default function UserProfile() {
   return (
     <div className="user-profile">
       <div className="user-profile__header">
-        <img
-          src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultBannerPictureUrl}
-          alt="Banner"
-          className="user-profile__banner-img"
-        />
+        <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
+          <div>
+            <img
+              src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultBannerPictureUrl}
+              alt="Banner"
+              className="user-profile__banner-img"
+            />
+          </div>
+          {isProfileBannerMenuVisible && (
+            <div className="user-profile__profile-banner-menu">
+              <button
+                onClick={() => document.getElementById("profile-picture-upload-input")?.click()}
+              >
+                Upload Profile Banner
+              </button>
+            </div>
+          )}
+          <input
+            id="profile-banner-upload-input"
+            type="file"
+            accept="image/*"
+            title=""
+            className="user-profile__upload-profile-banner-input"
+            onChange={handleProfileImageUpload}
+          />
+        </div>
         <div className="user-profile__details">
           <div
             className="user-profile__profile-picture-container"
@@ -101,7 +150,7 @@ export default function UserProfile() {
                   userData.profilePictureUrl ? userData.profilePictureUrl : defaultProfilePictureUrl
                 }
                 alt="Profile"
-                className="user-profile__profile-picture"
+                className="user-profile__profile-img"
               />
             </div>
             {isProfilePictureMenuVisible && (
@@ -114,12 +163,12 @@ export default function UserProfile() {
               </div>
             )}
             <input
-              id="profile-picture-upload-input"
+              id="profile-banner-upload-input"
               type="file"
               accept="image/*"
               title=""
               className="user-profile__upload-profile-picture-input"
-              onChange={handleProfilePictureUpload}
+              onChange={handleProfileImageUpload}
             />
           </div>
           <div className="user-profile__title">

@@ -1,6 +1,7 @@
 import { FormEvent, useState } from "react";
 import { useMembers } from "../../context/MemebersContext";
 import CloseButton from "../global/CloseButton";
+import { createUserRole } from "../../services/group.service";
 
 
 interface ModifyRolesPopupProps {
@@ -35,6 +36,24 @@ interface ModifyRolesPopupProps {
         }
     }
 
+    const handleRoleSet = () => {
+        if(selectedRole === "Member"){
+            createUserRole(selectedMemberId, groupId, selectedRole)
+            .then(() => {
+
+            })
+
+        }else {
+            if(selectedMemberRole === "Member"){
+
+            }else{
+
+            }
+        }
+
+        
+    }
+
     const handleMemberSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedMemberId(event.target.value);
         setSelectedMemberRole(members?.find((member) => member.userId === event.target.value)?.roleName ?? "");
@@ -45,7 +64,6 @@ interface ModifyRolesPopupProps {
         setSelectedRole(event.target.value);
     };
 
-      
     return (
         <div className="modify-roles-popup-overlay" onClick={onClose}>
             <div className="modify-roles-popup-container" onClick={(e) => e.stopPropagation()}>

@@ -12,11 +12,8 @@ export default function UserProfile() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
 
-  // TODO: pull image urls from server
-  const profilePictureUrl =
-    "https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg";
-  const bannerPictureUrl =
-    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e1fc0f08-7c3c-4224-b34b-1fe510feb6fd/d51vvz0-03d69283-b7d4-495e-82f8-5103f09d2b9a.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2UxZmMwZjA4LTdjM2MtNDIyNC1iMzRiLTFmZTUxMGZlYjZmZFwvZDUxdnZ6MC0wM2Q2OTI4My1iN2Q0LTQ5NWUtODJmOC01MTAzZjA5ZDJiOWEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.G5uPqH18xVbG7tywZNXVjRmX0W1_bfNbi1cvdR6XZXw";
+  const defaultProfilePictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_PICTURE;
+  const defaultBannerPictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_BANNER;
 
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
 
@@ -62,9 +59,17 @@ export default function UserProfile() {
   return (
     <div className="user-profile">
       <div className="user-profile__header">
-        <img src={bannerPictureUrl} alt="Banner" className="user-profile__banner-img" />
+        <img
+          src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultBannerPictureUrl}
+          alt="Banner"
+          className="user-profile__banner-img"
+        />
         <div className="user-profile__details">
-          <img src={profilePictureUrl} alt="Profile" className="user-profile__profile-picture" />
+          <img
+            src={userData.profilePictureUrl ? userData.profilePictureUrl : defaultProfilePictureUrl}
+            alt="Profile"
+            className="user-profile__profile-picture"
+          />
           <div className="user-profile__title">
             <h1 className="user-profile__username">{capitalizeWords(userData.username)}</h1>
             <h2 className="user-profile__email">{userData.email}</h2>

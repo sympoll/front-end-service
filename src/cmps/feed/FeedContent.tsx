@@ -20,6 +20,7 @@ export default function FeedContent() {
 
   // Initial fetch on component render
   useEffect(() => {
+    setIsLoading(true);
     setPolls([]); // clear poll data in feed when changing groups
     updatePolls();
   }, [groupId]);
@@ -34,15 +35,15 @@ export default function FeedContent() {
         fetchedPolls = await fetchAllUserGroupsPolls();
       }
 
+      setIsLoading(false);
       removeErrorFromFeed();
       setPolls(fetchedPolls);
     } catch (err) {
       console.error(cmpName + err);
-      setError(err.message);
+      const error = err as Error;
+      setError(error.message);
       setIsLoading(false);
-    } finally {
-      if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
-    }
+    } 
   }, [groupId]);
 
   useEffect(() => {

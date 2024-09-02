@@ -48,9 +48,14 @@ export default function Poll({
   isSpecificGroup
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
-  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>([]); // States array of the checked state of each voting item (checked/unchecked)
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
+  const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
+    votingItems.map((vItem) => ({
+      votingItemId: vItem.votingItemId,
+      isChecked: vItem.checked // Set isChecked based on the 'chosen' property
+    }))
+  );
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);

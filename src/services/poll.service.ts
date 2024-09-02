@@ -65,7 +65,7 @@ export async function fetchPollsByGroupId(groupId: string) {
         withCredentials: true
       })
       .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, {
-        params: { groupId }
+        params: { groupId, userId }
       });
 
     console.log(cmpName, "get polls successful");

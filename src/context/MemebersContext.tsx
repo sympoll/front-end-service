@@ -7,12 +7,14 @@ const MembersContext = createContext<{
     isChanged: boolean;
     setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
     setNewRoleToUser: (userId: string, roleName: string) => void;
+    getMemberRole: (userId: string) => string;
 }>({
     members: undefined,
     setMembers: () => {},
     isChanged: false,
     setIsChanged: () => {},
-    setNewRoleToUser: () => {} 
+    setNewRoleToUser: () => {},
+    getMemberRole: () => ""
 });
 
 export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -22,11 +24,7 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const setNewRoleToUser = (userId: string, roleName: string) => {
         setMembers(prevMembers => {
             if (!prevMembers) return prevMembers;
-    
-            // Debugging output to check values
-            console.log('Previous Members:', prevMembers);
-            console.log('Updating user:', userId, 'to role:', roleName);
-    
+
             const updatedMembers = prevMembers.map(member => {
                 if (member.userId === userId) {
                     console.log('Updating member:', member);
@@ -34,18 +32,18 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 }
                 return member;
             });
-    
-            // Debugging output to verify update
-            console.log('Updated Members:', updatedMembers);
-    
-            setIsChanged(prev => !prev); // Toggle the change state
-    
+
+            setIsChanged(prev => !prev); 
             return updatedMembers;
         });
     };
 
+    const getMemberRole = (userId: string) => {
+        return members?.find((member) => member.userId === userId)?.roleName ?? "";
+    }
+
     return (
-        <MembersContext.Provider value={{ members, setMembers, isChanged, setIsChanged, setNewRoleToUser }}>
+        <MembersContext.Provider value={{ members, setMembers, isChanged, setIsChanged, setNewRoleToUser, getMemberRole }}>
             {children}
         </MembersContext.Provider>
     );

@@ -27,7 +27,6 @@ interface ModifyRolesPopupProps {
             deleteUserRole(selectedMemberId, groupId, selectedMemberRole)
             .then(() => {
                 setNewRoleToUser(selectedMemberId, "Member");
-                setIsChanged(!isChanged);
                 onClose();
             })
             .catch((error) => {
@@ -43,19 +42,16 @@ interface ModifyRolesPopupProps {
                 .then(() => {
                     setNewRoleToUser(selectedMemberId, selectedRole);
                     console.log("Current members: ", members);
-                    setIsChanged(!isChanged);
                     onClose();
                 })
                 .catch((error) => {
                     console.log("Unable to set role to " + userId);
-                    setIsChanged(!isChanged);
                     setErrorMessage(String(error));
                 })
             }else{ // User is currently not a simple member
                 updateUserRole(selectedMemberId, groupId, selectedRole)
                 .then(() => {
                     setNewRoleToUser(selectedMemberId, selectedRole);
-                    setIsChanged(!isChanged);
                     onClose();
                 })
                 .catch((error) => {

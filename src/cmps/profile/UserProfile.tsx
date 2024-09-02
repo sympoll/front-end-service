@@ -124,7 +124,7 @@ export default function UserProfile() {
           {isProfileBannerMenuVisible && (
             <div className="user-profile__profile-banner-menu">
               <button
-                onClick={() => document.getElementById("profile-picture-upload-input")?.click()}
+                onClick={() => document.getElementById("profile-banner-upload-input")?.click()}
               >
                 Upload Profile Banner
               </button>
@@ -163,7 +163,7 @@ export default function UserProfile() {
               </div>
             )}
             <input
-              id="profile-banner-upload-input"
+              id="profile-picture-upload-input"
               type="file"
               accept="image/*"
               title=""

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
-import { fetchGroupData, removeMemberFromGroup } from "../../services/group.service";
+import { deleteGroupById, fetchGroupData, removeMemberFromGroup } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
@@ -67,7 +67,19 @@ export default function GroupInfo() {
     setIsRemoveMemberPopupOpen(true);
   };
 
-  const onDeleteGroupClick = () => {};
+  const onDeleteGroupClick = () => {
+    if(groupId){
+      deleteGroupById(groupId)
+        .then(() => {
+          setGroups((prevGroups) => prevGroups?.filter((group) => group.groupId !== groupId));
+          navigate("/feed");
+        })
+        .catch((error) => {
+          console.log("Unable to delete the group with ID " + groupId);
+          setErrorMessage(String(error));
+        });
+    }
+  };
 
   const onModifyRolesClick = () => {};
 

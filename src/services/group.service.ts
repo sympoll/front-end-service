@@ -159,3 +159,24 @@ export async function addMemberToGroup(groupId:string, username:string) : Promis
     throw throwAxiosErr(err);;
   }
 }
+
+export async function deleteGroupById(groupId:string) {
+  console.log("Send request to delte the group '" + groupId +"'.");
+ 
+    try {
+      const response = await axios.delete(groupServiceUrl, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+          params: {
+            groupId: groupId,
+          },
+        });
+    
+    return response.data;
+  } catch (err) {
+    console.error("Error deleting the group '" + groupId +"'.");
+    throw throwAxiosErr(err);;
+  }
+}

@@ -16,7 +16,7 @@ interface ModifyRolesPopupProps {
     const [selectedRole, setSelectedRole] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [isMemberSelected, setIsMemberSelected] = useState<boolean>(false);
-    const {members, setMembers, isChanged, setIsChanged, setNewRoleToUser} = useMembers();
+    const {members, isChanged, setIsChanged, setNewRoleToUser} = useMembers();
     
     const [roles, setRoles] = useState<string[]>(["Admin", "Moderator", "Member"]);
 
@@ -27,6 +27,8 @@ interface ModifyRolesPopupProps {
             deleteUserRole(selectedMemberId, groupId, selectedMemberRole)
             .then(() => {
                 setNewRoleToUser(selectedMemberId, "Member");
+                setIsChanged(!isChanged);
+                onClose();
             })
             .catch((error) => {
                 console.log("Unable to set role to " + userId);
@@ -40,15 +42,21 @@ interface ModifyRolesPopupProps {
                 createUserRole(selectedMemberId, groupId, selectedRole)
                 .then(() => {
                     setNewRoleToUser(selectedMemberId, selectedRole);
+                    console.log("Current members: ", members);
+                    setIsChanged(!isChanged);
+                    onClose();
                 })
                 .catch((error) => {
                     console.log("Unable to set role to " + userId);
+                    setIsChanged(!isChanged);
                     setErrorMessage(String(error));
                 })
             }else{ // User is currently not a simple member
                 updateUserRole(selectedMemberId, groupId, selectedRole)
                 .then(() => {
                     setNewRoleToUser(selectedMemberId, selectedRole);
+                    setIsChanged(!isChanged);
+                    onClose();
                 })
                 .catch((error) => {
                     console.log("Unable to set role to " + userId);

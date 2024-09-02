@@ -22,14 +22,24 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const setNewRoleToUser = (userId: string, roleName: string) => {
         setMembers(prevMembers => {
             if (!prevMembers) return prevMembers;
-
-            const updatedMembers = prevMembers.map(member => 
-                member.userId === userId 
-                    ? { ...member, role: roleName } 
-                    : member
-            );
-
-            setIsChanged(!isChanged);
+    
+            // Debugging output to check values
+            console.log('Previous Members:', prevMembers);
+            console.log('Updating user:', userId, 'to role:', roleName);
+    
+            const updatedMembers = prevMembers.map(member => {
+                if (member.userId === userId) {
+                    console.log('Updating member:', member);
+                    return { ...member, roleName: roleName };
+                }
+                return member;
+            });
+    
+            // Debugging output to verify update
+            console.log('Updated Members:', updatedMembers);
+    
+            setIsChanged(prev => !prev); // Toggle the change state
+    
             return updatedMembers;
         });
     };

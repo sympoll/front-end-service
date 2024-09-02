@@ -125,9 +125,9 @@ function convertSecondsPassedToString(diffInSeconds: number): string {
   const delimiter = ", ";
 
   if (daysStr) {
-    return daysStr + delimiter + hoursStr;
+    return hoursStr ? daysStr + delimiter + hoursStr : daysStr;
   } else if (hoursStr) {
-    return hoursStr + delimiter + minutesStr;
+    return minutesStr ? hoursStr + delimiter + minutesStr : hoursStr;
   } else if (minutesStr) {
     return minutesStr;
   } else {

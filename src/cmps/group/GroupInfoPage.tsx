@@ -66,6 +66,8 @@ export default function GroupInfo() {
     }else if(userRole === "Moderator"){
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
+      setIsUserHasPermissionToRmvGroup(false);
+      setIsUserHasPermissionToModRoles(false);
     }
   }
 

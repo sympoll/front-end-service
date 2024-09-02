@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import CloseButton from "../global/CloseButton";
-import { addMemberToGroup, removeMemberFromGroup } from "../../services/group.service";
+import { removeMemberFromGroup } from "../../services/group.service";
 import { useMembers } from "../../context/MemebersContext";
 
 

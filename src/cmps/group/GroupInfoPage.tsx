@@ -9,6 +9,7 @@ import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useGroups } from "../../context/GroupsContext";
 import AddMemberPopup from "../popup/AddMemberPopup";
 import RemoveMemberPopup from "../popup/RemoveMemberPopup";
+import ModifyRolesPopup from "../popup/ModifyRolesPopup";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
@@ -21,6 +22,7 @@ export default function GroupInfo() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
   const [isRemoveMemberPopupOpen, setIsRemoveMemberPopupOpen] = useState<boolean>(false);
+  const [isModifyRolesPopupOpen, setIsModifyRolesPopupOpen] = useState<boolean>(false);
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -69,7 +71,9 @@ export default function GroupInfo() {
 
   const onDeleteGroupClick = () => {};
 
-  const onModifyRolesClick = () => {};
+  const onModifyRolesClick = () => {
+    setIsModifyRolesPopupOpen(true);
+  };
 
 
   if (errorMessage) {
@@ -115,6 +119,7 @@ export default function GroupInfo() {
       </div>
       {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
       {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
+      {isModifyRolesPopupOpen && groupId && <ModifyRolesPopup groupId={groupId} userId={userId} onClose={() => setIsModifyRolesPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>

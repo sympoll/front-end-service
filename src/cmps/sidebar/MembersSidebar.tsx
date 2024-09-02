@@ -6,11 +6,12 @@ import { GroupMember } from "../../models/GroupMember.model";
 import { fetchGroupMembers } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { useMembers } from "../../context/MemebersContext";
 
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const [members, setMembers] = useState<GroupMember[]>([]);
+  const { members, setMembers, isChanged, sortMembers } = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -19,20 +20,21 @@ export default function MembersSidebar() {
 
   // Initial fetch on component render
   useEffect(() => {
-    setIsLoading(true);
     updateMembers();
-    setIsLoading(false);
-  }, [groupId]);
+  }, [groupId, userId]);
 
   const updateMembers = useCallback(async () => {
     if (groupId && !userId) {
+      setIsLoading(true);
       setIsShowingAllGroups(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
-        setMembers(fetchedMembers);
+        setMembers(sortMembers(fetchedMembers));
+        setIsLoading(false);
       } catch (error) {
         console.error(cmpName + error);
-      }
+        setIsLoading(false);
+      } 
     } else {
       if (!userId) {
         setIsShowingAllGroups(true);
@@ -49,17 +51,23 @@ export default function MembersSidebar() {
     };
   }, [registerForUpdate, updateMembers]);
 
+  useEffect(() => {
+    if (members) {
+      setMembers(sortMembers(members));
+    }
+  }, [isChanged]);
+
   return (
     <div className="members-sidebar-container">
       <div className={`members-sidebar-title ${!isShowingAllGroups ? "with-border" : ""}`}>
         {!isShowingAllGroups && "Group Members:"}
       </div>
       <ul className="members-sidebar-members-container">
-        {isLoading && (
+        {isLoading && !isShowingAllGroups &&(
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
-          members.map((member) => (
+          members?.map((member) => (
             <MembersSidebarItem
               key={member.userId}
               name={member.username}

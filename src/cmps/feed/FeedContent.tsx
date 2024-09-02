@@ -20,9 +20,9 @@ export default function FeedContent() {
 
   // Initial fetch on component render
   useEffect(() => {
-    setIsLoading(true); // Start loading state
+    setIsLoading(true);
+    setPolls([]); // clear poll data in feed when changing groups
     updatePolls();
-    setIsLoading(false);
   }, [groupId]);
 
   // Function to update polls with the latest data
@@ -32,9 +32,10 @@ export default function FeedContent() {
       if (groupId) {
         fetchedPolls = await fetchPollsByGroupId(groupId);
       } else {
-        fetchedPolls = await fetchAllUserGroupsPolls(0); // TODO: Replace this with userId
+        fetchedPolls = await fetchAllUserGroupsPolls();
       }
 
+      setIsLoading(false);
       removeErrorFromFeed();
       setPolls(fetchedPolls);
     } catch (err) {
@@ -46,7 +47,7 @@ export default function FeedContent() {
         setError("An unknown error occurred");
       }
       setIsLoading(false);
-    }
+    } 
   }, [groupId]);
 
   useEffect(() => {

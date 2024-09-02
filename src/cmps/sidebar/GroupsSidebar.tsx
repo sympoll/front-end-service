@@ -8,7 +8,7 @@ import CreateGroupPopup from "../popup/CreateGroupPopup";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
 import { fetchUserGroups } from "../../services/group.service";
-import { useGroups } from "../../context/GroupContext";
+import { useGroups } from "../../context/GroupsContext";
 
 export default function GroupsSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -22,9 +22,7 @@ export default function GroupsSidebar() {
 
   // Effect to fetch groups data on component mount or userId change
   useEffect(() => {
-    setIsLoading(true); // Start loading state
     updateGroups();
-    setIsLoading(false);
   }, [userId]);
 
   // Function to update groups with the latest data
@@ -35,6 +33,8 @@ export default function GroupsSidebar() {
     } catch (error) {
       console.error(cmpName + error);
       setIsLoading(false);
+    } finally {
+      if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
     }
   }, [userId]);
 

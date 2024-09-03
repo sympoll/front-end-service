@@ -9,26 +9,29 @@ import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
 import { fetchUserGroups } from "../../services/group.service";
 import { useGroups } from "../../context/GroupsContext";
+import { UserData } from "../../models/UserData.model";
 
-export default function GroupsSidebar() {
+interface GroupsSidebarProps {
+  userData: UserData;
+}
+
+export default function GroupsSidebar({ userData }: GroupsSidebarProps) {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { groups, setGroups } = useGroups();
 
-  // TODO: Change username to the current user dynamically
-  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const cmpName = "GROUP_SIDEBAR ";
 
   // Effect to fetch groups data on component mount or userId change
   useEffect(() => {
     updateGroups();
-  }, [userId]);
+  }, [userData.userId]);
 
   // Function to update groups with the latest data
   const updateGroups = useCallback(async () => {
     try {
-      const fetchedGroups = await fetchUserGroups(userId);
+      const fetchedGroups = await fetchUserGroups(userData.userId);
       setGroups(fetchedGroups);
     } catch (error) {
       console.error(cmpName + error);
@@ -36,7 +39,7 @@ export default function GroupsSidebar() {
     } finally {
       if (isLoading) setIsLoading(false); // End initial loading state after fetching or error
     }
-  }, [userId]);
+  }, [userData.userId]);
 
   useEffect(() => {
     // Register the updateGroups function and handle unregistration
@@ -51,7 +54,7 @@ export default function GroupsSidebar() {
 
   return (
     <div className="groups-sidebar-container">
-      <UserInfoSidebarItem username="Moishe" email="moishe@gmail.com" />
+      <UserInfoSidebarItem userData={userData} />
       <ul className="groups-sidebar-groups-list">
         <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
         {isLoading ? (
@@ -68,7 +71,9 @@ export default function GroupsSidebar() {
         )}
       </ul>
       <CreateGroupButton onClick={openPopup} />
-      {isPopupOpen && <CreateGroupPopup userId={userId} onClose={closePopup} groups={groups} />}
+      {isPopupOpen && (
+        <CreateGroupPopup userId={userData.userId} onClose={closePopup} groups={groups} />
+      )}
     </div>
   );
 }

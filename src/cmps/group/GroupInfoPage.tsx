@@ -167,7 +167,7 @@ export default function GroupInfo() {
         </CustomButton>
         )}
         {isUserHasPermissionToRmvGroup && (
-        <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="dark">
+        <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="warning">
           Delete Group
         </CustomButton>
         )}

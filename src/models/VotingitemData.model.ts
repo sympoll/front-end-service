@@ -1,5 +1,6 @@
 export interface VotingItemData {
     votingItemId: number;
+    checked: boolean;
     description: string;
     voteCount: number;
 }

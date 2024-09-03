@@ -25,7 +25,7 @@ export default function CreatePollForm({
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
-    nofAnswersAllowed: undefined,
+    nofAnswersAllowed: 1,
     creatorId: import.meta.env.VITE_DEBUG_USER_ID, // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
@@ -196,11 +196,9 @@ export default function CreatePollForm({
             </CustomButton>
           )}
         </div>
-        <p>
-          {isErrorPopupVisible && (
-            <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />
-          )}
-        </p>
+        {isErrorPopupVisible && (
+          <ErrorPopup message={errorMessage} closeErrorPopup={closeErrorPopup} />
+        )}
       </form>
     </div>
   );

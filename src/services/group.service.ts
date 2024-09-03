@@ -69,8 +69,8 @@ export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
   }
 }
 
-export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]> {
-  console.log(svcName,"Sending request to get members of group:'" + groupId + "'");
+export async function fetchGroupMembers(groupId: string) : Promise<GroupMember[]> {
+  console.log(svcName,"Sending request to get members of group: '" + groupId + "'");
 
   try{
     const response = await axios

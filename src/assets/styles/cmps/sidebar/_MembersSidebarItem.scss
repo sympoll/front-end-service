@@ -41,3 +41,11 @@
   max-width: 120px;
   font-size: 12px;
 }
+
+.members-sidebar-profile-img {
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}

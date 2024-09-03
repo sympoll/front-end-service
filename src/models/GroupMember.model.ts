@@ -1,5 +1,6 @@
+import { UserData } from "./UserData.model";
+
 export interface GroupMember{
-    userId: string,
-    username: string,
+    userData: UserData;
     roleName: string;
 }

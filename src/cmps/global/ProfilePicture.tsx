@@ -20,10 +20,15 @@ export default function ProfilePicture({
       style={{
         width: size,
         height: size,
-        cursor: onClick ? "pointer" : "default"
+        cursor: onClick ? "pointer" : ""
       }}
     >
-      <img className="profile-picture-image" src={imageUrl} alt={altText}></img>
+      <img
+        className="profile-picture-image"
+        style={{ width: size, height: size }}
+        src={imageUrl}
+        alt={altText}
+      ></img>
     </div>
   );
 }

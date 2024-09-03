@@ -91,7 +91,7 @@ export default function Poll({
 
   // On checkbox click, progress and voting count is updated
   // Returns true if changed progress, false otherwise
-  function handleNewProgress(inputId: string, inputIsInc: boolean) {
+  function handleNewProgress(inputId: number, inputIsInc: boolean) {
     if (
       shouldPreventProgressUpdate(
         inputIsInc,

@@ -2,6 +2,7 @@ import React, { useState, FormEvent, useEffect } from "react";
 import { createNewGroup } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import CloseButton from "../global/CloseButton";
+import { useNavigate } from "react-router-dom";
 
 interface CreateGroupPopupProps {
   userId: string;
@@ -15,25 +16,23 @@ export default function CreateGroupPopup({ userId, onClose, groups=[] }: CreateG
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [submitButtonText, setSubmitButtonText] = useState<string>("Create Group");
   const [isCreating, setIsCreating] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
      try {
-      if (!groups) {
-        return;
-      }
-
-      groups.push(
-        await createNewGroup(
-          groupName,
-          groupDescription,
-          userId,
-          setIsCreating,
-          setSubmitButtonText
-        )
+      const newCreatedGroup = await createNewGroup(
+        groupName,
+        groupDescription,
+        userId,
+        setIsCreating,
+        setSubmitButtonText
       );
+
+      groups.push(newCreatedGroup);
       console.log("New Group Created:", groupName);
       onClose(); // Close the popup after submission
+      navigate("/feed/" + newCreatedGroup.groupId); // Redirect page to the new group feed.
     } catch (err) {
       setErrorMessage(String(err));
     }

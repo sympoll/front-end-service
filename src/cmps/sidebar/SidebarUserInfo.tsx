@@ -1,22 +1,24 @@
 import React from "react";
 import ProfilePicture from "../global/ProfilePicture";
+import { UserData } from "../../models/UserData.model";
+import { useNavigate } from "react-router-dom";
 
 interface SidebarUserInfoProps {
-  username: string;
-  email: string;
+  userData: UserData;
 }
 
-export default function SidebarUserInfo({ username, email }: SidebarUserInfoProps) {
-  // TODO: pull image url from server
-  const imageUrl =
-    "https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg";
+export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
+  const navigate = useNavigate();
 
   return (
     <div className="sidebar-user-info-container">
-      <ProfilePicture imageUrl={imageUrl} />
+      <ProfilePicture
+        imageUrl={userData.profilePictureUrl}
+        onClick={() => navigate(`/${userData.userId}`)}
+      />
       <div className="sidebar-user-info-data">
-        <p>{username}</p>
-        <p>{email}</p>
+        <p>{userData.username}</p>
+        <p>{userData.email}</p>
       </div>
     </div>
   );

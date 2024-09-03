@@ -1,16 +1,16 @@
-export interface VotingItemData {
-  votingItemId: string;
-  description: string;
-  checked: boolean;
-  voteCount: number;
+export interface VotingItemIsChecked {
+    isChecked: boolean;
+    votingItemId: number;
+    description: string;
+    voteCount: number;
 }
 
 export interface VotingItemProgress {
-  votingItemId: string;
-  progress: number;
+    votingItemId: number;
+    progress: number;
 }
 
 export interface VotingItemIsChecked {
-  votingItemId: string;
-  isChecked: boolean;
+    votingItemId: number;
+    isChecked: boolean;
 }

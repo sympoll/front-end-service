@@ -136,7 +136,7 @@ function convertSecondsPassedToString(diffInSeconds: number): string {
 }
 
 // Calculates the progress percentage for a given voting item based on the total votes
-export const getProgress = (votingItemId: string, votingItemsData: VotingItemData[]): number => {
+export const getProgress = (votingItemId: number, votingItemsData: VotingItemData[]): number => {
   let totalCount = 0;
   let changedItem: VotingItemData | undefined;
 
@@ -153,7 +153,7 @@ export const getProgress = (votingItemId: string, votingItemsData: VotingItemDat
 
 // Checks if a specific voting item is currently checked
 export const getIsChecked = (
-  votingItemId: string,
+  votingItemId: number,
   isCheckedStates: VotingItemIsChecked[]
 ): boolean => {
   // Returns true if the item is checked, otherwise false
@@ -165,7 +165,7 @@ export const getIsChecked = (
 
 // Updates vote counts of voting items based on user interaction
 export const getUpdatedVoteCounts = (
-  inputId: string,
+  inputId: number,
   inputIsInc: boolean,
   votingItemsData: VotingItemData[],
   isCheckedStates: VotingItemIsChecked[],
@@ -193,7 +193,7 @@ export const getUpdatedVoteCounts = (
 
 // Updates the checked states of voting items based on user interaction
 export const getUpdatedCheckedStates = (
-  inputId: string,
+  inputId: number,
   inputIsInc: boolean,
   votingItemsData: VotingItemData[],
   isCheckedStates: VotingItemIsChecked[],
@@ -239,7 +239,7 @@ export const countCheckedItems = (isCheckedStates: VotingItemIsChecked[]): numbe
 };
 
 // Sends a request to vote or remove a vote for a specific voting item
-export async function sendRequestToVoteService(isChecked: boolean, votingItemId: string) {
+export async function sendRequestToVoteService(isChecked: boolean, votingItemId: number) {
   try {
     // Vote on the item if checked, remove the vote if unchecked
     if (isChecked) {

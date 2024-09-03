@@ -10,6 +10,7 @@ const userServiceUrl =
 
 
 export async function fetchUserData(userId : string) : Promise<UserData> {
+    console.log("Fetching user data for user with ID: " + userId);
     try {
         const response = await axios
             .create({
@@ -23,7 +24,7 @@ export async function fetchUserData(userId : string) : Promise<UserData> {
 
         return response.data;
     } catch (err) {
-        console.error("Error signing up the user: " + userId + ".");
+        console.error("Error fetching user info for user with ID: " + userId + ".");
         throw throwAxiosErr(err);
     }
 }

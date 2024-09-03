@@ -2,7 +2,7 @@ import VotingCheckbox from "./VotingCheckbox";
 import VotingBar from "./VotingBar";
 
 interface VotingItemProps {
-  votingItemID: string;
+  votingItemID: number;
   description: string;
   voteCount: number;
   progress: number;

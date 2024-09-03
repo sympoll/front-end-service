@@ -11,6 +11,7 @@ import AddMemberPopup from "../popup/AddMemberPopup";
 import RemoveMemberPopup from "../popup/RemoveMemberPopup";
 import ModifyRolesPopup from "../popup/ModifyRolesPopup";
 import { useMembers } from "../../context/MemebersContext";
+import VerifyPopup from "../popup/VerifyPopup";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
@@ -25,10 +26,13 @@ export default function GroupInfo() {
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
   const [isRemoveMemberPopupOpen, setIsRemoveMemberPopupOpen] = useState<boolean>(false);
   const [isModifyRolesPopupOpen, setIsModifyRolesPopupOpen] = useState<boolean>(false);
+  const [isExitVerifyPopupOpen, setIsExitVerifyPopupOpen] = useState<boolean>(false);
+  const [isDeleteVerifyPopupOpen, setIsDeleteVerifyPopupOpen] = useState<boolean>(false);
   const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] = useState<boolean>(false);
   const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] = useState<boolean>(false);
   const [isUserHasPermissionToRmvGroup, setIsUserHasPermissionToRmvGroup] = useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] = useState<boolean>(false);
+  
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -63,7 +67,7 @@ export default function GroupInfo() {
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(true);
       setIsUserHasPermissionToModRoles(true);
-    }else if(userRole === "Moderator"){
+    }else if(userRole === "Moderator") {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(false);
@@ -71,7 +75,7 @@ export default function GroupInfo() {
     }
   }
 
-  const onExitGroupClick = () => {
+  const exitGroup = () => {
     if (groupId) {
       removeMemberFromGroup(groupId, userId)
         .then(() => {
@@ -85,15 +89,7 @@ export default function GroupInfo() {
     }
   };
 
-  const onAddMemberClick = () => {
-    setIsAddMemberPopupOpen(true);
-  };
-
-  const onRemoveMemberClick = () => {
-    setIsRemoveMemberPopupOpen(true);
-  };
-
-  const onDeleteGroupClick = () => {
+  const deleteGroup = () => {
     if(groupId){
       deleteGroupById(groupId)
         .then(() => {
@@ -107,10 +103,25 @@ export default function GroupInfo() {
     }
   };
 
+  const onExitGroupClick = () => {
+    setIsExitVerifyPopupOpen(true);
+  };
+
+  const onAddMemberClick = () => {
+    setIsAddMemberPopupOpen(true);
+  };
+
+  const onRemoveMemberClick = () => {
+    setIsRemoveMemberPopupOpen(true);
+  };
+
   const onModifyRolesClick = () => {
     setIsModifyRolesPopupOpen(true);
   };
 
+  const onDeleteGroupClick = () => {
+    setIsDeleteVerifyPopupOpen(true);
+  };
 
   if (errorMessage) {
     return <ContentPageMessage msgText={errorMessage} />;
@@ -161,9 +172,11 @@ export default function GroupInfo() {
         </CustomButton>
         )}
       </div>
+      {isExitVerifyPopupOpen && <VerifyPopup headlineMessage="leave the group?" OnClickYes={exitGroup} onClose={() => setIsExitVerifyPopupOpen(false)} />}
       {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
       {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
       {isModifyRolesPopupOpen && groupId && <ModifyRolesPopup groupId={groupId} userId={userId} onClose={() => setIsModifyRolesPopupOpen(false)} />}
+      {isDeleteVerifyPopupOpen && <VerifyPopup headlineMessage="delete the group?" OnClickYes={deleteGroup} onClose={() => setIsDeleteVerifyPopupOpen(false)} />}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>

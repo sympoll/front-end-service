@@ -1,0 +1,55 @@
+.verify-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .verify-popup-container {
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 100%;
+    position: relative;
+  }
+  
+  .verify-popup-container h2 {
+    color: black;
+    margin-top: 0;
+    margin-bottom: 15px;
+  }
+
+  .verify-popup-buttons{
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+  }
+  
+  .verify-popup-button {
+    color: $mainFontColor;
+    font-size: $mainFontSize;
+    background-color: $mainColor-light0;
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+    width: 120px;
+    height: 40px; 
+  }
+ 
+  @keyframes textColorChange {
+    100% {
+      color: black;
+    }
+  }

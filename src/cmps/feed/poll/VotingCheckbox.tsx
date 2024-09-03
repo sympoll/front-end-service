@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface VotingCheckboxProps {
-  votingItemId: string;
+  votingItemId: number;
   isChecked: boolean;
   handleNewProgress: Function;
   showErrorPopup: () => void;
@@ -37,7 +37,7 @@ export default function VotingCheckbox({
     <div className={`voting-checkbox-container ${shakeClass}`}>
       <div className="cbx">
         <input
-          id={votingItemId}
+          id={votingItemId.toString()}
           checked={isChecked}
           type="checkbox"
           onChange={handleCheckboxChange}

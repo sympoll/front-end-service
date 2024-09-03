@@ -6,7 +6,7 @@ interface BtnProps {
   onClick?(): void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
-  theme?: "dark" | "light";
+  theme?: "dark" | "light" | "warning";
 }
 
 export default function btn({

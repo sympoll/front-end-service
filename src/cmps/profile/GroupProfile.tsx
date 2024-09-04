@@ -43,6 +43,13 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [timePassed, setTimePassed] = useState<string>();
 
+  // Styling configurations:
+  const commandBarButtonsWidth = "100px";
+  const normalTheme = "dark";
+  const warningTheme = "warning";
+  const memberButtonsColor = "#5555c2";
+  const roleButtonsColor = "#148c14";
+
   // TODO: pull image urls from server
   const profilePictureUrl =
     "https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg";
@@ -167,26 +174,54 @@ export default function GroupInfo() {
         <hr className="group-info__divider" />
       </div>
       <div className="group-info__commands-bar">
-        <CustomButton onClick={onExitGroupClick} name="exit-group-btn" theme="dark">
-          Exit Group
-        </CustomButton>
         {isUserHasPermissionToAddMember && (
-          <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">
+          <CustomButton
+            onClick={onAddMemberClick}
+            name="add-member-btn"
+            theme={normalTheme}
+            width={commandBarButtonsWidth}
+            bgColor={memberButtonsColor}
+          >
             Add Member
           </CustomButton>
         )}
         {isUserHasPermissionToRmvMember && (
-          <CustomButton onClick={onRemoveMemberClick} name="delete-member-btn" theme="dark">
+          <CustomButton
+            onClick={onRemoveMemberClick}
+            name="delete-member-btn"
+            theme={normalTheme}
+            width={commandBarButtonsWidth}
+            bgColor={memberButtonsColor}
+          >
             Remove Member
           </CustomButton>
         )}
         {isUserHasPermissionToModRoles && (
-          <CustomButton onClick={onModifyRolesClick} name="modify-roles-btn" theme="dark">
+          <CustomButton
+            onClick={onModifyRolesClick}
+            name="modify-roles-btn"
+            theme={normalTheme}
+            width={commandBarButtonsWidth}
+            bgColor={roleButtonsColor}
+          >
             Modify Roles
           </CustomButton>
         )}
+        <CustomButton
+          onClick={onExitGroupClick}
+          name="exit-group-btn"
+          theme={warningTheme}
+          width={commandBarButtonsWidth}
+        >
+          Exit Group
+        </CustomButton>
         {isUserHasPermissionToRmvGroup && (
-          <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="warning">
+          <CustomButton
+            onClick={onDeleteGroupClick}
+            name="delete-group-btn"
+            theme={warningTheme}
+            width={commandBarButtonsWidth}
+          >
             Delete Group
           </CustomButton>
         )}

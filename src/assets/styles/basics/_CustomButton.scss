@@ -12,7 +12,7 @@
   line-height: 20px;
   max-width: 480px;
   min-height: 40px;
-  min-width: 0px;
+  min-width: min-content;
   overflow: hidden;
   padding: 0px;
   padding-left: 20px;
@@ -70,12 +70,12 @@
   }
 
   &__warning {
-    background-color: $warningColor0;
+    background-color: $ButtonWarningColorNormal;
     color: $secondaryFontColor;
 
     &:hover,
     &:focus {
-      background-color: $warningColor1;
+      background-color: $ButtonWarningColorLight;
       color: $secondaryFontColor;
     }
 

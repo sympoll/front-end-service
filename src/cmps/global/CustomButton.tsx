@@ -7,6 +7,8 @@ interface BtnProps {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   theme?: "dark" | "light" | "warning";
+  width?: string;
+  bgColor?: string;
 }
 
 export default function btn({
@@ -15,7 +17,9 @@ export default function btn({
   type,
   name,
   disabled = false,
-  theme = "light"
+  theme = "light",
+  width,
+  bgColor
 }: BtnProps) {
   return (
     <button
@@ -24,6 +28,7 @@ export default function btn({
       type={type}
       id={name}
       disabled={disabled}
+      style={{ width: width, backgroundColor: bgColor }}
     >
       {children}
     </button>

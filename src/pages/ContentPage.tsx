@@ -4,7 +4,7 @@ import GroupsSidebar from "../cmps/sidebar/GroupsSidebar";
 import Feed from "../cmps/feed/FeedContent";
 import MembersSidebar from "../cmps/sidebar/MembersSidebar";
 import UserProfile from "../cmps/profile/UserProfile";
-import GroupInfo from "../cmps/group/GroupInfoPage";
+import GroupInfo from "../cmps/profile/GroupProfile";
 import { fetchUserData } from "../services/user.profile.service";
 import { UserData } from "../models/UserData.model";
 import LoadingAnimation from "../cmps/global/LoadingAnimation";

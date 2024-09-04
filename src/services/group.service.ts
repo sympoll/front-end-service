@@ -4,6 +4,7 @@ import { GroupMember } from "../models/GroupMember.model";
 import { UserData } from "../models/UserData.model";
 import { throwAxiosErr } from "./error.service";
 import { UserRole } from "../models/UserRole.model";
+import { RemoveGroupMemberResponse } from "../models/dto/RemoveGroupMemberResponse.dto";
 
 
 const groupServiceUrl = 
@@ -15,9 +16,9 @@ const svcName = "GROUP.SVC "
 
 
 export async function createNewGroup(
-    groupName:string, 
-    description:string, 
-    userId:string,
+    groupName: string, 
+    description: string, 
+    userId: string,
     setIsCreating: (data: boolean) => void,
     setSubmitButtonText: (data: string) => void) : Promise<GroupData> {
     const groupCreateRequestPayload ={
@@ -26,7 +27,7 @@ export async function createNewGroup(
         creatorId: userId,
     };
 
-    console.log(svcName, "Send request to create new group");
+    console.log(svcName, "Sending request to create a new group: '" + groupName + "'.");
     setIsCreating(true);
     try {
         const response = await axios.post(groupServiceUrl, groupCreateRequestPayload, {
@@ -69,8 +70,8 @@ export async function fetchUserGroups(memberId:string) : Promise<GroupData[]> {
   }
 }
 
-export async function fetchGroupMembers(groupId:string) : Promise<GroupMember[]> {
-  console.log(svcName,"Sending request to get members of group:'" + groupId + "'");
+export async function fetchGroupMembers(groupId: string) : Promise<GroupMember[]> {
+  console.log(svcName,"Sending request to get members of group: '" + groupId + "'");
 
   try{
     const response = await axios
@@ -111,7 +112,7 @@ export async function fetchGroupData(groupId:string) : Promise<GroupData> {
   }
 }
 
-export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<GroupMember>{
+export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<RemoveGroupMemberResponse>{
   console.log(svcName, "Sending request to delete user: '" + userId + "' from the group: '" + groupId +"'.");
 
   try{

@@ -28,7 +28,7 @@ export default function FeedContent() {
   // Function to update polls with the latest data
   const updatePolls = useCallback(async () => {
     try {
-      let fetchedPolls = [];
+      let fetchedPolls: PollData[];
       if (groupId) {
         fetchedPolls = await fetchPollsByGroupId(groupId);
       } else {
@@ -47,7 +47,7 @@ export default function FeedContent() {
         setError("An unknown error occurred");
       }
       setIsLoading(false);
-    } 
+    }
   }, [groupId]);
 
   useEffect(() => {

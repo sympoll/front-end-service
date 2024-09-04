@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState, useCallback } from "react";
 import MembersSidebarItem from "./MembersSidebarItem";
-import PersonIcon from "@mui/icons-material/Person";
 import { useParams } from "react-router-dom";
 import { GroupMember } from "../../models/GroupMember.model";
 import { fetchGroupMembers } from "../../services/group.service";
@@ -29,12 +28,13 @@ export default function MembersSidebar() {
       setIsShowingAllGroups(false);
       try {
         const fetchedMembers = await fetchGroupMembers(groupId);
+        console.log("Fetched members: " + fetchedMembers[0].userData);
         setMembers(sortMembers(fetchedMembers));
         setIsLoading(false);
       } catch (error) {
         console.error(cmpName + error);
         setIsLoading(false);
-      } 
+      }
     } else {
       if (!userId) {
         setIsShowingAllGroups(true);
@@ -63,16 +63,16 @@ export default function MembersSidebar() {
         {!isShowingAllGroups && "Group Members:"}
       </div>
       <ul className="members-sidebar-members-container">
-        {isLoading && !isShowingAllGroups &&(
+        {isLoading && !isShowingAllGroups && (
           <LoadingAnimation message="Loading members" messageFontSize="16px" ripple="off" />
         )}
         {!isLoading &&
           members?.map((member) => (
             <MembersSidebarItem
-              key={member.userId}
-              name={member.username}
-              Icon={PersonIcon}
-              path={"/" + member.userId}
+              key={member.userData.userId}
+              name={member.userData.username}
+              profilePictureUrl={member.userData.profilePictureUrl}
+              path={"/" + member.userData.userId}
               role={member.roleName}
             />
           ))}

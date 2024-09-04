@@ -6,6 +6,8 @@ import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { uploadProfileImage } from "../../services/media.service";
+import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
+import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -14,9 +16,6 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
-
-  const defaultProfilePictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_PICTURE;
-  const defaultBannerPictureUrl = import.meta.env.VITE_DEFAULT_USER_PROFILE_BANNER;
 
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
 
@@ -116,7 +115,7 @@ export default function UserProfile() {
         <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
             <img
-              src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultBannerPictureUrl}
+              src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultProfileBannerUrl}
               alt="Banner"
               className="user-profile__banner-img"
             />

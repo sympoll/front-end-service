@@ -2,6 +2,7 @@ import { FormEvent, useState } from "react";
 import { useMembers } from "../../context/MemebersContext";
 import CloseButton from "../global/CloseButton";
 import { createUserRole, deleteUserRole, updateUserRole } from "../../services/group.service";
+import { UserRoleName } from "../../models/enum/UserRoleName.enum";
 
 interface ModifyRolesPopupProps {
   groupId: string;
@@ -17,15 +18,19 @@ export default function ModifyRolesPopup({ groupId, userId, onClose }: ModifyRol
   const [isMemberSelected, setIsMemberSelected] = useState<boolean>(false);
   const { members, isChanged, setIsChanged, setNewRoleToUser } = useMembers();
 
-  const [roles, setRoles] = useState<string[]>(["Admin", "Moderator", "Member"]);
+  const [roles, setRoles] = useState<UserRoleName[]>([
+    UserRoleName.ADMIN,
+    UserRoleName.MODERATOR,
+    UserRoleName.MEMBER
+  ]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // User set to be a simple member
-    if (selectedRole === "Member") {
+    if (selectedRole === UserRoleName.MEMBER) {
       deleteUserRole(selectedMemberId, groupId, selectedMemberRole)
         .then(() => {
-          setNewRoleToUser(selectedMemberId, "Member");
+          setNewRoleToUser(selectedMemberId, UserRoleName.MEMBER);
           onClose();
         })
         .catch((error) => {
@@ -36,7 +41,7 @@ export default function ModifyRolesPopup({ groupId, userId, onClose }: ModifyRol
       // User set to have a role in the group
     } else {
       // User is currently a simple member
-      if (selectedMemberRole === "Member") {
+      if (selectedMemberRole === UserRoleName.MEMBER) {
         createUserRole(selectedMemberId, groupId, selectedRole)
           .then(() => {
             setNewRoleToUser(selectedMemberId, selectedRole);

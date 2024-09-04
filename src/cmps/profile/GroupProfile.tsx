@@ -16,6 +16,7 @@ import RemoveMemberPopup from "../popup/RemoveMemberPopup";
 import ModifyRolesPopup from "../popup/ModifyRolesPopup";
 import { useMembers } from "../../context/MemebersContext";
 import VerifyPopup from "../popup/VerifyPopup";
+import { UserRoleName } from "../../models/enum/UserRoleName.enum";
 
 export default function GroupInfo() {
   // Temporary hard coded user ID
@@ -80,12 +81,12 @@ export default function GroupInfo() {
   const fetchUserPermissionsInCommandBar = () => {
     const userRole = getMemberRole(userId);
 
-    if (userRole === "Admin") {
+    if (userRole === UserRoleName.ADMIN) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(true);
       setIsUserHasPermissionToModRoles(true);
-    } else if (userRole === "Moderator") {
+    } else if (userRole === UserRoleName.MODERATOR) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(false);

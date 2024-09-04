@@ -63,6 +63,7 @@ export default function Poll({
   );
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
+  const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -157,10 +158,13 @@ export default function Poll({
                 onClick={navigateToCreatorProfile}
               ></ProfilePicture>
               <div>
-                <div className="poll-info-title__creator-name" onClick={navigateToCreatorProfile}>
+                <div
+                  className="poll-info-title__specific-group__creator-name"
+                  onClick={navigateToCreatorProfile}
+                >
                   {creatorName}
                 </div>
-                <div className="poll-info-title__time-passed">{timePassed}</div>
+                <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
             </div>
             <div className="poll-info-title__row2">
@@ -168,14 +172,36 @@ export default function Poll({
             </div>
           </div>
         ) : (
-          <div className="poll-info-title-container">
-            <div className="poll-info-title-row1">{groupId}</div>
-            <div className="poll-info-title-row2">
-              <div className="poll-info-title-creator-name">{creatorName}</div>
-              <div className="poll-info-title-separator">•</div>
-              <div className="poll-info-title-time-posted">{timePassed}</div>
+          <div className="poll-info-title">
+            <div className="poll-info-title__row1">
+              <ProfilePicture
+                imageUrl={
+                  creatorProfilePictureUrl ? creatorProfilePictureUrl : defaultProfilePictureUrl
+                }
+                altText={creatorName + "'s profile picture"}
+                onClick={navigateToCreatorProfile}
+              ></ProfilePicture>
+              <div className="poll-info-title__all-groups__titles-container">
+                <div
+                  className="poll-info-title__all-groups__group-name"
+                  onClick={navigateToGroupProfile}
+                >
+                  {groupId}
+                </div>
+                <div className="poll-info-title__all-groups__creator-name-container">
+                  <div
+                    className="poll-info-title__all-groups__creator-name"
+                    onClick={navigateToCreatorProfile}
+                  >
+                    {creatorName}
+                  </div>
+                  <div className="poll-info-title-separator">•</div>
+                  <div className="poll-info-title__all-groups__time-passed">{timePassed}</div>
+                </div>
+              </div>
             </div>
-            <div className="poll-info-title-row3">
+
+            <div className="poll-info-title__row2">
               <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>

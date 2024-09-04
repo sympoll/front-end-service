@@ -60,21 +60,66 @@
     border-bottom: 1px solid $grayedOutFontColor;
   }
 
-  &__creator-name {
-    font-size: larger;
-    font-weight: bolder;
-    cursor: pointer;
+  &__specific-group {
+    &__creator-name {
+      font-size: larger;
+      font-weight: bolder;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__time-passed {
+      display: flex;
+      color: $mainBgColor1;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: small;
+      font-weight: normal;
+      gap: 8px;
+    }
   }
 
-  &__time-passed {
-    display: flex;
-    color: $mainBgColor1;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    font-size: small;
-    font-weight: normal;
-    gap: 8px;
+  &__all-groups {
+    &__titles-container {
+      @include flex-column;
+      gap: 3px;
+    }
+    &__creator-name-container {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    &__creator-name {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__group-name {
+      font-size: larger;
+      font-weight: bolder;
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    &__time-passed {
+      display: flex;
+      color: $mainBgColor1;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: small;
+      font-weight: normal;
+      gap: 8px;
+    }
   }
 }
 

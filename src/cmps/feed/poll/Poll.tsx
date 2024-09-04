@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import VotingItem from "./VotingItem";
 import {
   VotingItemData,
@@ -19,7 +20,7 @@ import {
 } from "../../../services/poll.service";
 import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
-import { useNavigate } from "react-router-dom";
+import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 
 interface PollProps {
   pollId: string;
@@ -30,6 +31,7 @@ interface PollProps {
   creatorName: string;
   creatorProfilePictureUrl: string;
   groupId: string;
+  groupProfilePictureUrl: string;
   timeCreated: string;
   timeUpdated: string;
   deadline: string;
@@ -46,6 +48,7 @@ export default function Poll({
   creatorName,
   creatorProfilePictureUrl,
   groupId,
+  groupProfilePictureUrl,
   timeCreated,
   timeUpdated,
   deadline,
@@ -176,10 +179,10 @@ export default function Poll({
             <div className="poll-info-title__row1">
               <ProfilePicture
                 imageUrl={
-                  creatorProfilePictureUrl ? creatorProfilePictureUrl : defaultProfilePictureUrl
+                  groupProfilePictureUrl ? groupProfilePictureUrl : defaultGroupProfilePictureUrl
                 }
                 altText={creatorName + "'s profile picture"}
-                onClick={navigateToCreatorProfile}
+                onClick={navigateToGroupProfile}
               ></ProfilePicture>
               <div className="poll-info-title__all-groups__titles-container">
                 <div

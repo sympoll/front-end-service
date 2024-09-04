@@ -17,10 +17,12 @@ import ModifyRolesPopup from "../popup/ModifyRolesPopup";
 import { useMembers } from "../../context/MemebersContext";
 import VerifyPopup from "../popup/VerifyPopup";
 import { UserRoleName } from "../../models/enum/UserRoleName.enum";
+import { UserData } from "../../models/UserData.model";
+import { fetchUserData } from "../../services/user.profile.service";
+import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
+import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 
 export default function GroupInfo() {
-  // Temporary hard coded user ID
-  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const { groupId } = useParams();
   const { setGroups } = useGroups();
   const { getMemberRole } = useMembers();
@@ -42,6 +44,13 @@ export default function GroupInfo() {
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
   const [timePassed, setTimePassed] = useState<string>();
+  const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
+  const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+
+  // Temporary hard coded user ID
+  // TODO: Delete this when using context/sessions
+  const userId = import.meta.env.VITE_DEBUG_USER_ID;
+  const userData = fetchUserData(userId);
 
   // Styling configurations:
   const commandBarButtonsWidth = "100px";
@@ -149,6 +158,14 @@ export default function GroupInfo() {
     setIsDeleteVerifyPopupOpen(true);
   };
 
+  const toggleProfilePictureMenu = () => {
+    setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
+  };
+
+  const toggleProfileBannerMenu = () => {
+    setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
+  };
+
   if (errorMessage) {
     return <ContentPageMessage msgText={errorMessage} />;
   }
@@ -161,12 +178,22 @@ export default function GroupInfo() {
     return <ContentPageMessage msgText="Could not fetch group data" />;
   }
 
+  if (!userData) {
+    return <ContentPageMessage msgText="Could not fetch user data" />;
+  }
+
   return (
     <div className="group-info">
       <div className="group-info__header">
-        <img src={bannerPictureUrl} alt="Banner" className="group-info__banner-img" />
+        <div className="group-info__profile-banner-container" onClick={toggleProfileBannerMenu}>
+          <div>
+            <img src={defaultProfileBannerUrl} alt="Banner" className="group-info__banner-img" />
+          </div>
+        </div>
         <div className="group-info__details">
-          <img src={profilePictureUrl} alt="Profile" className="group-info__profile-picture" />
+          <div className="group-info__profile-picture-container" onClick={toggleProfilePictureMenu}>
+            <img src={defaultProfilePictureUrl} alt="Profile" className="group-info__profile-img" />
+          </div>
           <div className="group-info__title">
             <h1 className="group-info__group-name">{groupData?.groupName}</h1>
           </div>

@@ -19,9 +19,8 @@ export default function RemoveMemberPopup({ groupId, userId, onClose }: RemoveMe
     try {
       if (selectedMemberId !== "") {
         const removedMember = await removeMemberFromGroup(groupId, selectedMemberId);
-        setMembers(
-          members?.filter((member) => member.userData.userId !== removedMember.userData.userId)
-        );
+
+        setMembers(members?.filter((member) => member.userData.userId !== removedMember.userId));
         setIsChanged(!isChanged);
         onClose();
       } else {

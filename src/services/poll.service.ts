@@ -52,7 +52,7 @@ export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
  * @param groupId ID string of the group to fetch its polls.
  * @returns A raw list of polls returned from poll-service microservice.
  */
-export async function fetchPollsByGroupId(groupId: string) {
+export async function fetchPollsByGroupId(groupId: string) : Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by group ID: " + groupId);
   // Send a request to the Poll Service to get all polls of the specified groups.
   try {

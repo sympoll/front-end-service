@@ -4,6 +4,7 @@ import { GroupMember } from "../models/GroupMember.model";
 import { UserData } from "../models/UserData.model";
 import { throwAxiosErr } from "./error.service";
 import { UserRole } from "../models/UserRole.model";
+import { RemoveGroupMemberResponse } from "../models/dto/RemoveGroupMemberResponse.dto";
 
 
 const groupServiceUrl = 
@@ -111,7 +112,7 @@ export async function fetchGroupData(groupId:string) : Promise<GroupData> {
   }
 }
 
-export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<GroupMember>{
+export async function removeMemberFromGroup(groupId:string, userId:string) : Promise<RemoveGroupMemberResponse>{
   console.log(svcName, "Sending request to delete user: '" + userId + "' from the group: '" + groupId +"'.");
 
   try{

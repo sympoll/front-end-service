@@ -15,9 +15,9 @@ const svcName = "GROUP.SVC "
 
 
 export async function createNewGroup(
-    groupName:string, 
-    description:string, 
-    userId:string,
+    groupName: string, 
+    description: string, 
+    userId: string,
     setIsCreating: (data: boolean) => void,
     setSubmitButtonText: (data: string) => void) : Promise<GroupData> {
     const groupCreateRequestPayload ={
@@ -26,7 +26,7 @@ export async function createNewGroup(
         creatorId: userId,
     };
 
-    console.log(svcName, "Send request to create new group");
+    console.log(svcName, "Sending request to create a new group: '" + groupName + "'.");
     setIsCreating(true);
     try {
         const response = await axios.post(groupServiceUrl, groupCreateRequestPayload, {

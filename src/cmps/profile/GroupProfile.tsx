@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
-import { deleteGroupById, fetchGroupData, removeMemberFromGroup } from "../../services/group.service";
+import {
+  deleteGroupById,
+  fetchGroupData,
+  removeMemberFromGroup
+} from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
@@ -28,11 +32,15 @@ export default function GroupInfo() {
   const [isModifyRolesPopupOpen, setIsModifyRolesPopupOpen] = useState<boolean>(false);
   const [isExitVerifyPopupOpen, setIsExitVerifyPopupOpen] = useState<boolean>(false);
   const [isDeleteVerifyPopupOpen, setIsDeleteVerifyPopupOpen] = useState<boolean>(false);
-  const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] = useState<boolean>(false);
-  const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] = useState<boolean>(false);
-  const [isUserHasPermissionToRmvGroup, setIsUserHasPermissionToRmvGroup] = useState<boolean>(false);
-  const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] = useState<boolean>(false);
-  
+  const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] =
+    useState<boolean>(false);
+  const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] =
+    useState<boolean>(false);
+  const [isUserHasPermissionToRmvGroup, setIsUserHasPermissionToRmvGroup] =
+    useState<boolean>(false);
+  const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
+    useState<boolean>(false);
+  const [timePassed, setTimePassed] = useState<string>();
 
   // TODO: pull image urls from server
   const profilePictureUrl =
@@ -59,21 +67,31 @@ export default function GroupInfo() {
     fetchUserPermissionsInCommandBar();
   }, [groupId]);
 
+  useEffect(() => {
+    if (groupData) {
+      const interval = setInterval(() => {
+        setTimePassed(getTimePassed(groupData.timeCreated));
+      }, 1000); // Update every second
+
+      return () => clearInterval(interval); // Cleanup the interval on component unmount
+    }
+  }, [groupData?.timeCreated]);
+
   const fetchUserPermissionsInCommandBar = () => {
     const userRole = getMemberRole(userId);
 
-    if(userRole === "Admin") {
+    if (userRole === "Admin") {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(true);
       setIsUserHasPermissionToModRoles(true);
-    }else if(userRole === "Moderator") {
+    } else if (userRole === "Moderator") {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(false);
       setIsUserHasPermissionToModRoles(false);
     }
-  }
+  };
 
   const exitGroup = () => {
     if (groupId) {
@@ -90,7 +108,7 @@ export default function GroupInfo() {
   };
 
   const deleteGroup = () => {
-    if(groupId){
+    if (groupId) {
       deleteGroupById(groupId)
         .then(() => {
           setGroups((prevGroups) => prevGroups?.filter((group) => group.groupId !== groupId));
@@ -152,31 +170,57 @@ export default function GroupInfo() {
           Exit Group
         </CustomButton>
         {isUserHasPermissionToAddMember && (
-        <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">
-          Add Member
-        </CustomButton>
+          <CustomButton onClick={onAddMemberClick} name="add-member-btn" theme="dark">
+            Add Member
+          </CustomButton>
         )}
         {isUserHasPermissionToRmvMember && (
-        <CustomButton onClick={onRemoveMemberClick} name="delete-member-btn" theme="dark">
-          Remove Member
-        </CustomButton>
+          <CustomButton onClick={onRemoveMemberClick} name="delete-member-btn" theme="dark">
+            Remove Member
+          </CustomButton>
         )}
         {isUserHasPermissionToModRoles && (
-        <CustomButton onClick={onModifyRolesClick} name="modify-roles-btn" theme="dark">
-          Modify Roles
-        </CustomButton>
+          <CustomButton onClick={onModifyRolesClick} name="modify-roles-btn" theme="dark">
+            Modify Roles
+          </CustomButton>
         )}
         {isUserHasPermissionToRmvGroup && (
-        <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="warning">
-          Delete Group
-        </CustomButton>
+          <CustomButton onClick={onDeleteGroupClick} name="delete-group-btn" theme="warning">
+            Delete Group
+          </CustomButton>
         )}
       </div>
-      {isExitVerifyPopupOpen && <VerifyPopup headlineMessage="leave the group?" OnClickYes={exitGroup} onClose={() => setIsExitVerifyPopupOpen(false)} />}
-      {isAddMemberPopupOpen && groupId && <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />}
-      {isRemoveMemberPopupOpen && groupId && <RemoveMemberPopup groupId={groupId} userId={userId} onClose={() => setIsRemoveMemberPopupOpen(false)} />}
-      {isModifyRolesPopupOpen && groupId && <ModifyRolesPopup groupId={groupId} userId={userId} onClose={() => setIsModifyRolesPopupOpen(false)} />}
-      {isDeleteVerifyPopupOpen && <VerifyPopup headlineMessage="delete the group?" OnClickYes={deleteGroup} onClose={() => setIsDeleteVerifyPopupOpen(false)} />}
+      {isExitVerifyPopupOpen && (
+        <VerifyPopup
+          headlineMessage="leave the group?"
+          OnClickYes={exitGroup}
+          onClose={() => setIsExitVerifyPopupOpen(false)}
+        />
+      )}
+      {isAddMemberPopupOpen && groupId && (
+        <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />
+      )}
+      {isRemoveMemberPopupOpen && groupId && (
+        <RemoveMemberPopup
+          groupId={groupId}
+          userId={userId}
+          onClose={() => setIsRemoveMemberPopupOpen(false)}
+        />
+      )}
+      {isModifyRolesPopupOpen && groupId && (
+        <ModifyRolesPopup
+          groupId={groupId}
+          userId={userId}
+          onClose={() => setIsModifyRolesPopupOpen(false)}
+        />
+      )}
+      {isDeleteVerifyPopupOpen && (
+        <VerifyPopup
+          headlineMessage="delete the group?"
+          OnClickYes={deleteGroup}
+          onClose={() => setIsDeleteVerifyPopupOpen(false)}
+        />
+      )}
       <div className="group-info__info-container">
         <div className="group-info__description">
           <h3>Description:</h3>
@@ -187,11 +231,10 @@ export default function GroupInfo() {
           <h3>Info:</h3>
           <br />
           <h4 className="group-info__group-info__label">Created:</h4>
-          {getTimePassed(groupData?.timeCreated ?? "")} <br /> <br />
+          {timePassed} <br /> <br />
           <h4 className="group-info__group-info__label">Group ID:</h4> {groupData?.groupId}
         </div>
       </div>
     </div>
-    
   );
 }

@@ -19,10 +19,10 @@ import VerifyPopup from "../popup/VerifyPopup";
 import { UserRoleName } from "../../models/enum/UserRoleName.enum";
 import { UserData } from "../../models/UserData.model";
 import { fetchUserData } from "../../services/user.profile.service";
+import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
+import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 
 export default function GroupInfo() {
-  // Temporary hard coded user ID
-  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const { groupId } = useParams();
   const { setGroups } = useGroups();
   const { getMemberRole } = useMembers();
@@ -47,7 +47,9 @@ export default function GroupInfo() {
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
 
+  // Temporary hard coded user ID
   // TODO: Delete this when using context/sessions
+  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const userData = fetchUserData(userId);
 
   // Styling configurations:
@@ -185,12 +187,12 @@ export default function GroupInfo() {
       <div className="group-info__header">
         <div className="group-info__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
-            <img src={bannerPictureUrl} alt="Banner" className="group-info__banner-img" />
+            <img src={defaultProfileBannerUrl} alt="Banner" className="group-info__banner-img" />
           </div>
         </div>
         <div className="group-info__details">
           <div className="group-info__profile-picture-container" onClick={toggleProfilePictureMenu}>
-            <img src={profilePictureUrl} alt="Profile" className="group-info__profile-img" />
+            <img src={defaultProfilePictureUrl} alt="Profile" className="group-info__profile-img" />
           </div>
           <div className="group-info__title">
             <h1 className="group-info__group-name">{groupData?.groupName}</h1>

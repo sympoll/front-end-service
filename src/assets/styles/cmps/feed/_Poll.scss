@@ -32,43 +32,50 @@
   font-weight: 600;
 }
 
-.poll-info-title-container {
-  display: flex;
-  flex-direction: column;
+.poll-info-title {
+  @include flex-column;
   height: fit-content;
   padding: 0;
   margin: 0;
   margin-bottom: 8px;
   gap: 4px;
-}
 
-.poll-info-title-row1 {
-  font-size: larger;
-  font-weight: bolder;
-}
+  &__row1 {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 4px;
+    align-items: center;
+  }
 
-.poll-info-title-row2 {
-  display: flex;
-  color: $mainBgColor1;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  font-size: small;
-  font-weight: normal;
-  gap: 8px;
-}
+  &__row2 {
+    display: flex;
+    color: $active-vote-color;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: small;
+    font-weight: normal;
+    gap: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid $grayedOutFontColor;
+  }
 
-.poll-info-title-row3 {
-  display: flex;
-  color: $active-vote-color;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
-  font-size: small;
-  font-weight: normal;
-  gap: 8px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid $grayedOutFontColor;
+  &__creator-name {
+    font-size: larger;
+    font-weight: bolder;
+    cursor: pointer;
+  }
+
+  &__time-passed {
+    display: flex;
+    color: $mainBgColor1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: small;
+    font-weight: normal;
+    gap: 8px;
+  }
 }
 
 .poll-info-title-separator {

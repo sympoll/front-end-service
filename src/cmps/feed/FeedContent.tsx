@@ -108,6 +108,7 @@ export default function FeedContent() {
             nofAnswersAllowed={poll.nofAnswersAllowed}
             creatorId={poll.creatorId}
             creatorName={poll.creatorName}
+            creatorProfilePictureUrl={poll.creatorProfilePictureUrl}
             groupId={poll.groupId}
             timeCreated={poll.timeCreated}
             timeUpdated={poll.timeUpdated}

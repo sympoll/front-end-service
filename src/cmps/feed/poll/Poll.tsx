@@ -17,6 +17,9 @@ import {
   sendRequestToVoteService,
   shouldPreventProgressUpdate
 } from "../../../services/poll.service";
+import ProfilePicture from "../../global/ProfilePicture";
+import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
+import { useNavigate } from "react-router-dom";
 
 interface PollProps {
   pollId: string;
@@ -25,6 +28,7 @@ interface PollProps {
   nofAnswersAllowed: number;
   creatorId: string;
   creatorName: string;
+  creatorProfilePictureUrl: string;
   groupId: string;
   timeCreated: string;
   timeUpdated: string;
@@ -40,6 +44,7 @@ export default function Poll({
   nofAnswersAllowed,
   creatorId,
   creatorName,
+  creatorProfilePictureUrl,
   groupId,
   timeCreated,
   timeUpdated,
@@ -56,6 +61,8 @@ export default function Poll({
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
+  const navigate = useNavigate();
+  const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -140,10 +147,23 @@ export default function Poll({
       {
         // Display Group info only on all groups tab
         isSpecificGroup ? (
-          <div className="poll-info-title-container">
-            <div className="poll-info-title-row1">{creatorName}</div>
-            <div className="poll-info-title-row2">{timePassed}</div>
-            <div className="poll-info-title-row3">
+          <div className="poll-info-title">
+            <div className="poll-info-title__row1">
+              <ProfilePicture
+                imageUrl={
+                  creatorProfilePictureUrl ? creatorProfilePictureUrl : defaultProfilePictureUrl
+                }
+                altText={creatorName + "'s profile picture"}
+                onClick={navigateToCreatorProfile}
+              ></ProfilePicture>
+              <div>
+                <div className="poll-info-title__creator-name" onClick={navigateToCreatorProfile}>
+                  {creatorName}
+                </div>
+                <div className="poll-info-title__time-passed">{timePassed}</div>
+              </div>
+            </div>
+            <div className="poll-info-title__row2">
               <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>

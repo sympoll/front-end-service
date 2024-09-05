@@ -12,4 +12,12 @@
 .sidebar-user-info-data {
   @include flex-column;
   justify-content: center;
+
+  &__username {
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

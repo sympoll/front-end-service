@@ -10,6 +10,7 @@ interface SidebarUserInfoProps {
 
 export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
   const navigate = useNavigate();
+  const navigateToUserProfile = () => navigate(`/${userData.userId}`);
 
   return (
     <div className="sidebar-user-info-container">
@@ -17,10 +18,10 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
         imageUrl={
           userData.profilePictureUrl ? userData.profilePictureUrl : defaultProfilePictureUrl
         }
-        onClick={() => navigate(`/${userData.userId}`)}
+        onClick={navigateToUserProfile}
       />
       <div className="sidebar-user-info-data">
-        <p>{userData.username}</p>
+        <p className="sidebar-user-info-data__username" onClick={navigateToUserProfile}>{userData.username}</p>
         <p>{userData.email}</p>
       </div>
     </div>

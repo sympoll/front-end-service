@@ -110,7 +110,7 @@ export default function FeedContent() {
             creatorName={poll.creatorName}
             creatorProfilePictureUrl={poll.creatorProfilePictureUrl}
             groupId={poll.groupId}
-            groupProfilePictureUrl={poll.creatorProfilePictureUrl}
+            groupProfilePictureUrl={poll.groupProfilePictureUrl}
             timeCreated={poll.timeCreated}
             timeUpdated={poll.timeUpdated}
             deadline={poll.deadline}

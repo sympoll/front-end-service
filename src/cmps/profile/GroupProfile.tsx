@@ -27,7 +27,7 @@ export default function GroupInfo() {
 
   const { groupId } = useParams();
   const { setGroups } = useGroups();
-  const { getMemberRole, isChanged } = useMembers();
+  const { members, getMemberRole } = useMembers();
   const [groupData, setGroupData] = useState<GroupData>();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -73,7 +73,6 @@ export default function GroupInfo() {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
           setIsLoading(false);
-          fetchUserPermissionsInCommandBar();
         })
         .catch((error) => {
           console.log("Unable to fetch group data with ID " + groupId);
@@ -95,7 +94,7 @@ export default function GroupInfo() {
 
   useEffect(() => {
     fetchUserPermissionsInCommandBar();
-  },[isChanged])
+  },[members])
 
   const fetchUserPermissionsInCommandBar = () => {
     console.log("Fetching user permissions in group");

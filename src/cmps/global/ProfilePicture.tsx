@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 interface ProfilePictureProps {
   imageUrl: string;
@@ -13,6 +13,8 @@ export default function ProfilePicture({
   size = "40px",
   altText = "Profile Picture"
 }: ProfilePictureProps) {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <div
       className="profile-picture-container"
@@ -25,9 +27,15 @@ export default function ProfilePicture({
     >
       <img
         className="profile-picture-image"
-        style={{ width: size, height: size }}
+        style={{
+          width: size,
+          height: size,
+          opacity: onClick ? (isHovered ? 0.9 : 1) : 1
+        }}
         src={imageUrl}
         alt={altText}
+        onMouseEnter={() => setIsHovered(true)} // Set hover state to true on mouse enter
+        onMouseLeave={() => setIsHovered(false)} // Reset hover state on mouse leave
       ></img>
     </div>
   );

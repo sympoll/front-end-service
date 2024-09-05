@@ -7,7 +7,9 @@ export interface PollData {
     nofAnswersAllowed: number;
     creatorId: string;
     creatorName: string;
+    creatorProfilePictureUrl: string;
     groupId: string;
+    groupProfilePictureUrl: string;
     timeCreated: string;
     timeUpdated: string;
     deadline: string;

@@ -1,22 +1,27 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
 import { fetchUserData } from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { uploadProfileImage } from "../../services/media.service";
+import { uploadUserProfileImage } from "../../services/media.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
+import ProfilePicture from "../global/ProfilePicture";
+import { fetchUserGroups } from "../../services/group.service";
+import { useGroups } from "../../context/GroupsContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const [userData, setUserData] = useState<UserData>();
+  const { groups, setGroups } = useGroups();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
 
+  const navigate = useNavigate();
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
 
   useEffect(() => {
@@ -37,21 +42,31 @@ export default function UserProfile() {
         setErrorMessage("User with ID '" + userId + "' does not exist...");
         setIsLoading(false);
       });
+
+    fetchUserGroups(userId)
+      .then((data) => {
+        console.log("Fetched user's groups: ", data);
+        setGroups(data);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch groups of user with ID " + userId);
+        setErrorMessage("Unable to fetch groups of user with ID " + userId);
+      });
   }, [userId]);
 
   const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("Profile picture was added, uploading...");
+    console.log("User profile picture was added, uploading...");
     const file = event.target.files?.[0];
 
     if (file && userId) {
       const targetId = event.target.id;
 
       if (targetId === "profile-picture-upload-input") {
-        console.log("Profile picture input was clicked");
+        console.log("User profile picture input was clicked");
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadProfileImage(userId, file, "profile picture");
+          const response = await uploadUserProfileImage(userId, file, "profile picture");
 
           // Update the local user data to include the newly uploaded profile picture
           setUserData(
@@ -59,14 +74,14 @@ export default function UserProfile() {
               prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
           );
         } catch (error) {
-          console.error("Failed to upload profile picture: ", error);
+          console.error("Failed to upload user profile picture: ", error);
         }
       } else if (targetId === "profile-banner-upload-input") {
-        console.log("Profile banner input was clicked");
+        console.log("User profile banner input was clicked");
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadProfileImage(userId, file, "profile banner");
+          const response = await uploadUserProfileImage(userId, file, "profile banner");
 
           // Update the local user data to include the newly uploaded profile banner
           setUserData(
@@ -74,7 +89,7 @@ export default function UserProfile() {
               prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
           );
         } catch (error) {
-          console.error("Failed to upload profile banner: ", error);
+          console.error("Failed to upload user profile banner: ", error);
         }
       } else {
         console.error("Unknown input");
@@ -178,17 +193,46 @@ export default function UserProfile() {
         <hr className="user-profile__divider" />
       </div>
       <div className="user-profile__info-container">
-        <div className="user-profile__description">
-          <h3>Description:</h3>
-          <br />
-          {defaultDescription}
-        </div>
-        <div className="user-profile__user-info">
-          <h3>Info:</h3>
-          <br />
-          <h4 className="user-profile__user-info__label">Created:</h4>
-          {getTimePassed(userData.timeCreated)} <br /> <br />
-          <h4 className="user-profile__user-info__label">User ID:</h4> {userData.userId}
+        <div className="user-profile__content-container">
+          <div className="user-profile__content-container__row1">
+            <div className="user-profile__description">
+              <h3>Description:</h3>
+              <br />
+              {defaultDescription}
+            </div>
+            <div className="user-profile__user-info">
+              <h3>Info:</h3>
+              <br />
+              <h4 className="user-profile__user-info__label">Created:</h4>
+              {getTimePassed(userData.timeCreated)} <br /> <br />
+              <h4 className="user-profile__user-info__label">User ID:</h4> {userData.userId}
+            </div>
+          </div>
+          <div className="user-profile__content-container__row2">
+            <div className="user-profile__groups-joined-container">
+              <h3>Joined Groups:</h3>
+              <br />
+              <div className="user-profile__groups-joined-list">
+                {groups ? (
+                  groups.map((group) => (
+                    <div className="user-profile__group-joined-item">
+                      <ProfilePicture
+                        imageUrl={
+                          group.profilePictureUrl
+                            ? group.profilePictureUrl
+                            : defaultProfilePictureUrl
+                        }
+                        onClick={() => navigate(`/group/${group.groupId}`)}
+                      />
+                      <p className="user-profile__group-joined-item__group-name">{group.groupName}</p>
+                    </div>
+                  ))
+                ) : (
+                  <p>Could not load user's joined groups...</p>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

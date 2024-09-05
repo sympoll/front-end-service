@@ -8,13 +8,13 @@ const mediaServiceUrl =
 
     const cmpName = "Media-Service";
 
-export async function uploadProfileImage(
+export async function uploadUserProfileImage(
     userId: string,
     file: File,
     type: "profile picture" | "profile banner" | undefined
     ) {
     if(type === undefined) {
-        console.error("cannot upload profile image, type is undefined.");
+        console.error("cannot upload user profile image, type is undefined.");
     }
     console.log(cmpName, "Uploading " + type + " for user with ID: " + userId);
     
@@ -41,8 +41,8 @@ export async function uploadProfileImage(
         })
         .post(
             type === "profile picture" ? 
-                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_PROFILE_PICTURE : 
-                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_PROFILE_BANNER,
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_PICTURE : 
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_BANNER,
             formData
         );
     
@@ -52,6 +52,57 @@ export async function uploadProfileImage(
     } catch (err) {
         console.error(
         cmpName, "Error uploading " + type + " for user with ID: " + userId +
+            ". Error info: " +
+            err
+        );
+        throw throwAxiosErr(err);
+    }
+}
+
+export async function uploadGroupProfileImage(
+    groupId: string,
+    file: File,
+    type: "profile picture" | "profile banner" | undefined
+    ) {
+    if(type === undefined) {
+        console.error("cannot upload group profile image, type is undefined.");
+    }
+    console.log(cmpName, "Uploading " + type + " for group with ID: " + groupId);
+    
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append("file", file); // The file to be uploaded
+
+    // Create a Blob for the uploadInfo to specify the Content-Type as application/json
+    const uploadInfoBlob = new Blob([JSON.stringify({ groupId: groupId })], {
+        type: "application/json",
+    });
+
+    formData.append("uploadInfo", uploadInfoBlob);
+
+    // Send a request to the Media Service to upload the profile image of the user.
+    try {
+        const response = await axios
+        .create({
+            baseURL: mediaServiceUrl,
+            headers: {
+            "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+        })
+        .post(
+            type === "profile picture" ? 
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_PICTURE : 
+                import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_BANNER,
+            formData
+        );
+    
+        console.log(cmpName, "Successfully uploaded " + type + " for group with ID: " + groupId);
+    
+        return response.data;
+    } catch (err) {
+        console.error(
+        cmpName, "Error uploading " + type + " for group with ID: " + groupId +
             ". Error info: " +
             err
         );

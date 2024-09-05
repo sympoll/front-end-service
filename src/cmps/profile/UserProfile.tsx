@@ -5,7 +5,7 @@ import { fetchUserData } from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { uploadProfileImage } from "../../services/media.service";
+import { uploadUserProfileImage } from "../../services/media.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 
@@ -40,18 +40,18 @@ export default function UserProfile() {
   }, [userId]);
 
   const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    console.log("Profile picture was added, uploading...");
+    console.log("User profile picture was added, uploading...");
     const file = event.target.files?.[0];
 
     if (file && userId) {
       const targetId = event.target.id;
 
       if (targetId === "profile-picture-upload-input") {
-        console.log("Profile picture input was clicked");
+        console.log("User profile picture input was clicked");
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadProfileImage(userId, file, "profile picture");
+          const response = await uploadUserProfileImage(userId, file, "profile picture");
 
           // Update the local user data to include the newly uploaded profile picture
           setUserData(
@@ -59,14 +59,14 @@ export default function UserProfile() {
               prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
           );
         } catch (error) {
-          console.error("Failed to upload profile picture: ", error);
+          console.error("Failed to upload user profile picture: ", error);
         }
       } else if (targetId === "profile-banner-upload-input") {
-        console.log("Profile banner input was clicked");
+        console.log("User profile banner input was clicked");
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadProfileImage(userId, file, "profile banner");
+          const response = await uploadUserProfileImage(userId, file, "profile banner");
 
           // Update the local user data to include the newly uploaded profile banner
           setUserData(
@@ -74,7 +74,7 @@ export default function UserProfile() {
               prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
           );
         } catch (error) {
-          console.error("Failed to upload profile banner: ", error);
+          console.error("Failed to upload user profile banner: ", error);
         }
       } else {
         console.error("Unknown input");

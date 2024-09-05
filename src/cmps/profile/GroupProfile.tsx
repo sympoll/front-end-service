@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import LoadingAnimation from "../global/LoadingAnimation";
 import CustomButton from "../global/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -17,24 +17,31 @@ import ModifyRolesPopup from "../popup/ModifyRolesPopup";
 import { useMembers } from "../../context/MemebersContext";
 import VerifyPopup from "../popup/VerifyPopup";
 import { UserRoleName } from "../../models/enum/UserRoleName.enum";
-import { UserData } from "../../models/UserData.model";
 import { fetchUserData } from "../../services/user.profile.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
+import { uploadGroupProfileImage } from "../../services/media.service";
 
 export default function GroupInfo() {
+  const navigate = useNavigate();
+
   const { groupId } = useParams();
   const { setGroups } = useGroups();
   const { getMemberRole } = useMembers();
-  const navigate = useNavigate();
   const [groupData, setGroupData] = useState<GroupData>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
+
   const [isAddMemberPopupOpen, setIsAddMemberPopupOpen] = useState<boolean>(false);
   const [isRemoveMemberPopupOpen, setIsRemoveMemberPopupOpen] = useState<boolean>(false);
   const [isModifyRolesPopupOpen, setIsModifyRolesPopupOpen] = useState<boolean>(false);
   const [isExitVerifyPopupOpen, setIsExitVerifyPopupOpen] = useState<boolean>(false);
   const [isDeleteVerifyPopupOpen, setIsDeleteVerifyPopupOpen] = useState<boolean>(false);
+
+  const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
+  const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+
   const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] =
     useState<boolean>(false);
   const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] =
@@ -43,9 +50,8 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
+
   const [timePassed, setTimePassed] = useState<string>();
-  const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
-  const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
 
   // Temporary hard coded user ID
   // TODO: Delete this when using context/sessions
@@ -58,12 +64,6 @@ export default function GroupInfo() {
   const warningTheme = "warning";
   const memberButtonsColor = "#5555c2";
   const roleButtonsColor = "#148c14";
-
-  // TODO: pull image urls from server
-  const profilePictureUrl =
-    "https://as1.ftcdn.net/v2/jpg/03/39/45/96/1000_F_339459697_XAFacNQmwnvJRqe1Fe9VOptPWMUxlZP8.jpg";
-  const bannerPictureUrl =
-    "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/e1fc0f08-7c3c-4224-b34b-1fe510feb6fd/d51vvz0-03d69283-b7d4-495e-82f8-5103f09d2b9a.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2UxZmMwZjA4LTdjM2MtNDIyNC1iMzRiLTFmZTUxMGZlYjZmZFwvZDUxdnZ6MC0wM2Q2OTI4My1iN2Q0LTQ5NWUtODJmOC01MTAzZjA5ZDJiOWEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.G5uPqH18xVbG7tywZNXVjRmX0W1_bfNbi1cvdR6XZXw";
 
   useEffect(() => {
     if (groupId) {
@@ -138,6 +138,49 @@ export default function GroupInfo() {
     }
   };
 
+  const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("Group profile picture was added, uploading...");
+    const file = event.target.files?.[0];
+
+    if (file && groupId) {
+      const targetId = event.target.id;
+
+      if (targetId === "profile-picture-upload-input") {
+        console.log("Profile picture input was clicked");
+
+        try {
+          console.log("uploading file: " + file?.name);
+          const response = await uploadGroupProfileImage(groupId, file, "profile picture");
+
+          // Update the local group data to include the newly uploaded profile picture
+          setGroupData(
+            (prevGroupData) =>
+              prevGroupData && { ...prevGroupData, profilePictureUrl: response.imageUrl }
+          );
+        } catch (error) {
+          console.error("Failed to upload group profile picture: ", error);
+        }
+      } else if (targetId === "profile-banner-upload-input") {
+        console.log("Group profile banner input was clicked");
+
+        try {
+          console.log("uploading file: " + file?.name);
+          const response = await uploadGroupProfileImage(groupId, file, "profile banner");
+
+          // Update the local user data to include the newly uploaded profile banner
+          setGroupData(
+            (prevGroupData) =>
+              prevGroupData && { ...prevGroupData, profileBannerUrl: response.imageUrl }
+          );
+        } catch (error) {
+          console.error("Failed to upload group profile banner: ", error);
+        }
+      } else {
+        console.error("Unknown input");
+      }
+    }
+  };
+
   const onExitGroupClick = () => {
     setIsExitVerifyPopupOpen(true);
   };
@@ -185,17 +228,87 @@ export default function GroupInfo() {
   return (
     <div className="group-info">
       <div className="group-info__header">
-        <div className="group-info__profile-banner-container" onClick={toggleProfileBannerMenu}>
+        <div
+          className="group-info__profile-banner-container"
+          onClick={
+            getMemberRole(userId) === UserRoleName.ADMIN ? toggleProfileBannerMenu : undefined
+          }
+          style={
+            getMemberRole(userId) === UserRoleName.ADMIN
+              ? { cursor: "pointer" }
+              : { cursor: "default" }
+          }
+        >
           <div>
-            <img src={defaultProfileBannerUrl} alt="Banner" className="group-info__banner-img" />
+            <img
+              src={
+                groupData.profileBannerUrl ? groupData.profileBannerUrl : defaultProfileBannerUrl
+              }
+              alt="Banner"
+              className="group-info__banner-img"
+            />
           </div>
+          {isProfileBannerMenuVisible && (
+            <div className="group-info__profile-banner-menu">
+              <button
+                onClick={() => document.getElementById("profile-banner-upload-input")?.click()}
+              >
+                Upload Group Banner
+              </button>
+            </div>
+          )}
+          <input
+            id="profile-banner-upload-input"
+            type="file"
+            accept="image/*"
+            title=""
+            className="group-info__upload-profile-banner-input"
+            onChange={handleProfileImageUpload}
+          />
         </div>
         <div className="group-info__details">
-          <div className="group-info__profile-picture-container" onClick={toggleProfilePictureMenu}>
-            <img src={defaultProfilePictureUrl} alt="Profile" className="group-info__profile-img" />
+          <div
+            className="group-info__profile-picture-container"
+            onClick={
+              getMemberRole(userId) === UserRoleName.ADMIN ? toggleProfilePictureMenu : undefined
+            }
+            style={
+              getMemberRole(userId) === UserRoleName.ADMIN
+                ? { cursor: "pointer" }
+                : { cursor: "default" }
+            }
+          >
+            <div>
+              <img
+                src={
+                  groupData.profilePictureUrl
+                    ? groupData.profilePictureUrl
+                    : defaultProfilePictureUrl
+                }
+                alt="Profile"
+                className="group-info__profile-img"
+              />
+            </div>
+            {isProfilePictureMenuVisible && (
+              <div className="group-info__profile-picture-menu">
+                <button
+                  onClick={() => document.getElementById("profile-picture-upload-input")?.click()}
+                >
+                  Upload Group Profile Picture
+                </button>
+              </div>
+            )}
+            <input
+              id="profile-picture-upload-input"
+              type="file"
+              accept="image/*"
+              title=""
+              className="group-info__upload-profile-picture-input"
+              onChange={handleProfileImageUpload}
+            />
           </div>
           <div className="group-info__title">
-            <h1 className="group-info__group-name">{groupData?.groupName}</h1>
+            <h1 className="group-info__group-name">{groupData.groupName}</h1>
           </div>
         </div>
         <hr className="group-info__divider" />

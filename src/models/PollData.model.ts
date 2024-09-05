@@ -9,6 +9,7 @@ export interface PollData {
     creatorName: string;
     creatorProfilePictureUrl: string;
     groupId: string;
+    groupName: string;
     groupProfilePictureUrl: string;
     timeCreated: string;
     timeUpdated: string;

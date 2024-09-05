@@ -31,6 +31,7 @@ interface PollProps {
   creatorName: string;
   creatorProfilePictureUrl: string;
   groupId: string;
+  groupName: string;
   groupProfilePictureUrl: string;
   timeCreated: string;
   timeUpdated: string;
@@ -48,6 +49,7 @@ export default function Poll({
   creatorName,
   creatorProfilePictureUrl,
   groupId,
+  groupName,
   groupProfilePictureUrl,
   timeCreated,
   timeUpdated,
@@ -189,7 +191,7 @@ export default function Poll({
                   className="poll-info-title__all-groups__group-name"
                   onClick={navigateToGroupProfile}
                 >
-                  {groupId}
+                  {groupName}
                 </div>
                 <div className="poll-info-title__all-groups__creator-name-container">
                   <div

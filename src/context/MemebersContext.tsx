@@ -4,16 +4,12 @@ import { GroupMember } from "../models/GroupMember.model";
 const MembersContext = createContext<{
   members: GroupMember[] | undefined;
   setMembers: React.Dispatch<React.SetStateAction<GroupMember[] | undefined>>;
-  isChanged: boolean;
-  setIsChanged: React.Dispatch<React.SetStateAction<boolean>>;
   setNewRoleToUser: (userId: string, roleName: string) => void;
   getMemberRole: (userId: string) => string;
   sortMembers: (members: GroupMember[]) => GroupMember[];
 }>({
   members: undefined,
   setMembers: () => {},
-  isChanged: false,
-  setIsChanged: () => {},
   setNewRoleToUser: () => {},
   getMemberRole: () => "",
   sortMembers: () => []
@@ -21,7 +17,6 @@ const MembersContext = createContext<{
 
 export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [members, setMembers] = useState<GroupMember[]>();
-  const [isChanged, setIsChanged] = useState(false);
 
   const setNewRoleToUser = (userId: string, roleName: string) => {
     setMembers((prevMembers) => {
@@ -38,8 +33,6 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
       const sortedMembers = sortMembers(updatedMembers);
       return sortedMembers;
     });
-
-    setIsChanged((prev) => !prev);
   };
 
   const getMemberRole = (userId: string) => {
@@ -66,8 +59,6 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
       value={{
         members,
         setMembers,
-        isChanged,
-        setIsChanged,
         setNewRoleToUser,
         getMemberRole,
         sortMembers

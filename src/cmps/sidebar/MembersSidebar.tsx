@@ -10,7 +10,7 @@ import { useMembers } from "../../context/MemebersContext";
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const { members, setMembers, isChanged, sortMembers } = useMembers();
+  const { members, setMembers, sortMembers } = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -55,7 +55,7 @@ export default function MembersSidebar() {
     if (members) {
       setMembers(sortMembers(members));
     }
-  }, [isChanged]);
+  }, [members]);
 
   return (
     <div className="members-sidebar-container">

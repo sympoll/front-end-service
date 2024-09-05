@@ -27,7 +27,7 @@ export default function GroupInfo() {
 
   const { groupId } = useParams();
   const { setGroups } = useGroups();
-  const { getMemberRole } = useMembers();
+  const { getMemberRole, isChanged } = useMembers();
   const [groupData, setGroupData] = useState<GroupData>();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -73,6 +73,7 @@ export default function GroupInfo() {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
           setIsLoading(false);
+          fetchUserPermissionsInCommandBar();
         })
         .catch((error) => {
           console.log("Unable to fetch group data with ID " + groupId);
@@ -80,8 +81,6 @@ export default function GroupInfo() {
           setIsLoading(false);
         });
     }
-
-    fetchUserPermissionsInCommandBar();
   }, [groupId]);
 
   useEffect(() => {
@@ -94,9 +93,14 @@ export default function GroupInfo() {
     }
   }, [groupData?.timeCreated]);
 
-  const fetchUserPermissionsInCommandBar = () => {
-    const userRole = getMemberRole(userId);
+  useEffect(() => {
+    fetchUserPermissionsInCommandBar();
+  },[isChanged])
 
+  const fetchUserPermissionsInCommandBar = () => {
+    console.log("Fetching user permissions in group");
+    const userRole = getMemberRole(userId);
+    
     if (userRole === UserRoleName.ADMIN) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);

@@ -10,7 +10,7 @@ import { useMembers } from "../../context/MemebersContext";
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { groupId } = useParams();
-  const { members, setMembers, isChanged, sortMembers } = useMembers();
+  const { members, setMembers, isChanged, sortMembers, setIsChanged } = useMembers();
   const [isShowingAllGroups, setIsShowingAllGroups] = useState(true);
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { userId } = useParams();
@@ -30,6 +30,7 @@ export default function MembersSidebar() {
         const fetchedMembers = await fetchGroupMembers(groupId);
         console.log("Fetched members: " + fetchedMembers[0].userData);
         setMembers(sortMembers(fetchedMembers));
+        setIsChanged((prev) => !prev);
         setIsLoading(false);
       } catch (error) {
         console.error(cmpName + error);

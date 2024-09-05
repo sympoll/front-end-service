@@ -16,7 +16,7 @@ export default function ModifyRolesPopup({ groupId, userId, onClose }: ModifyRol
   const [selectedRole, setSelectedRole] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [isMemberSelected, setIsMemberSelected] = useState<boolean>(false);
-  const { members, isChanged, setIsChanged, setNewRoleToUser } = useMembers();
+  const { members, setNewRoleToUser } = useMembers();
 
   const [roles, setRoles] = useState<UserRoleName[]>([
     UserRoleName.ADMIN,

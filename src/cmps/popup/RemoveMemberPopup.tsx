@@ -12,7 +12,7 @@ interface RemoveMemberPopupProps {
 export default function RemoveMemberPopup({ groupId, userId, onClose }: RemoveMemberPopupProps) {
   const [selectedMemberId, setSelectedMemberId] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { members, setMembers, isChanged, setIsChanged } = useMembers();
+  const { members, setMembers } = useMembers();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,7 +21,6 @@ export default function RemoveMemberPopup({ groupId, userId, onClose }: RemoveMe
         const removedMember = await removeMemberFromGroup(groupId, selectedMemberId);
 
         setMembers(members?.filter((member) => member.userData.userId !== removedMember.userId));
-        setIsChanged(!isChanged);
         onClose();
       } else {
         setErrorMessage("You must select a group member!");

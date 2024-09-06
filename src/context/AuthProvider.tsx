@@ -1,6 +1,9 @@
 import React, { createContext, ReactNode, useEffect, useState, useContext } from "react";
 import keycloak, { initKeycloak } from "../services/keycloak.service";
-import Keycloak from "keycloak-js";
+import Keycloak, { KeycloakTokenParsed } from "keycloak-js";
+import { invokeSignUp } from "../services/signup.service";
+import { UserSignupData } from "../models/UserSignupData.model";
+import { useUser } from "./UserContext";
 
 // Define types for context
 interface AuthContextType {
@@ -19,17 +22,47 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
-const onAuthSuccess = () => {
-  // Handle post-authentication actions if needed
+type ParsedToken = KeycloakTokenParsed & {
+  email?: string;
+  preferred_username?: string;
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [initialized, setInitialized] = useState(false); // Initialization state
   const [keycloakInstance, setKeycloakInstance] = useState<Keycloak | null>(null);
+  const { setUser } = useUser(); // Destructure setUser from useUser hook
 
+  // onAuthSuccess function to handle authentication success
+  const onAuthSuccess = async () => {
+    const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed;
+
+    if (parsedToken?.preferred_username && parsedToken.email) {
+      const userData: UserSignupData = {
+        username: parsedToken.preferred_username,
+        email: parsedToken.email
+      };
+
+      try {
+        const signedUpUser = await invokeSignUp(userData);
+        // Save user data in UserContext
+        setUser({
+          userId: signedUpUser.userId, // Assuming the response contains userId
+          username: signedUpUser.username,
+          email: signedUpUser.email
+        });
+      } catch (error) {
+        console.error("Error during signup:", error);
+      }
+    } else {
+      console.error("Missing username or email in the token");
+    }
+  };
+
+  // Extract enableAuth environment variable
   const enableAuth = import.meta.env.VITE_ENABLE_AUTH === "auth-enabled";
 
+  // useEffect hook to initialize Keycloak
   useEffect(() => {
     const initializeKeycloak = async () => {
       if (enableAuth) {
@@ -50,8 +83,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     initializeKeycloak();
-  }, [enableAuth]);
+  }, [enableAuth, onAuthSuccess]);
 
+  // Return the AuthContext.Provider with the necessary values
   return (
     <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated, initialized }}>
       {children}

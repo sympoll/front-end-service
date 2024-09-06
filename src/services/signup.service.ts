@@ -183,7 +183,7 @@ export async function checkEmailTaken(email : string) : Promise<boolean> {
  * @param userData Information of the user, filled in the sign up form.
  * @returns Full information of the signed up user.
  */
-export async function invokeSignUp(userData : UserSignupData) : Promise<UserData>{
+export async function invokeSignUp(userData : UserSignupData | undefined) : Promise<UserData>{
     try {
         const response = await axios
             .create({

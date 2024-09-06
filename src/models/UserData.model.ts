@@ -3,6 +3,6 @@ export interface UserData {
     username: string;
     email: string;
     profilePictureUrl: string;
-    profileBannerUrl: string;
+    bannerPictureUrl: string;
     timeCreated: string;
 }

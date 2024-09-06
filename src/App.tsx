@@ -4,7 +4,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import ContentPage from "./pages/ContentPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import { AuthProvider } from "./context/AuthProvider";
+import { AuthProvider, useAuth } from "./context/AuthProvider";
 import ProtectedRoute from "./cmps/route/ProtectedRoute";
 
 export default function App() {

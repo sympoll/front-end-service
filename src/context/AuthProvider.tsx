@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState, useContext } from "react";
+import keycloak, { initKeycloak } from "../services/keycloak.service";
 import Keycloak from "keycloak-js";
-import keycloak from "../services/keycloak.service";
 
 // Define types for context
 interface AuthContextType {
@@ -24,29 +24,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const enableAuth = import.meta.env.VITE_ENABLE_AUTH === "auth-enabled";
 
   useEffect(() => {
-    if (enableAuth) {
-      // Initialize Keycloak if authentication is enabled
-      keycloak
-        .init({
-          onLoad: "login-required",
-          checkLoginIframe: false
-        })
-        .then((auth) => {
-          setAuthenticated(auth);
+    const initializeKeycloak = async () => {
+      if (enableAuth) {
+        try {
+          await initKeycloak(); // Use the guarded initKeycloak function
+          setAuthenticated(keycloak.authenticated || false);
           setKeycloakInstance(keycloak);
-        })
-        .catch((error: Error) => {
-          console.error("Keycloak init failed", error);
-        });
-    } else {
-      // If authentication is disabled, mock authenticated state
-      setAuthenticated(true);
-    }
+        } catch (error) {
+          console.error("Keycloak initialization failed", error);
+        }
+      } else {
+        // If authentication is disabled, mock authenticated state
+        setAuthenticated(true);
+      }
+    };
+
+    initializeKeycloak();
   }, [enableAuth]);
 
   return (
     <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated }}>
-      {authenticated ? children : <div>Loading...</div>}
+      {children}
     </AuthContext.Provider>
   );
 };

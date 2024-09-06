@@ -1,11 +1,8 @@
 import axios from "axios";
 import { CreatePollData } from "../models/CreatePollData.model";
 import { PollData } from "../models/PollData.model";
-import axiosInstance from "./axiosInstance";
 
 const pollServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_POLL_SERVICE_URL;
 
 interface SubmitResult {
@@ -86,7 +83,7 @@ export async function handleSubmit(
     try {
         const deadlineDate = new Date(formData.deadline);
         formData.deadline = deadlineDate.toISOString();
-        const response = await axiosInstance.post<PollData>(pollServiceUrl, formData, {
+        const response = await axios.post<PollData>(pollServiceUrl, formData, {
             headers: {
                 "Content-Type": "application/json",
             },

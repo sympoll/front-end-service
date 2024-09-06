@@ -1,10 +1,7 @@
 import axios from "axios";
 import { throwAxiosErr } from "./error.service";
-import axiosInstance from "./axiosInstance";
 
 const mediaServiceUrl = 
-    import.meta.env.VITE_BASE_URL +
-    import.meta.env.VITE_API_GATEWAY_URL + 
     import.meta.env.VITE_MEDIA_SERVICE_URL;
 
     const cmpName = "Media-Service";
@@ -32,7 +29,14 @@ export async function uploadUserProfileImage(
 
     // Send a request to the Media Service to upload the profile image of the user.
     try {
-        const response = await axiosInstance
+        const response = await axios
+        .create({
+            baseURL: mediaServiceUrl,
+            headers: {
+            "Content-Type": "multipart/form-data",
+            },
+            withCredentials: true,
+        })
         .post(
             type === "profile picture" ? 
                 import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_PICTURE : 

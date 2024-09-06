@@ -1,8 +1,6 @@
 import axios from "axios";
 
 const voteServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_VOTE_SERVICE_URL;
 
 // TODO: once session mechanism is in place, replace this.

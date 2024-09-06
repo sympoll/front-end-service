@@ -5,8 +5,6 @@ import { VotingItemData, VotingItemIsChecked } from "../models/VotingitemData.mo
 import { removeVoteFromItem, voteOnItem } from "./vote.service";
 
 const pollServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_POLL_SERVICE_URL;
 
 // TODO: userId should be accessed from session.

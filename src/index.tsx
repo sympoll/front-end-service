@@ -6,6 +6,7 @@ import { GroupsProvider } from "./context/GroupsContext";
 import { MembersProvider } from "./context/MemebersContext";
 import { AuthProvider } from "./context/AuthProvider";
 import { UserProvider } from "./context/UserContext";
+import "./services/axiosConfig";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

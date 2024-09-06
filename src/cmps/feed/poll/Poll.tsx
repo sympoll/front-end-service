@@ -21,6 +21,7 @@ import {
 import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
+import DeletePollButton from "../../global/DeletePollButton";
 
 interface PollProps {
   pollId: string;
@@ -148,6 +149,10 @@ export default function Poll({
     return true;
   }
 
+  const onDeletePoll = () => {
+
+  }
+
   return (
     <section className="poll-container">
       {
@@ -170,6 +175,9 @@ export default function Poll({
                   {creatorName}
                 </div>
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
+              </div>
+              <div className="poll-info-title__delete-button">
+                <DeletePollButton onClick={onDeletePoll} />
               </div>
             </div>
             <div className="poll-info-title__row2">

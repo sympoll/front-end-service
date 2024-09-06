@@ -9,27 +9,27 @@ const userServiceUrl =
     import.meta.env.VITE_USER_SERVICE_URL;
 
 
-/**
- * 
- * @param userData 
- * @param setError 
- */
-export async function validateUserData(
-    userData : UserSignupData,
-    passwordConfirm : string,
-    setErrorMessage : React.Dispatch<React.SetStateAction<string>>
-) : Promise<boolean>   {
-    if (!(await validateUsername(userData.username, setErrorMessage))) {
-        return false;
-    }
-    if (!(await validateEmail(userData.email, setErrorMessage))) {
-        return false;
-    }
-    if (!validatePassword(userData.password, passwordConfirm, setErrorMessage)) {
-        return false;
-    }
-    return true;
-  }
+// /**
+//  * 
+//  * @param userData 
+//  * @param setError 
+//  */
+// export async function validateUserData(
+//     userData : UserSignupData,
+//     passwordConfirm : string,
+//     setErrorMessage : React.Dispatch<React.SetStateAction<string>>
+// ) : Promise<boolean>   {
+//     if (!(await validateUsername(userData.username, setErrorMessage))) {
+//         return false;
+//     }
+//     if (!(await validateEmail(userData.email, setErrorMessage))) {
+//         return false;
+//     }
+//     if (!validatePassword(userData.password, passwordConfirm, setErrorMessage)) {
+//         return false;
+//     }
+//     return true;
+//   }
 
 /**
  * Validate the entered username.

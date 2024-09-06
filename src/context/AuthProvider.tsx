@@ -6,19 +6,26 @@ import Keycloak from "keycloak-js";
 interface AuthContextType {
   keycloak: Keycloak | null;
   authenticated: boolean;
+  initialized: boolean; // Track initialization state
 }
 
 const AuthContext = createContext<AuthContextType>({
   keycloak: null,
-  authenticated: false
+  authenticated: false,
+  initialized: false
 });
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
+const onAuthSuccess = () => {
+  // Handle post-authentication actions if needed
+};
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
+  const [initialized, setInitialized] = useState(false); // Initialization state
   const [keycloakInstance, setKeycloakInstance] = useState<Keycloak | null>(null);
 
   const enableAuth = import.meta.env.VITE_ENABLE_AUTH === "auth-enabled";
@@ -27,15 +34,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const initializeKeycloak = async () => {
       if (enableAuth) {
         try {
-          await initKeycloak(); // Use the guarded initKeycloak function
-          setAuthenticated(keycloak.authenticated || false);
+          const isAuthenticated = await initKeycloak(onAuthSuccess);
+          setAuthenticated(isAuthenticated);
+          setInitialized(true); // Set initialized to true after init completes
           setKeycloakInstance(keycloak);
         } catch (error) {
           console.error("Keycloak initialization failed", error);
+          setInitialized(true); // Mark as initialized even if it failed to prevent blocking UI
         }
       } else {
         // If authentication is disabled, mock authenticated state
         setAuthenticated(true);
+        setInitialized(true);
       }
     };
 
@@ -43,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [enableAuth]);
 
   return (
-    <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated }}>
+    <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated, initialized }}>
       {children}
     </AuthContext.Provider>
   );

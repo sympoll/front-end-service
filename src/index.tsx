@@ -9,8 +9,8 @@ import { UserProvider } from "./context/UserContext";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AuthProvider>
-      <UserProvider>
+    <UserProvider>
+      <AuthProvider>
         <UpdateProvider>
           <GroupsProvider>
             <MembersProvider>
@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             </MembersProvider>
           </GroupsProvider>
         </UpdateProvider>
-      </UserProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </UserProvider>
   </React.StrictMode>
 );

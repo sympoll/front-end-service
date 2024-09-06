@@ -31,7 +31,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
   const [initialized, setInitialized] = useState(false); // Initialization state
   const [keycloakInstance, setKeycloakInstance] = useState<Keycloak | null>(null);
-  const { setUser } = useUser(); // Destructure setUser from useUser hook
+  const { user, setUser } = useUser(); // Destructure setUser from useUser hook
 
   // onAuthSuccess function to handle authentication success
   const onAuthSuccess = async () => {
@@ -51,6 +51,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           username: signedUpUser.username,
           email: signedUpUser.email
         });
+        console.log(user);
       } catch (error) {
         console.error("Error during signup:", error);
       }

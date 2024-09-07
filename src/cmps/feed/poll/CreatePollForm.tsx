@@ -5,6 +5,7 @@ import CustomButton from "../../global/CustomButton";
 import { handleSubmit, getCurrentDateTime } from "../../../services/create.poll.form.service";
 import CloseButton from "../../global/CloseButton";
 import { PollData } from "../../../models/PollData.model";
+import { useUser } from "../../../context/UserContext";
 
 interface CreatePollFormProps {
   groupId: string;
@@ -21,12 +22,13 @@ export default function CreatePollForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitButtonText, setSubmitButtonText] = useState("Submit");
+  const { user } = useUser();
 
   const [formData, setFormData] = useState<CreatePollData>({
     title: "",
     description: "",
     nofAnswersAllowed: 1,
-    creatorId: import.meta.env.VITE_DEBUG_USER_ID, // Replace with actual creatorId
+    creatorId: user?.userId, // Replace with actual creatorId
     groupId: groupId,
     deadline: "",
     votingItems: ["", "", ""]

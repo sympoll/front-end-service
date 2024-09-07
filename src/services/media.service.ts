@@ -30,8 +30,8 @@ export async function uploadUserProfileImage(
   try {
     const response = await axios.post(
       type === "profile picture"
-        ? import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_PICTURE
-        : import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_BANNER,
+        ? mediaServiceUrl + import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_PICTURE
+        : mediaServiceUrl + import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_USER_PROFILE_BANNER,
       formData,
       {
         headers: {
@@ -77,8 +77,8 @@ export async function uploadGroupProfileImage(
   try {
     const response = await axios.post(
       type === "profile picture"
-        ? import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_PICTURE
-        : import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_BANNER,
+        ? mediaServiceUrl + import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_PICTURE
+        : mediaServiceUrl + import.meta.env.VITE_MEDIA_SERVICE_UPLOAD_GROUP_PROFILE_BANNER,
       formData,
       {
         headers: {

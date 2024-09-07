@@ -1,4 +1,5 @@
 import Keycloak, { KeycloakConfig } from "keycloak-js";
+import { useAuth } from "../context/AuthProvider";
 
 // This file sets up the Keycloak configuration and initializes a Keycloak instance for managing authentication in the application.
 // The initKeycloak function initializes Keycloak and optionally handles authentication success through a callback.

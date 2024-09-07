@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VotingItem from "./VotingItem";
 import {
@@ -24,6 +24,7 @@ import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-pic
 import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
+import VerifyPopup from "../../popup/VerifyPopup";
 
 interface PollProps {
   pollId: string;
@@ -41,7 +42,8 @@ interface PollProps {
   deadline: string;
   votingItems: VotingItemData[];
   isSpecificGroup: boolean;
-  isPollListChanged: boolean;
+  showVerifyDeletePopup: () => void;
+  deletePollTrigger: boolean;
 }
 
 export default function Poll({
@@ -60,7 +62,8 @@ export default function Poll({
   deadline,
   votingItems,
   isSpecificGroup,
-  isPollListChanged
+  showVerifyDeletePopup,
+  deletePollTrigger
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
@@ -72,11 +75,13 @@ export default function Poll({
     }))
   );
   const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
+  
   const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
   const {members, getMemberRole} = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
+  const isFirstRender = useRef(true); // useRef to track the first render
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -171,8 +176,16 @@ export default function Poll({
     }
   }
 
-  const onDeletePoll = () => {
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      onDeletePoll(); 
+    }
+  }, [deletePollTrigger]);
 
+  const onDeletePoll = () => {
+    console.log("deleting poll");
   }
 
   return (
@@ -199,7 +212,7 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePoll} />)}
+                {isUserCanDeletePoll && (<DeletePollButton onClick={showVerifyDeletePopup} />)}
               </div>
             </div>
             <div className="poll-info-title__row2">

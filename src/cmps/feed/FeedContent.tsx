@@ -8,11 +8,13 @@ import { useParams } from "react-router-dom";
 import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useUpdateContext } from "../../context/UpdateContext";
+import VerifyPopup from "../popup/VerifyPopup";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isPollListChanged, setIdPollListChanged] = useState(false);
+  const [isVerifyPopupOpen, setIsVerifyPopupOpen] = useState(false);
+  const [deletePollTrigger, setDeletePollTrigger] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
@@ -38,8 +40,7 @@ export default function FeedContent() {
 
       setIsLoading(false);
       removeErrorFromFeed();
-      setPolls(fetchedPolls);
-      setIdPollListChanged((prev) => !prev); 
+      setPolls(fetchedPolls); 
     } catch (err) {
       if (err instanceof Error) {
         console.error(cmpName + err.message);
@@ -71,6 +72,14 @@ export default function FeedContent() {
     console.log("Adding newly created poll to feed. ", newPoll);
     setPolls((prevPolls) => [newPoll, ...prevPolls]); // Prepend the new poll to the beginning of the array
   };
+
+  const showVerifyDeletePopup = () => {
+    setIsVerifyPopupOpen(true);
+  }
+
+  const deletePoll = () => {
+    setDeletePollTrigger((prev) => !prev);
+  }
 
   if (isLoading) {
     return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
@@ -119,10 +128,12 @@ export default function FeedContent() {
             deadline={poll.deadline}
             votingItems={poll.votingItems}
             isSpecificGroup={!!groupId}
-            isPollListChanged={isPollListChanged}
+            showVerifyDeletePopup={showVerifyDeletePopup}
+            deletePollTrigger={deletePollTrigger}
           />
         ))}
       </div>
+      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={deletePoll} onClose={() => setIsVerifyPopupOpen(false)}></VerifyPopup>)}
     </div>
   );
 }

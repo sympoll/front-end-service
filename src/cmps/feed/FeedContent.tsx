@@ -77,8 +77,12 @@ export default function FeedContent() {
     setIsVerifyPopupOpen(true);
   }
 
-  const deletePoll = () => {
-    setDeletePollTrigger((prev) => !prev);
+  const turnDeletePollTrigger = () => {
+    setDeletePollTrigger(true);
+  }
+
+  const deletePollFromPollsList = (pollId: string) => {
+    setPolls(polls?.filter((poll) => poll.pollId !== pollId));
   }
 
   if (isLoading) {
@@ -130,10 +134,12 @@ export default function FeedContent() {
             isSpecificGroup={!!groupId}
             showVerifyDeletePopup={showVerifyDeletePopup}
             deletePollTrigger={deletePollTrigger}
+            setDeletePollTrigger={setDeletePollTrigger}
+            deletePollFromPollsList={deletePollFromPollsList}
           />
         ))}
       </div>
-      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={deletePoll} onClose={() => setIsVerifyPopupOpen(false)}></VerifyPopup>)}
+      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={turnDeletePollTrigger} onClose={() => setIsVerifyPopupOpen(false)}></VerifyPopup>)}
     </div>
   );
 }

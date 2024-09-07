@@ -9,6 +9,7 @@ import {
 import ErrorPopup from "../../popup/ErrorPopup";
 import {
   countCheckedItems,
+  deletePoll,
   getProgress,
   getTimePassed,
   getTimeToDeadline,
@@ -25,6 +26,7 @@ import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
 import VerifyPopup from "../../popup/VerifyPopup";
+import { error } from "winston";
 
 interface PollProps {
   pollId: string;
@@ -44,6 +46,8 @@ interface PollProps {
   isSpecificGroup: boolean;
   showVerifyDeletePopup: () => void;
   deletePollTrigger: boolean;
+  setDeletePollTrigger: React.Dispatch<React.SetStateAction<boolean>>;
+  deletePollFromPollsList: (pollId: string) => void;
 }
 
 export default function Poll({
@@ -63,30 +67,34 @@ export default function Poll({
   votingItems,
   isSpecificGroup,
   showVerifyDeletePopup,
-  deletePollTrigger
+  deletePollTrigger,
+  setDeletePollTrigger,
+  deletePollFromPollsList
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
+  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
     votingItems.map((vItem) => ({
       votingItemId: vItem.votingItemId,
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
-  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
+  
   
   const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
   const {members, getMemberRole} = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
-  const isFirstRender = useRef(true); // useRef to track the first render
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
   };
-  const showErrorPopup = () => {
+  const showLimitErrorPopup = () => {
+    setErrorMessage("Already reached the limit of votes!");
     setIsErrorPopupVisible(true);
   };
 
@@ -177,15 +185,23 @@ export default function Poll({
   }
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (deletePollTrigger) {
+      onDeletePoll();
     } else {
-      onDeletePoll(); 
+      setDeletePollTrigger(false); 
     }
   }, [deletePollTrigger]);
 
-  const onDeletePoll = () => {
+  const onDeletePoll = async () => {
     console.log("deleting poll");
+    await deletePoll(pollId, userId, groupId)
+    .then((data) => {
+      deletePollFromPollsList(data.pollId);
+    }).catch((error) => {
+      console.log("Unable to delete poll: ", pollId);
+      setErrorMessage(error);
+      setIsErrorPopupVisible(true);
+    });
   }
 
   return (
@@ -282,7 +298,7 @@ export default function Poll({
                   ?.isChecked || false
               }
               handleNewProgress={handleNewProgress}
-              showErrorPopup={showErrorPopup}
+              showErrorPopup={showLimitErrorPopup}
             />
           ))
         }
@@ -290,7 +306,7 @@ export default function Poll({
       <p className="poll-error-message">
         {isErrorPopupVisible && (
           <ErrorPopup
-            message="Already reached the limit of votes!"
+            message={errorMessage}
             closeErrorPopup={closeErrorPopup}
           />
         )}

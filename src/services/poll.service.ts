@@ -252,3 +252,31 @@ export async function sendRequestToVoteService(isChecked: boolean, votingItemId:
     throw error;
   }
 }
+
+export async function deletePoll(pollId:string, userId:string, groupId:string) : Promise<PollData> {
+  console.log(cmpName, "Sending request to delete poll '" + pollId + "'");
+  const pollDeleteRequestPayload ={
+    pollId: pollId,
+    userId: userId,
+    groupId: groupId,
+};
+
+  try {
+    const response = await axios
+    .create({
+      baseURL: pollServiceUrl,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      withCredentials: true,
+    }).delete(
+      import.meta.env.VITE_POLL_SERVICE_DELETE_POLL, {
+      data: pollDeleteRequestPayload,
+    });
+    
+    return response.data;
+  } catch(err) {
+    console.error(cmpName, "Error deleting poll: '" + pollId + "' error info: " + err);
+    throw throwAxiosErr(err);;
+  }
+}

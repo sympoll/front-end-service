@@ -3,19 +3,20 @@ import { PollData } from "../models/PollData.model";
 import { throwAxiosErr } from "./error.service";
 import { VotingItemData, VotingItemIsChecked } from "../models/VotingitemData.model";
 import { removeVoteFromItem, voteOnItem } from "./vote.service";
+import { useUser } from "../context/UserContext";
+import { UserData } from "../models/UserData.model";
 
 const pollServiceUrl = import.meta.env.VITE_POLL_SERVICE_URL;
 
 // TODO: userId should be accessed from session.
 const cmpName = "POLL.SVC";
-const userId = import.meta.env.VITE_DEBUG_USER_ID;
+// const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 /**
  * Fetch all polls of a user, most recent polls first.
- * @param userId ID of the user to fetch his polls.
  * @returns Logged in user's polls from all his groups.
  */
-export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
+export async function fetchAllUserGroupsPolls(userId: string | undefined): Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by all user's polls");
 
   // Send a request to the Poll Service to get all polls of the user.
@@ -44,7 +45,10 @@ export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
  * @param groupId ID string of the group to fetch its polls.
  * @returns A raw list of polls returned from poll-service microservice.
  */
-export async function fetchPollsByGroupId(groupId: string): Promise<PollData[]> {
+export async function fetchPollsByGroupId(
+  groupId: string,
+  userId: string | undefined
+): Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by group ID: " + groupId);
   // Send a request to the Poll Service to get all polls of the specified groups.
   try {
@@ -226,13 +230,17 @@ export const countCheckedItems = (isCheckedStates: VotingItemIsChecked[]): numbe
 };
 
 // Sends a request to vote or remove a vote for a specific voting item
-export async function sendRequestToVoteService(isChecked: boolean, votingItemId: number) {
+export async function sendRequestToVoteService(
+  isChecked: boolean,
+  votingItemId: number,
+  userId: string | undefined
+) {
   try {
     // Vote on the item if checked, remove the vote if unchecked
     if (isChecked) {
-      await voteOnItem(Number(votingItemId));
+      await voteOnItem(Number(votingItemId), userId);
     } else {
-      await removeVoteFromItem(Number(votingItemId));
+      await removeVoteFromItem(Number(votingItemId), userId);
     }
   } catch (error) {
     console.error("Error sending request:", error);

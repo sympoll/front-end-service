@@ -5,6 +5,10 @@ import { invokeSignUp } from "../services/signup.service";
 import { UserSignupData } from "../models/UserSignupData.model";
 import { useUser } from "./UserContext";
 
+// This file defines the AuthProvider component and AuthContext for managing authentication state using Keycloak in the React application.
+// The AuthProvider initializes Keycloak, tracks authentication and initialization states, and handles user signup by using information from the Keycloak token.
+// It provides the authentication state and Keycloak instance via AuthContext to the application, and the useAuth hook allows easy access to this context.
+
 // Define types for context
 interface AuthContextType {
   keycloak: Keycloak | null;

@@ -1,11 +1,10 @@
 import "./assets/styles/main.scss";
 import { BrowserRouter, Routes, Route, redirect, Navigate } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
 import ContentPage from "./pages/ContentPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import { AuthProvider } from "./context/AuthProvider";
 import ProtectedRoute from "./cmps/route/ProtectedRoute";
+import KeycloakLoginPage from "./pages/KeycloakLoginPage";
 
 export default function App() {
   return (
@@ -14,7 +13,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<KeycloakLoginPage />} />
         <Route path="/reset-account" element={<NotFoundPage />} />
         <Route path="/*" element={<NotFoundPage />} />
 

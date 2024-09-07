@@ -1,5 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
+// This file defines the UserProvider component and UserContext for managing user data within the React application.
+// The UserProvider component maintains user state and provides it along with a setUser function via the UserContext to its child components.
+// The useUser hook offers a convenient way to access and update user data in components that consume the UserContext.
+
 // Define the type for user data
 interface UserData {
   userId: string;

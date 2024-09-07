@@ -1,7 +1,7 @@
 // This automatically configures axios to work with access tokens and refresh them.
 
 import axios from "axios";
-import keycloak from "./keycloak.service"; // Adjust the import path as needed
+import keycloak from "../services/keycloak.service"; // Adjust the import path as needed
 
 // Set base URL globally if your API is consistent across services
 axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_GATEWAY_URL}`;

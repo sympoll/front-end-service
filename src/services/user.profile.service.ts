@@ -5,7 +5,7 @@ import { throwAxiosErr } from "./error.service";
 
 const userServiceUrl = import.meta.env.VITE_USER_SERVICE_URL;
 
-export async function fetchUserData(userId: string): Promise<UserData> {
+export async function fetchUserData(userId: string | undefined): Promise<UserData> {
   console.log("Fetching user data for user with ID: " + userId);
   try {
     const response = await axios.get(

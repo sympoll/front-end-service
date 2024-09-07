@@ -3,10 +3,14 @@ import axios from "axios";
 const voteServiceUrl = import.meta.env.VITE_VOTE_SERVICE_URL;
 
 // TODO: once session mechanism is in place, replace this.
-const userId = import.meta.env.VITE_DEBUG_USER_ID;
+// const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 // Helper function to handle API requests
-async function sendVoteRequest(method: "post" | "delete", votingItemId: number): Promise<void> {
+async function sendVoteRequest(
+  method: "post" | "delete",
+  votingItemId: number,
+  userId: string | undefined
+): Promise<void> {
   const voteRequestPayload = {
     userId: userId,
     votingItemId: votingItemId
@@ -34,11 +38,14 @@ async function sendVoteRequest(method: "post" | "delete", votingItemId: number):
 }
 
 // Function to vote on an item
-export async function voteOnItem(votingItemId: number): Promise<void> {
-  return sendVoteRequest("post", votingItemId);
+export async function voteOnItem(votingItemId: number, userId: string | undefined): Promise<void> {
+  return sendVoteRequest("post", votingItemId, userId);
 }
 
 // Function to remove vote from an item
-export async function removeVoteFromItem(votingItemId: number): Promise<void> {
-  return sendVoteRequest("delete", votingItemId);
+export async function removeVoteFromItem(
+  votingItemId: number,
+  userId: string | undefined
+): Promise<void> {
+  return sendVoteRequest("delete", votingItemId, userId);
 }

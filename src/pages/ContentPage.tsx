@@ -24,7 +24,7 @@ export default function ContentPage({ content }: ContentPageProps) {
 
   useEffect(() => {
     updateLoggedInUser();
-  }, [loggedInUser]);
+  }, [user?.userId]);
 
   const updateLoggedInUser = useCallback(async () => {
     setLoading(true);

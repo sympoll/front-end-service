@@ -59,7 +59,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser({
           userId: signedUpUser.userId, // Assuming the response contains userId
           username: signedUpUser.username,
-          email: signedUpUser.email
+          email: signedUpUser.email,
+          profilePictureUrl: signedUpUser.profilePictureUrl,
+          profileBannerUrl: signedUpUser.profileBannerUrl,
+          timeCreated: signedUpUser.timeCreated
         });
         console.log(user);
       } catch (error) {
@@ -88,10 +91,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       } else {
         // Set dummy user data
+        const signedUpUser = await invokeSignUp(import.meta.env.VITE_DEBUG_USER_ID);
+
         setUser({
-          userId: import.meta.env.VITE_DEBUG_USER_ID,
-          username: import.meta.env.VITE_DEBUG_USERNAME,
-          email: import.meta.env.VITE_DEBUG_USER_EMAIL
+          userId: signedUpUser.userId, // Assuming the response contains userId
+          username: signedUpUser.username,
+          email: signedUpUser.email,
+          profilePictureUrl: signedUpUser.profilePictureUrl,
+          profileBannerUrl: signedUpUser.profileBannerUrl,
+          timeCreated: signedUpUser.timeCreated
         });
         // If authentication is disabled, mock authenticated state
         setAuthenticated(true);

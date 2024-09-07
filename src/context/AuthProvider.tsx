@@ -91,19 +91,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       } else {
         // Set dummy user data
-        const signedUpUser = await invokeSignUp(import.meta.env.VITE_DEBUG_USER_ID);
+        const userData: UserSignupData = {
+          userId: import.meta.env.VITE_DEBUG_USER_ID,
+          username: import.meta.env.VITE_DEBUG_USERNAME,
+          email: import.meta.env.VITE_DEBUG_EMAIL
+        };
+        try {
+          const signedUpUser = await invokeSignUp(userData);
 
-        setUser({
-          userId: signedUpUser.userId, // Assuming the response contains userId
-          username: signedUpUser.username,
-          email: signedUpUser.email,
-          profilePictureUrl: signedUpUser.profilePictureUrl,
-          profileBannerUrl: signedUpUser.profileBannerUrl,
-          timeCreated: signedUpUser.timeCreated
-        });
-        // If authentication is disabled, mock authenticated state
-        setAuthenticated(true);
-        setInitialized(true);
+          setUser({
+            userId: signedUpUser.userId, // Assuming the response contains userId
+            username: signedUpUser.username,
+            email: signedUpUser.email,
+            profilePictureUrl: signedUpUser.profilePictureUrl,
+            profileBannerUrl: signedUpUser.profileBannerUrl,
+            timeCreated: signedUpUser.timeCreated
+          });
+          // If authentication is disabled, mock authenticated state
+          setAuthenticated(true);
+          setInitialized(true);
+        } catch (error) {
+          console.error("dummy data login failed", error);
+          setInitialized(true); // Mark as initialized even if it failed to prevent blocking UI
+        }
       }
     };
 

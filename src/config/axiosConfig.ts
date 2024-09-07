@@ -5,25 +5,27 @@ import keycloak from "../services/keycloak.service"; // Adjust the import path a
 
 // Set base URL globally if your API is consistent across services
 axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_GATEWAY_URL}`;
-axios.defaults.withCredentials = true; // Include credentials with requests
+const enableAuth = import.meta.env.VITE_ENABLE_AUTH === "auth-enabled";
+axios.defaults.withCredentials = enableAuth;
 
 // Add a request interceptor to attach the Keycloak access token to every request
 axios.interceptors.request.use(
   async (config) => {
-    if (keycloak.authenticated) {
+    if (enableAuth && keycloak.authenticated) {
       try {
-        // Refresh the token if it's about to expire
         await keycloak.updateToken(30); // Refresh if the token will expire in the next 30 seconds
         const token = keycloak.token;
 
-        // Attach the token to the Authorization header
         if (token) {
-          config.headers.Authorization = `Bearer ${token}`;
+          config.headers.Authorization = `Bearer ${token}`; // Make sure to use backticks for string interpolation
         }
       } catch (error) {
         console.error("Failed to refresh Keycloak token", error);
         keycloak.login(); // Redirect to login if token refresh fails
       }
+    } else {
+      // Ensure Authorization header is not set if auth is disabled
+      delete config.headers.Authorization;
     }
     return config;
   },

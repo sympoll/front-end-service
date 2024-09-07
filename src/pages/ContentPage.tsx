@@ -15,7 +15,6 @@ interface ContentPageProps {
 }
 
 export default function ContentPage({ content }: ContentPageProps) {
-  // const loggedInUserId = import.meta.env.VITE_DEBUG_USER_ID; // Temporarily using hardcoded logged-in user ID
   const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);

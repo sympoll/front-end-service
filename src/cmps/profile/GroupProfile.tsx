@@ -53,12 +53,7 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
-
   const [timePassed, setTimePassed] = useState<string>();
-
-  // Temporary hard coded user ID
-  // TODO: Delete this when using context/sessions
-  // const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const userData = fetchUserData(userId);
 
   // Styling configurations:

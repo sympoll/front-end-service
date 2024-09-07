@@ -8,9 +8,7 @@ import { UserData } from "../models/UserData.model";
 
 const pollServiceUrl = import.meta.env.VITE_POLL_SERVICE_URL;
 
-// TODO: userId should be accessed from session.
 const cmpName = "POLL.SVC";
-// const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 /**
  * Fetch all polls of a user, most recent polls first.

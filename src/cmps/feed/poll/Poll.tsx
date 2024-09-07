@@ -22,6 +22,7 @@ import {
 import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
+import { useUser } from "../../../context/UserContext";
 import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
@@ -82,6 +83,7 @@ export default function Poll({
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
+  const { user } = useUser();
   const isFirstRender = useRef(true); // useRef to track the first render
 
   const closeErrorPopup = () => {
@@ -137,7 +139,7 @@ export default function Poll({
     if (isSingleChoice(nofAnswersAllowed) && inputIsInc) {
       const previouslySelectedItem = isCheckedStates.find((item) => item.isChecked);
       if (previouslySelectedItem) {
-        sendRequestToVoteService(false, previouslySelectedItem.votingItemId);
+        sendRequestToVoteService(false, previouslySelectedItem.votingItemId, user?.userId);
       }
     }
 
@@ -162,7 +164,7 @@ export default function Poll({
     );
 
     // Trigger vote service call for the new selection
-    sendRequestToVoteService(inputIsInc, inputId);
+    sendRequestToVoteService(inputIsInc, inputId, user?.userId);
 
     return true;
   }

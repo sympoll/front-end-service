@@ -5,7 +5,7 @@ const MembersContext = createContext<{
   members: GroupMember[] | undefined;
   setMembers: React.Dispatch<React.SetStateAction<GroupMember[] | undefined>>;
   setNewRoleToUser: (userId: string, roleName: string) => void;
-  getMemberRole: (userId: string) => string;
+  getMemberRole: (userId: string | undefined) => string;
   sortMembers: (members: GroupMember[]) => GroupMember[];
 }>({
   members: undefined,
@@ -18,7 +18,7 @@ const MembersContext = createContext<{
 export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [members, setMembers] = useState<GroupMember[]>();
 
-  const setNewRoleToUser = (userId: string, roleName: string) => {
+  const setNewRoleToUser = (userId: string | undefined, roleName: string) => {
     setMembers((prevMembers) => {
       if (!prevMembers) return prevMembers;
 
@@ -35,7 +35,7 @@ export const MembersProvider: React.FC<{ children: React.ReactNode }> = ({ child
     });
   };
 
-  const getMemberRole = (userId: string) => {
+  const getMemberRole = (userId: string | undefined) => {
     return members?.find((member) => member.userData.userId === userId)?.roleName ?? "";
   };
 

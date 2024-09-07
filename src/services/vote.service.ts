@@ -1,21 +1,16 @@
 import axios from "axios";
 
-const voteServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
-  import.meta.env.VITE_VOTE_SERVICE_URL;
-
-// TODO: once session mechanism is in place, replace this.
-const userId = import.meta.env.VITE_DEBUG_USER_ID
+const voteServiceUrl = import.meta.env.VITE_VOTE_SERVICE_URL;
 
 // Helper function to handle API requests
 async function sendVoteRequest(
   method: "post" | "delete",
-  votingItemId: number
+  votingItemId: number,
+  userId: string | undefined
 ): Promise<void> {
   const voteRequestPayload = {
     userId: userId,
-    votingItemId: votingItemId,
+    votingItemId: votingItemId
   };
 
   console.log(`${method.toUpperCase()} request on item: ${votingItemId}`);
@@ -24,11 +19,8 @@ async function sendVoteRequest(
     const response = await axios({
       method: method,
       url: voteServiceUrl,
-      headers: {
-        "Content-Type": "application/json",
-      },
       data: voteRequestPayload,
-      withCredentials: true,
+      withCredentials: true
     });
 
     return response.data;
@@ -43,11 +35,14 @@ async function sendVoteRequest(
 }
 
 // Function to vote on an item
-export async function voteOnItem(votingItemId: number): Promise<void> {
-  return sendVoteRequest("post", votingItemId);
+export async function voteOnItem(votingItemId: number, userId: string | undefined): Promise<void> {
+  return sendVoteRequest("post", votingItemId, userId);
 }
 
 // Function to remove vote from an item
-export async function removeVoteFromItem(votingItemId: number): Promise<void> {
-  return sendVoteRequest("delete", votingItemId);
+export async function removeVoteFromItem(
+  votingItemId: number,
+  userId: string | undefined
+): Promise<void> {
+  return sendVoteRequest("delete", votingItemId, userId);
 }

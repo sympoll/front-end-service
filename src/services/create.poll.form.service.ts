@@ -3,8 +3,6 @@ import { CreatePollData } from "../models/CreatePollData.model";
 import { PollData } from "../models/PollData.model";
 
 const pollServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
   import.meta.env.VITE_POLL_SERVICE_URL;
 
 interface SubmitResult {

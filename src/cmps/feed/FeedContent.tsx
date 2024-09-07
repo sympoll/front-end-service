@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { useUser } from "../../context/UserContext";
 import VerifyPopup from "../popup/VerifyPopup";
 
 export default function FeedContent() {
@@ -18,6 +19,7 @@ export default function FeedContent() {
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
+  const { user } = useUser();
   const [pollIdToDelete, setPollIdToDelete] = useState<string>("");
   const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
 
@@ -35,9 +37,9 @@ export default function FeedContent() {
     try {
       let fetchedPolls: PollData[];
       if (groupId) {
-        fetchedPolls = await fetchPollsByGroupId(groupId);
+        fetchedPolls = await fetchPollsByGroupId(groupId, user?.userId);
       } else {
-        fetchedPolls = await fetchAllUserGroupsPolls();
+        fetchedPolls = await fetchAllUserGroupsPolls(user?.userId);
       }
 
       setIsLoading(false);

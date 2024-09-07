@@ -21,6 +21,7 @@ import { fetchUserData } from "../../services/user.profile.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import { uploadGroupProfileImage } from "../../services/media.service";
+import { useUser } from "../../context/UserContext";
 
 export default function GroupInfo() {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function GroupInfo() {
   const { setGroups } = useGroups();
   const { members, getMemberRole } = useMembers();
   const [groupData, setGroupData] = useState<GroupData>();
+  const { user } = useUser();
+  const userId = user?.userId;
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
@@ -50,12 +53,7 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
-
   const [timePassed, setTimePassed] = useState<string>();
-
-  // Temporary hard coded user ID
-  // TODO: Delete this when using context/sessions
-  const userId = import.meta.env.VITE_DEBUG_USER_ID;
   const userData = fetchUserData(userId);
 
   // Styling configurations:
@@ -94,12 +92,12 @@ export default function GroupInfo() {
 
   useEffect(() => {
     fetchUserPermissionsInCommandBar();
-  },[members])
+  }, [members]);
 
   const fetchUserPermissionsInCommandBar = () => {
     console.log("Fetching user permissions in group");
     const userRole = getMemberRole(userId);
-    
+
     if (userRole === UserRoleName.ADMIN) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);

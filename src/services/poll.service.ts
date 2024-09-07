@@ -255,17 +255,12 @@ export async function deletePoll(pollId:string, userId:string | undefined, group
 };
 
   try {
-    const response = await axios
-    .create({
-      baseURL: pollServiceUrl,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    }).delete(
-      import.meta.env.VITE_POLL_SERVICE_DELETE_POLL, {
-      data: pollDeleteRequestPayload,
-    });
+    const response = await axios.delete(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_DELETE_POLL,
+      {
+        data: pollDeleteRequestPayload
+      }
+    );
     
     return response.data;
   } catch(err) {

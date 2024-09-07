@@ -27,6 +27,7 @@ interface AuthProviderProps {
 }
 
 type ParsedToken = KeycloakTokenParsed & {
+  userId?: string | undefined;
   email?: string;
   preferred_username?: string;
 };
@@ -41,8 +42,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const onAuthSuccess = async () => {
     const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed;
 
+    if (parsedToken) {
+      parsedToken.userId = parsedToken.sub; // Map sub to userId
+    }
+
     if (parsedToken?.preferred_username && parsedToken.email) {
       const userData: UserSignupData = {
+        userId: parsedToken.userId,
         username: parsedToken.preferred_username,
         email: parsedToken.email
       };
@@ -81,6 +87,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           setInitialized(true); // Mark as initialized even if it failed to prevent blocking UI
         }
       } else {
+        // Set dummy user data
+        setUser({
+          userId: import.meta.env.VITE_DEBUG_USER_ID,
+          username: import.meta.env.VITE_DEBUG_USERNAME,
+          email: import.meta.env.VITE_DEBUG_USER_EMAIL
+        });
         // If authentication is disabled, mock authenticated state
         setAuthenticated(true);
         setInitialized(true);

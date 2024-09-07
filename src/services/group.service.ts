@@ -94,7 +94,7 @@ export async function fetchGroupData(groupId: string): Promise<GroupData> {
 
 export async function removeMemberFromGroup(
   groupId: string,
-  userId: string
+  userId: string | undefined
 ): Promise<RemoveGroupMemberResponse> {
   console.log(
     svcName,

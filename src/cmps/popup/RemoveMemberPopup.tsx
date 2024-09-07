@@ -5,7 +5,7 @@ import { useMembers } from "../../context/MemebersContext";
 
 interface RemoveMemberPopupProps {
   groupId: string;
-  userId: string;
+  userId: string | undefined;
   onClose: () => void;
 }
 

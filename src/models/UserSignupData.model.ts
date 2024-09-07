@@ -1,4 +1,5 @@
 export interface UserSignupData {
-    username: string;
-    email: string;
+  userId: String | undefined;
+  username: string;
+  email: string;
 }

@@ -10,13 +10,9 @@ export default function KeycloakLoginPage() {
 
   const handleLogIn = () => {
     if (initialized && keycloak && !authenticated) {
-      keycloak
-        .login({
-          redirectUri: "http://localhost:8080/feed" // Specify the redirect URI
-        })
-        .catch((error) => {
-          console.error("Failed to initiate Keycloak login:", error);
-        });
+      keycloak.login().catch((error) => {
+        console.error("Failed to initiate Keycloak login:", error);
+      });
     } else if (!initialized) {
       console.warn("Keycloak is not initialized yet.");
     } else {

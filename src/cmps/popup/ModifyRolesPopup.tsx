@@ -6,7 +6,7 @@ import { UserRoleName } from "../../models/enum/UserRoleName.enum";
 
 interface ModifyRolesPopupProps {
   groupId: string;
-  userId: string;
+  userId: string | undefined;
   onClose: () => void;
 }
 

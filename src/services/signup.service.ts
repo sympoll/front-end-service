@@ -3,14 +3,12 @@ import { UserSignupData } from "../models/UserSignupData.model";
 import { throwAxiosErr } from "./error.service";
 import { UserData } from "../models/UserData.model";
 
-const userServiceUrl = 
-    import.meta.env.VITE_USER_SERVICE_URL;
-
+const userServiceUrl = import.meta.env.VITE_USER_SERVICE_URL;
 
 // /**
-//  * 
-//  * @param userData 
-//  * @param setError 
+//  *
+//  * @param userData
+//  * @param setError
 //  */
 // export async function validateUserData(
 //     userData : UserSignupData,
@@ -36,34 +34,34 @@ const userServiceUrl =
  * @returns Promise of a boolean value, true if valid, otherwise false.
  */
 async function validateUsername(
-    username: string,
-    setErrorMessage : React.Dispatch<React.SetStateAction<string>>
+  username: string,
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 ): Promise<boolean> {
-    const validCharactersPattern = /^[a-zA-Z0-9_]*$/;
-    if (!username) {
-        setErrorMessage("Username is required.");
-        return false;
-    }
-    if (!username.match(validCharactersPattern)) {
-        setErrorMessage("Username contains invalid characters.");
-        return false;
-    }
-    if (username.length < 4) {
-        setErrorMessage("Username is too short. It must be at least 4 characters long.");
-        return false;
-    }
+  const validCharactersPattern = /^[a-zA-Z0-9_]*$/;
+  if (!username) {
+    setErrorMessage("Username is required.");
+    return false;
+  }
+  if (!username.match(validCharactersPattern)) {
+    setErrorMessage("Username contains invalid characters.");
+    return false;
+  }
+  if (username.length < 4) {
+    setErrorMessage("Username is too short. It must be at least 4 characters long.");
+    return false;
+  }
 
-    // Check if the username chosen already exists in the database
-    try {
-        const isUsernameTaken = await checkUsernameTaken(username);
-        if(isUsernameTaken) {
-            setErrorMessage(`The username ${username} already exists.`);
-            return false;
-        }
-    } catch(err) {
-        setErrorMessage("Could not check if username was already taken. " + err);
+  // Check if the username chosen already exists in the database
+  try {
+    const isUsernameTaken = await checkUsernameTaken(username);
+    if (isUsernameTaken) {
+      setErrorMessage(`The username ${username} already exists.`);
+      return false;
     }
-    return true;
+  } catch (err) {
+    setErrorMessage("Could not check if username was already taken. " + err);
+  }
+  return true;
 }
 
 /**
@@ -73,28 +71,28 @@ async function validateUsername(
  * @returns Promise of a boolean value, true if valid, otherwise false.
  */
 function validatePassword(
-    password: string,
-    passwordConfirm: string,
-    setErrorMessage : React.Dispatch<React.SetStateAction<string>>
+  password: string,
+  passwordConfirm: string,
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 ): boolean {
-    const validCharactersPattern = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/`~]*$/;
-    if (!password) {
-        setErrorMessage("Password is required.");
-        return false;
-    }
-    if (!password.match(validCharactersPattern)) {
-        setErrorMessage("Password contains invalid characters.");
-        return false;
-    }
-    if (password.length < 6) {
-        setErrorMessage("Password is too short. It must be at least 6 characters long.");
-        return false;
-    }
-    if(password !== passwordConfirm) {
-        setErrorMessage("The password and confirmation password do not match.");
-        return false;
-    }
-    return true;
+  const validCharactersPattern = /^[a-zA-Z0-9!@#$%^&*()_+\-=\[\]{}|;:'",.<>?/`~]*$/;
+  if (!password) {
+    setErrorMessage("Password is required.");
+    return false;
+  }
+  if (!password.match(validCharactersPattern)) {
+    setErrorMessage("Password contains invalid characters.");
+    return false;
+  }
+  if (password.length < 6) {
+    setErrorMessage("Password is too short. It must be at least 6 characters long.");
+    return false;
+  }
+  if (password !== passwordConfirm) {
+    setErrorMessage("The password and confirmation password do not match.");
+    return false;
+  }
+  return true;
 }
 
 /**
@@ -104,76 +102,66 @@ function validatePassword(
  * @returns Promise of a boolean value, true if valid, otherwise false.
  */
 async function validateEmail(
-    email: string,
-    setErrorMessage : React.Dispatch<React.SetStateAction<string>>
+  email: string,
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>
 ): Promise<boolean> {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!email) {
-        setErrorMessage("Email is required.");
-        return false;
-    }
-    if (!email.match(emailPattern)) {
-        setErrorMessage("Invalid email format.");
-        return false;
-    }
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!email) {
+    setErrorMessage("Email is required.");
+    return false;
+  }
+  if (!email.match(emailPattern)) {
+    setErrorMessage("Invalid email format.");
+    return false;
+  }
 
-    // Check if the email chosen already exists in the database
-    try {
-        const isEmailTaken = await checkEmailTaken(email);
-        if(isEmailTaken) {
-            setErrorMessage(`The email ${email} already exists.`);
-            return false;
-        }
-    } catch(err) {
-        setErrorMessage("Could not check if email was already taken. " + err);
+  // Check if the email chosen already exists in the database
+  try {
+    const isEmailTaken = await checkEmailTaken(email);
+    if (isEmailTaken) {
+      setErrorMessage(`The email ${email} already exists.`);
+      return false;
     }
-    return true;
+  } catch (err) {
+    setErrorMessage("Could not check if email was already taken. " + err);
+  }
+  return true;
 }
 
 /**
  * Send a request to user-service to check if the username is already taken.
  * @param username Username to check.
  */
-export async function checkUsernameTaken(username : string) : Promise<boolean>{
-    try {
-        const response = await axios
-            .create({
-                baseURL: userServiceUrl,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true
-            })
-            .get(import.meta.env.VITE_USER_SERVICE_USERNAME_TAKEN, { params: { username } });
+export async function checkUsernameTaken(username: string): Promise<boolean> {
+  try {
+    const response = await axios.get(
+      userServiceUrl + import.meta.env.VITE_USER_SERVICE_USERNAME_TAKEN,
+      { params: { username } }
+    );
 
-        return response.data.isUsernameExists;
-    } catch (err) {
-        console.error("Error validating the username: " + username + ".");
-        throw throwAxiosErr(err);
-    }
+    return response.data.isUsernameExists;
+  } catch (err) {
+    console.error("Error validating the username: " + username + ".");
+    throw throwAxiosErr(err);
+  }
 }
 
 /**
  * Send a request to user-service to check if the email is already taken.
  * @param email Email to check.
  */
-export async function checkEmailTaken(email : string) : Promise<boolean> {
-    try {
-        const response = await axios
-            .create({
-                baseURL: userServiceUrl,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true
-            })
-            .get(import.meta.env.VITE_USER_SERVICE_EMAIL_TAKEN, { params: { email } });
+export async function checkEmailTaken(email: string): Promise<boolean> {
+  try {
+    const response = await axios.get(
+      userServiceUrl + import.meta.env.VITE_USER_SERVICE_EMAIL_TAKEN,
+      { params: { email } }
+    );
 
-        return response.data.isEmailExists;
-    } catch (err) {
-        console.error("Error validating the email: " + email + ".");
-        throw throwAxiosErr(err);
-    }
+    return response.data.isEmailExists;
+  } catch (err) {
+    console.error("Error validating the email: " + email + ".");
+    throw throwAxiosErr(err);
+  }
 }
 
 /**
@@ -181,21 +169,13 @@ export async function checkEmailTaken(email : string) : Promise<boolean> {
  * @param userData Information of the user, filled in the sign up form.
  * @returns Full information of the signed up user.
  */
-export async function invokeSignUp(userData : UserSignupData | undefined) : Promise<UserData>{
-    try {
-        const response = await axios
-            .create({
-                baseURL: userServiceUrl,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                withCredentials: true
-            })
-            .post("", userData);
+export async function invokeSignUp(userData: UserSignupData | undefined): Promise<UserData> {
+  try {
+    const response = await axios.post(userServiceUrl, userData);
 
-        return response.data;
-    } catch (err) {
-        console.error("Error signing up the user: " + userData + ".");
-        throw throwAxiosErr(err);
-    }
+    return response.data;
+  } catch (err) {
+    console.error("Error signing up the user: " + userData + ".");
+    throw throwAxiosErr(err);
+  }
 }

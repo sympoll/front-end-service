@@ -4,8 +4,7 @@ import { throwAxiosErr } from "./error.service";
 import { VotingItemData, VotingItemIsChecked } from "../models/VotingitemData.model";
 import { removeVoteFromItem, voteOnItem } from "./vote.service";
 
-const pollServiceUrl =
-  import.meta.env.VITE_POLL_SERVICE_URL;
+const pollServiceUrl = import.meta.env.VITE_POLL_SERVICE_URL;
 
 // TODO: userId should be accessed from session.
 const cmpName = "POLL.SVC";
@@ -21,17 +20,12 @@ export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
 
   // Send a request to the Poll Service to get all polls of the user.
   try {
-    const response = await axios
-      .create({
-        baseURL: pollServiceUrl,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      })
-      .get(import.meta.env.VITE_POLL_SERVICE_GET_ALL_USER_POLLS, {
+    const response = await axios.get(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_GET_ALL_USER_POLLS,
+      {
         params: { userId }
-      });
+      }
+    );
 
     console.log(cmpName, "get polls successful");
 
@@ -50,21 +44,16 @@ export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
  * @param groupId ID string of the group to fetch its polls.
  * @returns A raw list of polls returned from poll-service microservice.
  */
-export async function fetchPollsByGroupId(groupId: string) : Promise<PollData[]> {
+export async function fetchPollsByGroupId(groupId: string): Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by group ID: " + groupId);
   // Send a request to the Poll Service to get all polls of the specified groups.
   try {
-    const response = await axios
-      .create({
-        baseURL: pollServiceUrl,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      })
-      .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, {
+    const response = await axios.get(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID,
+      {
         params: { groupId, userId }
-      });
+      }
+    );
 
     console.log(cmpName, "get polls successful");
 

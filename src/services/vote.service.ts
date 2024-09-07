@@ -1,19 +1,15 @@
 import axios from "axios";
 
-const voteServiceUrl =
-  import.meta.env.VITE_VOTE_SERVICE_URL;
+const voteServiceUrl = import.meta.env.VITE_VOTE_SERVICE_URL;
 
 // TODO: once session mechanism is in place, replace this.
-const userId = import.meta.env.VITE_DEBUG_USER_ID
+const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 // Helper function to handle API requests
-async function sendVoteRequest(
-  method: "post" | "delete",
-  votingItemId: number
-): Promise<void> {
+async function sendVoteRequest(method: "post" | "delete", votingItemId: number): Promise<void> {
   const voteRequestPayload = {
     userId: userId,
-    votingItemId: votingItemId,
+    votingItemId: votingItemId
   };
 
   console.log(`${method.toUpperCase()} request on item: ${votingItemId}`);
@@ -22,11 +18,8 @@ async function sendVoteRequest(
     const response = await axios({
       method: method,
       url: voteServiceUrl,
-      headers: {
-        "Content-Type": "application/json",
-      },
       data: voteRequestPayload,
-      withCredentials: true,
+      withCredentials: true
     });
 
     return response.data;

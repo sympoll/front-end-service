@@ -1,7 +1,7 @@
 // This automatically configures axios to work with access tokens and refresh them.
 
-import axios from 'axios';
-import keycloak from './keycloak.service'; // Adjust the import path as needed
+import axios from "axios";
+import keycloak from "./keycloak.service"; // Adjust the import path as needed
 
 // Set base URL globally if your API is consistent across services
 axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_GATEWAY_URL}`;
@@ -21,7 +21,7 @@ axios.interceptors.request.use(
           config.headers.Authorization = `Bearer ${token}`;
         }
       } catch (error) {
-        console.error('Failed to refresh Keycloak token', error);
+        console.error("Failed to refresh Keycloak token", error);
         keycloak.login(); // Redirect to login if token refresh fails
       }
     }
@@ -33,6 +33,6 @@ axios.interceptors.request.use(
 );
 
 // Optionally, set common headers globally
-axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.headers.common["Content-Type"] = "application/json";
 
 export default axios;

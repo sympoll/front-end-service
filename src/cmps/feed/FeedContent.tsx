@@ -12,6 +12,7 @@ import { useUpdateContext } from "../../context/UpdateContext";
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isPollListChanged, setIdPollListChanged] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
@@ -38,6 +39,7 @@ export default function FeedContent() {
       setIsLoading(false);
       removeErrorFromFeed();
       setPolls(fetchedPolls);
+      setIdPollListChanged((prev) => !prev); 
     } catch (err) {
       if (err instanceof Error) {
         console.error(cmpName + err.message);
@@ -117,6 +119,7 @@ export default function FeedContent() {
             deadline={poll.deadline}
             votingItems={poll.votingItems}
             isSpecificGroup={!!groupId}
+            isPollListChanged={isPollListChanged}
           />
         ))}
       </div>

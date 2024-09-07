@@ -22,6 +22,8 @@ import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import DeletePollButton from "../../global/DeletePollButton";
+import { useMembers } from "../../../context/MemebersContext";
+import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
 
 interface PollProps {
   pollId: string;
@@ -39,6 +41,7 @@ interface PollProps {
   deadline: string;
   votingItems: VotingItemData[];
   isSpecificGroup: boolean;
+  isPollListChanged: boolean;
 }
 
 export default function Poll({
@@ -56,7 +59,8 @@ export default function Poll({
   timeUpdated,
   deadline,
   votingItems,
-  isSpecificGroup
+  isSpecificGroup,
+  isPollListChanged
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
@@ -67,6 +71,9 @@ export default function Poll({
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
+  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
+  const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
+  const {members, getMemberRole} = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
@@ -77,6 +84,11 @@ export default function Poll({
   const showErrorPopup = () => {
     setIsErrorPopupVisible(true);
   };
+
+  useEffect(() => {
+    console.log("fetching permission for delete");
+    fetchPermissionToDeletePoll();
+  },[members])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -149,6 +161,16 @@ export default function Poll({
     return true;
   }
 
+  const fetchPermissionToDeletePoll = () => {
+    if(isSpecificGroup){
+      if(creatorId === userId || getMemberRole(userId) === UserRoleName.ADMIN){
+        setIsUserCanDeletePoll(true);
+      } else {
+        setIsUserCanDeletePoll(false);
+      }
+    }
+  }
+
   const onDeletePoll = () => {
 
   }
@@ -177,7 +199,7 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                <DeletePollButton onClick={onDeletePoll} />
+                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePoll} />)}
               </div>
             </div>
             <div className="poll-info-title__row2">

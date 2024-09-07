@@ -26,8 +26,6 @@ import { useUser } from "../../../context/UserContext";
 import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
-import VerifyPopup from "../../popup/VerifyPopup";
-import { error } from "winston";
 
 interface PollProps {
   pollId: string;
@@ -77,14 +75,11 @@ export default function Poll({
     }))
   );
   
-  
-  const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
   const {members, getMemberRole} = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
   const { user } = useUser();
-  const isFirstRender = useRef(true); // useRef to track the first render
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -171,7 +166,7 @@ export default function Poll({
 
   const fetchPermissionToDeletePoll = () => {
     if(isSpecificGroup){
-      if(creatorId === userId || getMemberRole(userId) === UserRoleName.ADMIN){
+      if(creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN){
         setIsUserCanDeletePoll(true);
       } else {
         setIsUserCanDeletePoll(false);

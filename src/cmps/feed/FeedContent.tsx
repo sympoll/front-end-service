@@ -15,13 +15,11 @@ export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isVerifyPopupOpen, setIsVerifyPopupOpen] = useState(false);
-  const [deletePollTrigger, setDeletePollTrigger] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { user } = useUser();
   const [pollIdToDelete, setPollIdToDelete] = useState<string>("");
-  const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
 
   const cmpName = "FEED ";
 
@@ -91,7 +89,7 @@ export default function FeedContent() {
     if(pollIdToDelete !== "")
     {
       console.log("deleting poll");
-      await deletePoll(pollIdToDelete, userId, groupId)
+      await deletePoll(pollIdToDelete, user?.userId, groupId)
       .then((data) => {
         deletePollFromPollsList(data.pollId);
       }).catch((error) => {

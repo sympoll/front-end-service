@@ -11,11 +11,12 @@ import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
 import { useGroups } from "../../context/GroupsContext";
+import { GroupData } from "../../models/GroupData.model";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const [userData, setUserData] = useState<UserData>();
-  const { groups, setGroups } = useGroups();
+  const [groups, setGroups] = useState<GroupData[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
@@ -224,7 +225,9 @@ export default function UserProfile() {
                         }
                         onClick={() => navigate(`/group/${group.groupId}`)}
                       />
-                      <p className="user-profile__group-joined-item__group-name">{group.groupName}</p>
+                      <p className="user-profile__group-joined-item__group-name">
+                        {group.groupName}
+                      </p>
                     </div>
                   ))
                 ) : (

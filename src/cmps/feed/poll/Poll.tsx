@@ -21,6 +21,7 @@ import {
 import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
+import { useUser } from "../../../context/UserContext";
 
 interface PollProps {
   pollId: string;
@@ -60,6 +61,7 @@ export default function Poll({
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
+  const { user } = useUser();
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
     votingItems.map((vItem) => ({
       votingItemId: vItem.votingItemId,
@@ -118,7 +120,7 @@ export default function Poll({
     if (isSingleChoice(nofAnswersAllowed) && inputIsInc) {
       const previouslySelectedItem = isCheckedStates.find((item) => item.isChecked);
       if (previouslySelectedItem) {
-        sendRequestToVoteService(false, previouslySelectedItem.votingItemId);
+        sendRequestToVoteService(false, previouslySelectedItem.votingItemId, user?.userId);
       }
     }
 
@@ -143,7 +145,7 @@ export default function Poll({
     );
 
     // Trigger vote service call for the new selection
-    sendRequestToVoteService(inputIsInc, inputId);
+    sendRequestToVoteService(inputIsInc, inputId, user?.userId);
 
     return true;
   }

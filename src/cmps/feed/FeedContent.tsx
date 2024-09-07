@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { useUser } from "../../context/UserContext";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
@@ -15,6 +16,7 @@ export default function FeedContent() {
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
+  const { user } = useUser();
 
   const cmpName = "FEED ";
 
@@ -30,9 +32,9 @@ export default function FeedContent() {
     try {
       let fetchedPolls: PollData[];
       if (groupId) {
-        fetchedPolls = await fetchPollsByGroupId(groupId);
+        fetchedPolls = await fetchPollsByGroupId(groupId, user?.userId);
       } else {
-        fetchedPolls = await fetchAllUserGroupsPolls();
+        fetchedPolls = await fetchAllUserGroupsPolls(user?.userId);
       }
 
       setIsLoading(false);

@@ -3,37 +3,28 @@ import { PollData } from "../models/PollData.model";
 import { throwAxiosErr } from "./error.service";
 import { VotingItemData, VotingItemIsChecked } from "../models/VotingitemData.model";
 import { removeVoteFromItem, voteOnItem } from "./vote.service";
+import { useUser } from "../context/UserContext";
+import { UserData } from "../models/UserData.model";
 
-const pollServiceUrl =
-  import.meta.env.VITE_BASE_URL +
-  import.meta.env.VITE_API_GATEWAY_URL +
-  import.meta.env.VITE_POLL_SERVICE_URL;
+const pollServiceUrl = import.meta.env.VITE_POLL_SERVICE_URL;
 
-// TODO: userId should be accessed from session.
 const cmpName = "POLL.SVC";
-const userId = import.meta.env.VITE_DEBUG_USER_ID;
 
 /**
  * Fetch all polls of a user, most recent polls first.
- * @param userId ID of the user to fetch his polls.
  * @returns Logged in user's polls from all his groups.
  */
-export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
+export async function fetchAllUserGroupsPolls(userId: string | undefined): Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by all user's polls");
 
   // Send a request to the Poll Service to get all polls of the user.
   try {
-    const response = await axios
-      .create({
-        baseURL: pollServiceUrl,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      })
-      .get(import.meta.env.VITE_POLL_SERVICE_GET_ALL_USER_POLLS, {
+    const response = await axios.get(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_GET_ALL_USER_POLLS,
+      {
         params: { userId }
-      });
+      }
+    );
 
     console.log(cmpName, "get polls successful");
 
@@ -52,21 +43,19 @@ export async function fetchAllUserGroupsPolls(): Promise<PollData[]> {
  * @param groupId ID string of the group to fetch its polls.
  * @returns A raw list of polls returned from poll-service microservice.
  */
-export async function fetchPollsByGroupId(groupId: string) : Promise<PollData[]> {
+export async function fetchPollsByGroupId(
+  groupId: string,
+  userId: string | undefined
+): Promise<PollData[]> {
   console.log(cmpName, "Trying to fetch polls by group ID: " + groupId);
   // Send a request to the Poll Service to get all polls of the specified groups.
   try {
-    const response = await axios
-      .create({
-        baseURL: pollServiceUrl,
-        headers: {
-          "Content-Type": "application/json"
-        },
-        withCredentials: true
-      })
-      .get(import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID, {
+    const response = await axios.get(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_GET_POLLS_BY_GROUP_ID,
+      {
         params: { groupId, userId }
-      });
+      }
+    );
 
     console.log(cmpName, "get polls successful");
 
@@ -239,13 +228,17 @@ export const countCheckedItems = (isCheckedStates: VotingItemIsChecked[]): numbe
 };
 
 // Sends a request to vote or remove a vote for a specific voting item
-export async function sendRequestToVoteService(isChecked: boolean, votingItemId: number) {
+export async function sendRequestToVoteService(
+  isChecked: boolean,
+  votingItemId: number,
+  userId: string | undefined
+) {
   try {
     // Vote on the item if checked, remove the vote if unchecked
     if (isChecked) {
-      await voteOnItem(Number(votingItemId));
+      await voteOnItem(Number(votingItemId), userId);
     } else {
-      await removeVoteFromItem(Number(votingItemId));
+      await removeVoteFromItem(Number(votingItemId), userId);
     }
   } catch (error) {
     console.error("Error sending request:", error);

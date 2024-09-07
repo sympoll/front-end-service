@@ -1,8 +1,5 @@
-import React, { useEffect, useState } from "react";
 import logo from "/imgs/logo-no-bg.png";
-import Button from "../cmps/global/CustomButton";
 import { useNavigate } from "react-router-dom";
-import CreatePollForm from "../cmps/feed/poll/CreatePollForm";
 import CustomButton from "../cmps/global/CustomButton";
 
 export default function LandingPage() {

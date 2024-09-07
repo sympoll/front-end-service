@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AppHeader from "../cmps/app-header/AppHeader";
 import GroupsSidebar from "../cmps/sidebar/GroupsSidebar";
 import Feed from "../cmps/feed/FeedContent";
@@ -9,6 +9,7 @@ import { fetchUserData } from "../services/user.profile.service";
 import { UserData } from "../models/UserData.model";
 import LoadingAnimation from "../cmps/global/LoadingAnimation";
 import { useUser } from "../context/UserContext";
+import { useUpdateContext } from "../context/UpdateContext";
 
 interface ContentPageProps {
   content: "feed" | "user-profile" | "group-info";
@@ -19,8 +20,13 @@ export default function ContentPage({ content }: ContentPageProps) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useUser();
+  const { registerForUpdate } = useUpdateContext();
 
   useEffect(() => {
+    updateLoggedInUser();
+  }, [loggedInUser]);
+
+  const updateLoggedInUser = useCallback(async () => {
     setLoading(true);
 
     if (user) {
@@ -35,6 +41,13 @@ export default function ContentPage({ content }: ContentPageProps) {
         });
     }
   }, [user?.userId]);
+
+  useEffect(() => {
+    const unregister = registerForUpdate(updateLoggedInUser);
+    return () => {
+      unregister();
+    };
+  }, [registerForUpdate, updateLoggedInUser]);
 
   if (loading) {
     return <LoadingAnimation message="Loading User Data" dots="off" />;

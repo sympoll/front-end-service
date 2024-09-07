@@ -87,7 +87,7 @@ export default function UserProfile() {
           // Update the local user data to include the newly uploaded profile banner
           setUserData(
             (prevUserData) =>
-              prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
+              prevUserData && { ...prevUserData, bannerPictureUrl: response.imageUrl }
           );
         } catch (error) {
           console.error("Failed to upload user profile banner: ", error);
@@ -131,7 +131,7 @@ export default function UserProfile() {
         <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
             <img
-              src={userData.profileBannerUrl ? userData.profileBannerUrl : defaultProfileBannerUrl}
+              src={userData.bannerPictureUrl ? userData.bannerPictureUrl : defaultProfileBannerUrl}
               alt="Banner"
               className="user-profile__banner-img"
             />

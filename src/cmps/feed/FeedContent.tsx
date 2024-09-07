@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Poll from "./poll/Poll";
-import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
+import { deletePoll, fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
 import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
@@ -18,6 +18,8 @@ export default function FeedContent() {
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
+  const [pollIdToDelete, setPollIdToDelete] = useState<string>("");
+  const userId = import.meta.env.VITE_DEBUG_USER_ID; //Temporary
 
   const cmpName = "FEED ";
 
@@ -73,12 +75,30 @@ export default function FeedContent() {
     setPolls((prevPolls) => [newPoll, ...prevPolls]); // Prepend the new poll to the beginning of the array
   };
 
-  const showVerifyDeletePopup = () => {
+  const showVerifyDeletePopup = (pollId: string) => {
     setIsVerifyPopupOpen(true);
+    setPollIdToDelete(pollId);
   }
 
-  const turnDeletePollTrigger = () => {
-    setDeletePollTrigger(true);
+  const closeVerifyDeletePopup = () => {
+    setIsVerifyPopupOpen(false)
+    setPollIdToDelete("");
+  }
+
+  const onDeletePoll = async () => {
+    if(pollIdToDelete !== "")
+    {
+      console.log("deleting poll");
+      await deletePoll(pollIdToDelete, userId, groupId)
+      .then((data) => {
+        deletePollFromPollsList(data.pollId);
+      }).catch((error) => {
+        console.log("Unable to delete poll: ", pollIdToDelete);
+        setError(error);
+      });
+
+      closeVerifyDeletePopup();
+    }
   }
 
   const deletePollFromPollsList = (pollId: string) => {
@@ -133,13 +153,10 @@ export default function FeedContent() {
             votingItems={poll.votingItems}
             isSpecificGroup={!!groupId}
             showVerifyDeletePopup={showVerifyDeletePopup}
-            deletePollTrigger={deletePollTrigger}
-            setDeletePollTrigger={setDeletePollTrigger}
-            deletePollFromPollsList={deletePollFromPollsList}
           />
         ))}
       </div>
-      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={turnDeletePollTrigger} onClose={() => setIsVerifyPopupOpen(false)}></VerifyPopup>)}
+      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={onDeletePoll} onClose={closeVerifyDeletePopup}></VerifyPopup>)}
     </div>
   );
 }

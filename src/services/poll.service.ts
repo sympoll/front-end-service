@@ -253,7 +253,7 @@ export async function sendRequestToVoteService(isChecked: boolean, votingItemId:
   }
 }
 
-export async function deletePoll(pollId:string, userId:string, groupId:string) : Promise<PollData> {
+export async function deletePoll(pollId:string, userId:string, groupId:string | undefined) : Promise<PollData> {
   console.log(cmpName, "Sending request to delete poll '" + pollId + "'");
   const pollDeleteRequestPayload ={
     pollId: pollId,

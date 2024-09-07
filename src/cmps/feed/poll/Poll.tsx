@@ -44,10 +44,7 @@ interface PollProps {
   deadline: string;
   votingItems: VotingItemData[];
   isSpecificGroup: boolean;
-  showVerifyDeletePopup: () => void;
-  deletePollTrigger: boolean;
-  setDeletePollTrigger: React.Dispatch<React.SetStateAction<boolean>>;
-  deletePollFromPollsList: (pollId: string) => void;
+  showVerifyDeletePopup: (pollId: string) => void;
 }
 
 export default function Poll({
@@ -67,12 +64,8 @@ export default function Poll({
   votingItems,
   isSpecificGroup,
   showVerifyDeletePopup,
-  deletePollTrigger,
-  setDeletePollTrigger,
-  deletePollFromPollsList
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
-  const [errorMessage, setErrorMessage] = useState<string>("");
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
   const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
@@ -89,12 +82,12 @@ export default function Poll({
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
+  const isFirstRender = useRef(true); // useRef to track the first render
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
   };
-  const showLimitErrorPopup = () => {
-    setErrorMessage("Already reached the limit of votes!");
+  const showErrorPopup = () => {
     setIsErrorPopupVisible(true);
   };
 
@@ -182,26 +175,10 @@ export default function Poll({
         setIsUserCanDeletePoll(false);
       }
     }
-  }
+  };
 
-  useEffect(() => {
-    if (deletePollTrigger) {
-      onDeletePoll();
-    } else {
-      setDeletePollTrigger(false); 
-    }
-  }, [deletePollTrigger]);
-
-  const onDeletePoll = async () => {
-    console.log("deleting poll");
-    await deletePoll(pollId, userId, groupId)
-    .then((data) => {
-      deletePollFromPollsList(data.pollId);
-    }).catch((error) => {
-      console.log("Unable to delete poll: ", pollId);
-      setErrorMessage(error);
-      setIsErrorPopupVisible(true);
-    });
+  const onDeletePollButtonClick = () => {
+    showVerifyDeletePopup(pollId)
   }
 
   return (
@@ -228,7 +205,7 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (<DeletePollButton onClick={showVerifyDeletePopup} />)}
+                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePollButtonClick} />)}
               </div>
             </div>
             <div className="poll-info-title__row2">
@@ -298,7 +275,7 @@ export default function Poll({
                   ?.isChecked || false
               }
               handleNewProgress={handleNewProgress}
-              showErrorPopup={showLimitErrorPopup}
+              showErrorPopup={showErrorPopup}
             />
           ))
         }
@@ -306,7 +283,7 @@ export default function Poll({
       <p className="poll-error-message">
         {isErrorPopupVisible && (
           <ErrorPopup
-            message={errorMessage}
+            message="Already reached the limit of votes!"
             closeErrorPopup={closeErrorPopup}
           />
         )}

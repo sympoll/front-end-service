@@ -14,12 +14,14 @@ interface AuthContextType {
   keycloak: Keycloak | null;
   authenticated: boolean;
   initialized: boolean; // Track initialization state
+  onLogout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   keycloak: null,
   authenticated: false,
-  initialized: false
+  initialized: false,
+  onLogout: () => {}
 });
 
 interface AuthProviderProps {
@@ -120,9 +122,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     initializeKeycloak();
   }, [enableAuth, onAuthSuccess]);
 
+  const onLogout = () => {
+    if (authenticated && initialized && keycloak) {
+      keycloak
+        .logout({
+          redirectUri: "localhost:8080/"
+        })
+        .catch((error) => {
+          console.error("Failed to log out:", error);
+        })
+        .finally(() => {
+          setAuthenticated(false);
+        });
+  
+    } else if (!initialized) {
+      console.warn("Keycloak is not initialized yet.");
+    }
+  }
+
   // Return the AuthContext.Provider with the necessary values
   return (
-    <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated, initialized }}>
+    <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated, initialized, onLogout }}>
       {children}
     </AuthContext.Provider>
   );

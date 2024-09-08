@@ -11,7 +11,7 @@ export default function AppHeader() {
   // For now more convenient to navigate to the landing page.
   return (
     <div className="app-header-container">
-      <div id="app-header-title" onClick={() => navigate("/")}>
+      <div id="app-header-title" onClick={() => navigate("/feed")}>
         Sympoll™
       </div>
       <button className="app-header__update-btn">

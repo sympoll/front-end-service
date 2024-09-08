@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
-import { fetchUserData } from "../../services/user.profile.service";
+import { capitalizeWords, fetchUserData } from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
@@ -21,7 +21,10 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+
   const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
+  const [isEditingDescription, setIsEditingDescription] = useState<boolean>(false);
+  const [descriptionText, setDescriptionText] = useState<string>("");
 
   const navigate = useNavigate();
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
@@ -37,6 +40,7 @@ export default function UserProfile() {
       .then((data) => {
         console.log("Fetched user data for user with ID: ", userId, data);
         setUserData(data);
+        setDescriptionText(data.description || defaultDescription);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -99,12 +103,26 @@ export default function UserProfile() {
     }
   };
 
-  function capitalizeWords(input: string): string {
-    return input
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
+  const onEditDescription = () => {
+    toggleEditDescriptionMenu();
+
+    if (isEditingDescription) {
+      setIsEditingDescription(false);
+      setDescriptionText(
+        userData ? userData.description || defaultDescription : defaultDescription
+      );
+    } else {
+      setIsEditingDescription(true);
+    }
+  };
+
+  const onSaveDescription = () => {
+    setIsEditingDescription(false);
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionText(event.target.value);
+  };
 
   const toggleProfilePictureMenu = () => {
     setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
@@ -201,19 +219,32 @@ export default function UserProfile() {
       <div className="user-profile__info-container">
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
-            <div className="user-profile__description">
+            <div className="user-profile__description-container">
               <EditDescriptionIcon
                 className="user-profile__edit-description-button"
                 onClick={toggleEditDescriptionMenu}
               />
               {isEditDescriptionMenuVisible && (
                 <div className="user-profile__edit-description-menu">
-                  <button>Edit</button>
+                  <button onClick={onEditDescription}>
+                    {isEditingDescription ? "Exit" : "Edit"}
+                  </button>
                 </div>
               )}
               <h3>Description:</h3>
               <br />
-              {defaultDescription}
+              {isEditingDescription ? (
+                <div className="user-profile__edit-description-container">
+                  <textarea
+                    value={descriptionText}
+                    onChange={handleDescriptionChange}
+                    className="user-profile__edit-description-input"
+                  />
+                  <button onClick={onSaveDescription}>Save</button>
+                </div>
+              ) : (
+                <p>{descriptionText}</p>
+              )}
             </div>
             <div className="user-profile__user-info">
               <h3>Info:</h3>

@@ -19,3 +19,10 @@ export async function fetchUserData(userId: string | undefined): Promise<UserDat
     throw throwAxiosErr(err);
   }
 }
+
+export function capitalizeWords(input: string): string {
+  return input
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

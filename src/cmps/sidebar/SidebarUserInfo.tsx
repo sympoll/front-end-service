@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { UserData } from "../../models/UserData.model";
 import { useNavigate } from "react-router-dom";
-import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { useAuth } from "../../context/AuthProvider";
 
@@ -41,9 +40,7 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
   return (
     <div className="sidebar-user-info-container">
       <ProfilePicture
-        imageUrl={
-          userData.profilePictureUrl ? userData.profilePictureUrl : defaultProfilePictureUrl
-        }
+        imageUrl={userData.profilePictureUrl}
         onClick={onUsernameClick}
       />
       <div className="sidebar-user-info-data">

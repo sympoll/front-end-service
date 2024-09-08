@@ -9,7 +9,7 @@ import {
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { uploadUserProfileImage } from "../../services/media.service";
+import { fetchPicture, uploadUserProfileImage } from "../../services/media.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import ProfilePicture from "../global/ProfilePicture";
@@ -30,6 +30,11 @@ export default function UserProfile() {
 
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+  const [canSetPictures, setCanSetPictures] = useState(false);
+  const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
+  const [bannerImageSrc, setBannerImageSrc] = useState<string>(defaultProfileBannerUrl);
+  const { user } = useUser();
+
   const navigate = useNavigate();
 
   const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
@@ -54,6 +59,7 @@ export default function UserProfile() {
         console.log("Fetched user data for user with ID: ", userId, data);
         setUserData(data);
         setDescriptionText(data.description || defaultDescription);
+        setCanSetPictures(true);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -71,7 +77,32 @@ export default function UserProfile() {
         console.log("Unable to fetch groups of user with ID " + userId);
         setErrorMessage("Unable to fetch groups of user with ID " + userId);
       });
+      
   }, [userId]);
+
+  useEffect(() => {
+    if(canSetPictures){
+      fetchPicture(userData?.profilePictureUrl)
+      .then((data) => {
+        console.log("Fetched user's profile picture");
+        setProfileImageSrc(data ?? defaultProfilePictureUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch user's profile picture");
+      });
+
+      fetchPicture(userData?.profileBannerUrl)
+      .then((data) => {
+        console.log("Fetched user's bannner picture");
+        setBannerImageSrc(data ?? defaultProfileBannerUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch user's banner picture");
+      });
+
+      setCanSetPictures(false);
+    }
+  }, [canSetPictures])
 
   const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     console.log("User profile picture was added, uploading...");
@@ -92,6 +123,7 @@ export default function UserProfile() {
             (prevUserData) =>
               prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
           );
+          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload user profile picture: ", error);
         }
@@ -105,8 +137,9 @@ export default function UserProfile() {
           // Update the local user data to include the newly uploaded profile banner
           setUserData(
             (prevUserData) =>
-              prevUserData && { ...prevUserData, bannerPictureUrl: response.imageUrl }
+              prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
           );
+          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload user profile banner: ", error);
         }
@@ -165,11 +198,15 @@ export default function UserProfile() {
   };
 
   const toggleProfilePictureMenu = () => {
-    setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
+    if(userId === user?.userId){
+      setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);  
+    }
   };
 
   const toggleProfileBannerMenu = () => {
-    setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
+    if(userId === user?.userId){
+      setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);  
+    }
   };
 
   const toggleEditDescriptionMenu = () => {
@@ -194,7 +231,7 @@ export default function UserProfile() {
         <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
             <img
-              src={userData.bannerPictureUrl ? userData.bannerPictureUrl : defaultProfileBannerUrl}
+              src={bannerImageSrc}
               alt="Banner"
               className="user-profile__banner-img"
             />
@@ -224,9 +261,7 @@ export default function UserProfile() {
           >
             <div>
               <img
-                src={
-                  userData.profilePictureUrl ? userData.profilePictureUrl : defaultProfilePictureUrl
-                }
+                src={profileImageSrc}
                 alt="Profile"
                 className="user-profile__profile-img"
               />

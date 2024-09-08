@@ -98,3 +98,19 @@ export async function uploadGroupProfileImage(
     throw throwAxiosErr(err);
   }
 }
+
+export async function fetchPicture(pictureUrl: string | undefined) : Promise<string | undefined> {
+  console.log(cmpName, "Sending request to receive picture url: " + pictureUrl);
+  if(pictureUrl){
+    try{
+      const response = await axios.get(pictureUrl, {
+        responseType: "blob",
+      });
+  
+      return URL.createObjectURL(response.data);
+    } catch (err) {
+      console.error(cmpName, "Error getting the picture: " + pictureUrl + " Error: " + err);
+      throwAxiosErr(err);
+    }
+  }
+}

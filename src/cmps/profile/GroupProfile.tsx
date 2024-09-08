@@ -20,7 +20,7 @@ import { UserRoleName } from "../../models/enum/UserRoleName.enum";
 import { fetchUserData } from "../../services/user.profile.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
-import { uploadGroupProfileImage } from "../../services/media.service";
+import { fetchPicture, uploadGroupProfileImage } from "../../services/media.service";
 import { useUser } from "../../context/UserContext";
 
 export default function GroupInfo() {
@@ -44,6 +44,10 @@ export default function GroupInfo() {
 
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+
+  const [canSetPictures, setCanSetPictures] = useState(false);
+  const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
+  const [bannerImageSrc, setBannerImageSrc] = useState<string>(defaultProfileBannerUrl);
 
   const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] =
     useState<boolean>(false);
@@ -70,6 +74,7 @@ export default function GroupInfo() {
         .then((data) => {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
+          setCanSetPictures(true);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -93,6 +98,30 @@ export default function GroupInfo() {
   useEffect(() => {
     fetchUserPermissionsInCommandBar();
   }, [members]);
+
+  useEffect(() => {
+    if(canSetPictures){
+      fetchPicture(groupData?.profilePictureUrl)
+      .then((data) => {
+        console.log("Fetched group's profile picture");
+        setProfileImageSrc(data ?? defaultProfilePictureUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch group's profile picture");
+      });
+
+      fetchPicture(groupData?.profileBannerUrl)
+      .then((data) => {
+        console.log("Fetched group's bannner picture");
+        setBannerImageSrc(data ?? defaultProfileBannerUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch group's banner picture");
+      });
+
+      setCanSetPictures(false);
+    }
+  }, [canSetPictures])
 
   const fetchUserPermissionsInCommandBar = () => {
     console.log("Fetching user permissions in group");
@@ -158,6 +187,7 @@ export default function GroupInfo() {
             (prevGroupData) =>
               prevGroupData && { ...prevGroupData, profilePictureUrl: response.imageUrl }
           );
+          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload group profile picture: ", error);
         }
@@ -173,6 +203,7 @@ export default function GroupInfo() {
             (prevGroupData) =>
               prevGroupData && { ...prevGroupData, profileBannerUrl: response.imageUrl }
           );
+          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload group profile banner: ", error);
         }
@@ -242,9 +273,7 @@ export default function GroupInfo() {
         >
           <div>
             <img
-              src={
-                groupData.profileBannerUrl ? groupData.profileBannerUrl : defaultProfileBannerUrl
-              }
+              src={bannerImageSrc}
               alt="Banner"
               className="group-info__banner-img"
             />
@@ -281,11 +310,7 @@ export default function GroupInfo() {
           >
             <div>
               <img
-                src={
-                  groupData.profilePictureUrl
-                    ? groupData.profilePictureUrl
-                    : defaultProfilePictureUrl
-                }
+                src={profileImageSrc}
                 alt="Profile"
                 className="group-info__profile-img"
               />

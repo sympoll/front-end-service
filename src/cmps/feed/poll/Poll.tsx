@@ -26,6 +26,7 @@ import { useUser } from "../../../context/UserContext";
 import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
+import { fetchPicture } from "../../../services/media.service";
 
 interface PollProps {
   pollId: string;
@@ -68,6 +69,8 @@ export default function Poll({
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
   const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
+  const [creatorProfileImageSrc, setCreatorProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
+  const [groupProfileImageSrc, setGroupProfileImageSrc] = useState<string>(defaultGroupProfilePictureUrl);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
     votingItems.map((vItem) => ({
       votingItemId: vItem.votingItemId,
@@ -117,6 +120,29 @@ export default function Poll({
       }))
     );
   }, [votingItemsData]);
+
+  useEffect(() => {
+    if(creatorProfilePictureUrl){
+      fetchPicture(creatorProfilePictureUrl)
+      .then((data) => {
+        console.log("Fetched user's profile picture");
+        setCreatorProfileImageSrc(data ?? defaultProfilePictureUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch user's profile picture");
+
+      });
+    } else if(groupProfilePictureUrl) {
+      fetchPicture(groupProfilePictureUrl)
+      .then((data) => {
+        console.log("Fetched group's profile picture");
+        setGroupProfileImageSrc(data ?? defaultGroupProfilePictureUrl);
+      })
+      .catch((error) => {
+        console.log("Unable to fetch groups's banner picture");
+      });
+    }
+  }, [creatorProfilePictureUrl, groupProfilePictureUrl]);
 
   // On checkbox click, progress and voting count is updated
   // Returns true if changed progress, false otherwise
@@ -186,9 +212,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={
-                  creatorProfilePictureUrl ? creatorProfilePictureUrl : defaultProfilePictureUrl
-                }
+                imageUrl={creatorProfileImageSrc}
                 altText={creatorName + "'s profile picture"}
                 onClick={navigateToCreatorProfile}
               ></ProfilePicture>
@@ -213,9 +237,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={
-                  groupProfilePictureUrl ? groupProfilePictureUrl : defaultGroupProfilePictureUrl
-                }
+                imageUrl={groupProfileImageSrc}
                 altText={creatorName + "'s profile picture"}
                 onClick={navigateToGroupProfile}
               ></ProfilePicture>

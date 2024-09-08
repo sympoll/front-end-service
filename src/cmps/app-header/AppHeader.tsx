@@ -8,7 +8,6 @@ import refreshImage from "/imgs/button/refresh.png";
 export default function AppHeader() {
   const navigate = useNavigate();
   const { triggerUpdate } = useUpdateContext();
-  const { onLogout } = useAuth();
 
   // Can change later the navigation to navigate to the feed page.
   // For now more convenient to navigate to the landing page.

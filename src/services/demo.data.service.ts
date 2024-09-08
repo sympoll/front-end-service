@@ -1,3 +1,5 @@
+export {};
+
 // import { VotingItemData } from "../models/VotingitemData.model";
 
 // // Sample Voting Items Data

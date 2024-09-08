@@ -21,6 +21,7 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+  const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
@@ -113,6 +114,10 @@ export default function UserProfile() {
     setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
   };
 
+  const toggleEditDescriptionMenu = () => {
+    setIsEditDescriptionMenuVisible(!isEditDescriptionMenuVisible);
+  };
+
   if (errorMessage) {
     return <ContentPageMessage msgText={errorMessage} />;
   }
@@ -197,7 +202,15 @@ export default function UserProfile() {
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
             <div className="user-profile__description">
-              <EditDescriptionIcon className="user-profile__edit-description-button" />
+              <EditDescriptionIcon
+                className="user-profile__edit-description-button"
+                onClick={toggleEditDescriptionMenu}
+              />
+              {isEditDescriptionMenuVisible && (
+                <div className="user-profile__edit-description-menu">
+                  <button>Edit</button>
+                </div>
+              )}
               <h3>Description:</h3>
               <br />
               {defaultDescription}

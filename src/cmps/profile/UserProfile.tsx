@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
-import { fetchUserData } from "../../services/user.profile.service";
+import {
+  capitalizeWords,
+  fetchUserData,
+  saveUserDescription
+} from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
@@ -10,16 +14,20 @@ import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
-import { useGroups } from "../../context/GroupsContext";
 import { GroupData } from "../../models/GroupData.model";
+import EditDescriptionIcon from "@mui/icons-material/MoreVert";
 import { useUser } from "../../context/UserContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const [userData, setUserData] = useState<UserData>();
+  const { user: loggedInUser } = useUser();
+
   const [groups, setGroups] = useState<GroupData[]>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
+
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
   const [canSetPictures, setCanSetPictures] = useState(false);
@@ -28,7 +36,16 @@ export default function UserProfile() {
   const { user } = useUser();
 
   const navigate = useNavigate();
+
+  const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
+  const [isEditingDescription, setIsEditingDescription] = useState<boolean>(false);
+  const [descriptionText, setDescriptionText] = useState<string>("");
+
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
+  const resetUserDescriptionText = () =>
+    setDescriptionText(userData ? userData.description || defaultDescription : defaultDescription);
+
+  const isProfileOfLoggedInUser = () => loggedInUser?.userId === userId;
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,6 +58,7 @@ export default function UserProfile() {
       .then((data) => {
         console.log("Fetched user data for user with ID: ", userId, data);
         setUserData(data);
+        setDescriptionText(data.description || defaultDescription);
         setCanSetPictures(true);
         setIsLoading(false);
       })
@@ -131,12 +149,53 @@ export default function UserProfile() {
     }
   };
 
-  function capitalizeWords(input: string): string {
-    return input
-      .split(" ")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  }
+  const onEditDescription = () => {
+    toggleEditDescriptionMenu();
+
+    // Check if clicked on edit button or exit button
+    if (isEditingDescription) {
+      setIsEditingDescription(false);
+      resetUserDescriptionText();
+    } else {
+      setIsEditingDescription(true);
+
+      fetchUserData(userId)
+        .then((data) => {
+          console.log("Fetched user data for user with ID: ", userId, data);
+          setUserData(data);
+          setDescriptionText(data.description || defaultDescription);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch user with ID " + userId);
+          setErrorMessage("User with ID '" + userId + "' does not exist...");
+          setIsLoading(false);
+        });
+    }
+  };
+
+  const onSaveDescription = () => {
+    if (!userId) {
+      throw new Error("Error fetching user ID param");
+    }
+
+    saveUserDescription(userId, descriptionText)
+      .then((data) => {
+        console.log("Saved user description for user with ID: ", userId, data);
+        setDescriptionText(descriptionText);
+        setIsEditingDescription(false);
+      })
+      .catch((error) => {
+        console.log("Unable to save user description for user with ID " + userId);
+        setErrorMessage("Unable to save user description for user with ID " + userId);
+        resetUserDescriptionText();
+        setIsEditingDescription(false);
+      });
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionText(event.target.value);
+  };
 
   const toggleProfilePictureMenu = () => {
     if(userId === user?.userId){
@@ -148,6 +207,10 @@ export default function UserProfile() {
     if(userId === user?.userId){
       setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);  
     }
+  };
+
+  const toggleEditDescriptionMenu = () => {
+    setIsEditDescriptionMenuVisible(!isEditDescriptionMenuVisible);
   };
 
   if (errorMessage) {
@@ -231,10 +294,34 @@ export default function UserProfile() {
       <div className="user-profile__info-container">
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
-            <div className="user-profile__description">
+            <div className="user-profile__description-container">
+              {isProfileOfLoggedInUser() && (
+                <EditDescriptionIcon
+                  className="user-profile__edit-description-button"
+                  onClick={toggleEditDescriptionMenu}
+                />
+              )}
+              {isEditDescriptionMenuVisible && (
+                <div className="user-profile__edit-description-menu">
+                  <button onClick={onEditDescription}>
+                    {isEditingDescription ? "Exit" : "Edit"}
+                  </button>
+                </div>
+              )}
               <h3>Description:</h3>
               <br />
-              {defaultDescription}
+              {isEditingDescription ? (
+                <div className="user-profile__edit-description-container">
+                  <textarea
+                    value={descriptionText}
+                    onChange={handleDescriptionChange}
+                    className="user-profile__edit-description-input"
+                  />
+                  <button onClick={onSaveDescription}>Save</button>
+                </div>
+              ) : (
+                <p>{descriptionText}</p>
+              )}
             </div>
             <div className="user-profile__user-info">
               <h3>Info:</h3>

@@ -23,47 +23,15 @@
   }
 }
 
-// .sidebar-user-info-menu {
-//   position: absolute;
-//   top: 75%; // Move the menu up by reducing this value
-//   left: 30px; // Move the menu slightly to the right
-//   width: fit-content;
-//   background: rgba(255, 255, 255, 0.8);
-//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-//   border-radius: 8px;
-//   padding: 6px;
-//   z-index: 100;
-//   display: flex;
-//   flex-direction: column;
-
-//   button {
-//     background: none;
-//     border: none;
-//     color: #4b3832;
-//     font-weight: bold;
-//     font-size: 12px;
-//     cursor: pointer;
-//     padding: 8px 12px;
-
-//     &:hover {
-//       color: #ff7f50;
-//     }
-
-//     &:not(:last-child) {
-//       border-bottom: 2px solid rgba(0, 0, 0, 0.2); // Add a border between buttons
-//     }
-//   }
-// }
-
 .sidebar-user-info-menu {
   position: absolute;
-  top: 75%; // Keep the current positioning
-  left: 20px; // Keep the current positioning
-  width: 150px; // Set a fixed width for uniformity
-  background: #ffffff; // Solid white background for clarity
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); // Softer shadow for a cleaner look
-  border-radius: 10px; // Slightly larger border-radius for a modern look
-  padding: 10px 0; // Adjust padding to center content nicely
+  top: 85%; 
+  left: 20px; 
+  width: 120px; 
+  background: #ffffff; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15); 
+  border-radius: 10px; 
+  padding: 10px 0; 
   z-index: 100;
   display: flex;
   flex-direction: column;
@@ -73,18 +41,18 @@
     border: none;
     color: #4b3832;
     font-weight: bold;
-    font-size: 14px; // Slightly increase font size for better readability
+    font-size: 13px; 
     cursor: pointer;
-    padding: 10px 16px; // Add more padding for a comfortable clickable area
-    text-align: left; // Align button text to the left
+    padding: 8px 12px; 
+    text-align: left; 
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05); // Add subtle background on hover
+      background-color: rgba(0, 0, 0, 0.05); 
       color: #ff7f50;
     }
 
     &:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.1); // Lighter border between buttons
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1); 
     }
   }
 }

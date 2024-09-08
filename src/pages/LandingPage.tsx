@@ -11,7 +11,7 @@ export default function LandingPage() {
       <p className="landing-page-content">Welcome to Sympoll™, where decisions are made...</p>
       <div className="landing-page-buttons">
         <CustomButton onClick={() => navigate("/login")}>Log In / Sign Up</CustomButton>
-        <CustomButton onClick={() => navigate("/feed")}>Temporary - Move to feed</CustomButton>
+        {/* <CustomButton onClick={() => navigate("/feed")}>Temporary - Move to feed</CustomButton> */}
       </div>
     </section>
   );

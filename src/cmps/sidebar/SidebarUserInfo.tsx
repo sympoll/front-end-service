@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { UserData } from "../../models/UserData.model";
 import { useNavigate } from "react-router-dom";
-import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { useAuth } from "../../context/AuthProvider";
-import { fetchPicture } from "../../services/media.service";
 
 interface SidebarUserInfoProps {
   userData: UserData;
@@ -13,7 +11,6 @@ interface SidebarUserInfoProps {
 export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
   const navigate = useNavigate();
   const [isUserInfoMenuVisible, setIsUserInfoMenuVisible] = useState(false);
-  const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
   const { onLogout } = useAuth();
 
 
@@ -26,21 +23,10 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
     setIsUserInfoMenuVisible((prev) => !prev);
   }
 
-  useEffect(() => {
-    fetchPicture(userData?.profilePictureUrl)
-    .then((data) => {
-      console.log("Fetched user's profile picture");
-      setProfileImageSrc(data ?? defaultProfilePictureUrl);
-    })
-    .catch((error) => {
-      console.log("Unable to fetch user's profile picture");
-    });
-  }, []);
-
   return (
     <div className="sidebar-user-info-container">
       <ProfilePicture
-        imageUrl={profileImageSrc}
+        imageUrl={userData.profilePictureUrl}
         onClick={onUsernameClick}
       />
       <div className="sidebar-user-info-data">

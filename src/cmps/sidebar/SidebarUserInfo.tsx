@@ -35,7 +35,7 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
     .catch((error) => {
       console.log("Unable to fetch user's profile picture");
     });
-  }, [userData.profileBannerUrl]);
+  }, []);
 
   return (
     <div className="sidebar-user-info-container">

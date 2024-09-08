@@ -40,7 +40,7 @@ export default function MembersSidebarItem({
     .catch((error) => {
       console.log("Unable to fetch user's profile picture");
     });
-  }, [profileImageSrc]);
+  }, []);
 
   return (
     <li className="members-sidebar-item-container" onClick={() => navigate(path)}>

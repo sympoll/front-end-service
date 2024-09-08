@@ -7,11 +7,17 @@ import { useNavigate } from "react-router-dom";
 interface FeedBarProps {
   groupId: string;
   addNewPoll: (newPoll: PollData) => void;
+  isCreatePollFormVisible: boolean;
+  setIsCreatePollFormVisible: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function FeedBar({ groupId, addNewPoll }: FeedBarProps) {
+export default function FeedBar({
+  groupId,
+  addNewPoll,
+  isCreatePollFormVisible,
+  setIsCreatePollFormVisible
+}: FeedBarProps) {
   const [isFeedBarVisible, setIsFeedBarVisible] = useState(true);
-  const [isCreatePollFormVisible, setIsCreatePollFormVisible] = useState(false);
   const navigate = useNavigate();
 
   const toggleFeedBar = () => {
@@ -31,7 +37,11 @@ export default function FeedBar({ groupId, addNewPoll }: FeedBarProps) {
           <CustomButton onClick={toggleCreatePollForm} name="create-btn" theme="dark">
             Create Poll
           </CustomButton>
-          <CustomButton onClick={() => navigate("/group/" + groupId)} name="group-info-btn" theme="dark">
+          <CustomButton
+            onClick={() => navigate("/group/" + groupId)}
+            name="group-info-btn"
+            theme="dark"
+          >
             Group Info
           </CustomButton>
         </div>

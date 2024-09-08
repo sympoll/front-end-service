@@ -10,7 +10,6 @@ import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
-import { useGroups } from "../../context/GroupsContext";
 import { GroupData } from "../../models/GroupData.model";
 
 export default function UserProfile() {

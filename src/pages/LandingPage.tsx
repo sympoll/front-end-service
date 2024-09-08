@@ -1,4 +1,4 @@
-import logo from "/imgs/logo-no-bg.png";
+import logo from "/imgs/logo/logo-no-bg.png";
 import { useNavigate } from "react-router-dom";
 import CustomButton from "../cmps/global/CustomButton";
 

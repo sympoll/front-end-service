@@ -245,3 +245,26 @@ export async function sendRequestToVoteService(
     throw error;
   }
 }
+
+export async function deletePoll(pollId:string, userId:string | undefined, groupId:string | undefined) : Promise<PollData> {
+  console.log(cmpName, "Sending request to delete poll '" + pollId + "'");
+  const pollDeleteRequestPayload ={
+    pollId: pollId,
+    userId: userId,
+    groupId: groupId,
+};
+
+  try {
+    const response = await axios.delete(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_DELETE_POLL,
+      {
+        data: pollDeleteRequestPayload
+      }
+    );
+    
+    return response.data;
+  } catch(err) {
+    console.error(cmpName, "Error deleting poll: '" + pollId + "' error info: " + err);
+    throw throwAxiosErr(err);;
+  }
+}

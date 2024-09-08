@@ -10,6 +10,35 @@
   width: 100%;
 }
 
+.app-header {
+  &__update-btn {
+    top: 14px;
+    right: 20px;
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.6s ease-in-out;
+
+    &__img {
+      width: 26px;
+      fill: $mainBgColor0;
+      stroke: $mainBgColor0;
+      transform-origin: center;
+      transition: transform 0.6s ease-in-out;
+
+      &:hover {
+        transform: rotate(-360deg);
+      }
+
+      &:not(:hover) {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}
+
 .header-content {
   display: flex;
   width: 100%;
@@ -21,9 +50,4 @@
   font-size: 30px;
   cursor: pointer;
   text-align: center;
-}
-
-#update-btn {
-  right: 20px;
-  position: absolute;
 }

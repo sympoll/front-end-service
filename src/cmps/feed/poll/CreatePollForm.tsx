@@ -189,7 +189,6 @@ export default function CreatePollForm({
           <button type="button" onClick={addVotingItem} className="poll-form__body__add-btn">
             +
           </button>
-          <p>Add New Option</p>
         </div>
         <div className="poll-form__body__submit-button-container">
           {groupId && (

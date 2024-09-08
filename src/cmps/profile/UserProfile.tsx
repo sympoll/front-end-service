@@ -12,6 +12,7 @@ import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
 import { useGroups } from "../../context/GroupsContext";
 import { GroupData } from "../../models/GroupData.model";
+import { useUser } from "../../context/UserContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -21,6 +22,7 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+  const { user } = useUser();
 
   const navigate = useNavigate();
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
@@ -106,11 +108,15 @@ export default function UserProfile() {
   }
 
   const toggleProfilePictureMenu = () => {
-    setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
+    if(userId === user?.userId){
+      setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);  
+    }
   };
 
   const toggleProfileBannerMenu = () => {
-    setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
+    if(userId === user?.userId){
+      setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);  
+    }
   };
 
   if (errorMessage) {

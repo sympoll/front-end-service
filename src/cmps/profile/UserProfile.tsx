@@ -11,6 +11,7 @@ import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
+import EditDescriptionIcon from "@mui/icons-material/MoreVert";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -196,6 +197,7 @@ export default function UserProfile() {
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
             <div className="user-profile__description">
+              <EditDescriptionIcon className="user-profile__edit-description-button" />
               <h3>Description:</h3>
               <br />
               {defaultDescription}

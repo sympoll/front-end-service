@@ -16,13 +16,18 @@ import ProfilePicture from "../global/ProfilePicture";
 import { fetchUserGroups } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import EditDescriptionIcon from "@mui/icons-material/MoreVert";
+import { useUser } from "../../context/UserContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const [userData, setUserData] = useState<UserData>();
+  const { user: loggedInUser } = useUser();
+
   const [groups, setGroups] = useState<GroupData[]>();
+
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>();
+
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -34,6 +39,8 @@ export default function UserProfile() {
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
   const resetUserDescriptionText = () =>
     setDescriptionText(userData ? userData.description || defaultDescription : defaultDescription);
+
+  const isProfileOfLoggedInUser = () => loggedInUser?.userId === userId;
 
   useEffect(() => {
     setIsLoading(true);
@@ -253,10 +260,12 @@ export default function UserProfile() {
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
             <div className="user-profile__description-container">
-              <EditDescriptionIcon
-                className="user-profile__edit-description-button"
-                onClick={toggleEditDescriptionMenu}
-              />
+              {isProfileOfLoggedInUser() && (
+                <EditDescriptionIcon
+                  className="user-profile__edit-description-button"
+                  onClick={toggleEditDescriptionMenu}
+                />
+              )}
               {isEditDescriptionMenuVisible && (
                 <div className="user-profile__edit-description-menu">
                   <button onClick={onEditDescription}>

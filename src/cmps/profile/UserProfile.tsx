@@ -74,7 +74,7 @@ export default function UserProfile() {
         setErrorMessage("Unable to fetch user's profile picture" + userId);
       });
 
-      fetchPicture(userData?.bannerPictureUrl)
+      fetchPicture(userData?.profileBannerUrl)
       .then((data) => {
         console.log("Fetched user's bannner picture");
         setBannerImageSrc(data ?? defaultProfileBannerUrl);
@@ -121,7 +121,7 @@ export default function UserProfile() {
           // Update the local user data to include the newly uploaded profile banner
           setUserData(
             (prevUserData) =>
-              prevUserData && { ...prevUserData, bannerPictureUrl: response.imageUrl }
+              prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
           );
           setCanSetPictures(true);
         } catch (error) {

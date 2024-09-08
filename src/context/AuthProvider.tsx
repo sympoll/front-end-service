@@ -63,7 +63,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           username: signedUpUser.username,
           email: signedUpUser.email,
           profilePictureUrl: signedUpUser.profilePictureUrl,
-          bannerPictureUrl: signedUpUser.bannerPictureUrl,
+          profileBannerUrl: signedUpUser.profileBannerUrl,
           timeCreated: signedUpUser.timeCreated
         });
         console.log(user);
@@ -106,7 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             username: signedUpUser.username,
             email: signedUpUser.email,
             profilePictureUrl: signedUpUser.profilePictureUrl,
-            bannerPictureUrl: signedUpUser.bannerPictureUrl,
+            profileBannerUrl: signedUpUser.profileBannerUrl,
             timeCreated: signedUpUser.timeCreated
           });
           // If authentication is disabled, mock authenticated state

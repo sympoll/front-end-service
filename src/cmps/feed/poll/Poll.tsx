@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import VotingItem from "./VotingItem";
 import {
@@ -9,6 +9,7 @@ import {
 import ErrorPopup from "../../popup/ErrorPopup";
 import {
   countCheckedItems,
+  deletePoll,
   getProgress,
   getTimePassed,
   getTimeToDeadline,
@@ -22,6 +23,9 @@ import ProfilePicture from "../../global/ProfilePicture";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import { useUser } from "../../../context/UserContext";
+import DeletePollButton from "../../global/DeletePollButton";
+import { useMembers } from "../../../context/MemebersContext";
+import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
 
 interface PollProps {
   pollId: string;
@@ -39,6 +43,7 @@ interface PollProps {
   deadline: string;
   votingItems: VotingItemData[];
   isSpecificGroup: boolean;
+  showVerifyDeletePopup: (pollId: string) => void;
 }
 
 export default function Poll({
@@ -56,21 +61,25 @@ export default function Poll({
   timeUpdated,
   deadline,
   votingItems,
-  isSpecificGroup
+  isSpecificGroup,
+  showVerifyDeletePopup,
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
-  const { user } = useUser();
+  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
     votingItems.map((vItem) => ({
       votingItemId: vItem.votingItemId,
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
+  
+  const {members, getMemberRole} = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
+  const { user } = useUser();
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -78,6 +87,11 @@ export default function Poll({
   const showErrorPopup = () => {
     setIsErrorPopupVisible(true);
   };
+
+  useEffect(() => {
+    console.log("fetching permission for delete");
+    fetchPermissionToDeletePoll();
+  },[members])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -150,6 +164,20 @@ export default function Poll({
     return true;
   }
 
+  const fetchPermissionToDeletePoll = () => {
+    if(isSpecificGroup){
+      if(creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN){
+        setIsUserCanDeletePoll(true);
+      } else {
+        setIsUserCanDeletePoll(false);
+      }
+    }
+  };
+
+  const onDeletePollButtonClick = () => {
+    showVerifyDeletePopup(pollId)
+  }
+
   return (
     <section className="poll-container">
       {
@@ -172,6 +200,9 @@ export default function Poll({
                   {creatorName}
                 </div>
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
+              </div>
+              <div className="poll-info-title__delete-button">
+                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePollButtonClick} />)}
               </div>
             </div>
             <div className="poll-info-title__row2">

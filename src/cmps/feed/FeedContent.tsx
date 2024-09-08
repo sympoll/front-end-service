@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Poll from "./poll/Poll";
-import { fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
+import { deletePoll, fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
 import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
@@ -9,14 +9,17 @@ import FeedBar from "./bar/FeedBar";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
 import { useUpdateContext } from "../../context/UpdateContext";
 import { useUser } from "../../context/UserContext";
+import VerifyPopup from "../popup/VerifyPopup";
 
 export default function FeedContent() {
   const [polls, setPolls] = useState<PollData[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isVerifyPopupOpen, setIsVerifyPopupOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { groupId } = useParams();
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { user } = useUser();
+  const [pollIdToDelete, setPollIdToDelete] = useState<string>("");
 
   const cmpName = "FEED ";
 
@@ -39,7 +42,7 @@ export default function FeedContent() {
 
       setIsLoading(false);
       removeErrorFromFeed();
-      setPolls(fetchedPolls);
+      setPolls(fetchedPolls); 
     } catch (err) {
       if (err instanceof Error) {
         console.error(cmpName + err.message);
@@ -71,6 +74,36 @@ export default function FeedContent() {
     console.log("Adding newly created poll to feed. ", newPoll);
     setPolls((prevPolls) => [newPoll, ...prevPolls]); // Prepend the new poll to the beginning of the array
   };
+
+  const showVerifyDeletePopup = (pollId: string) => {
+    setIsVerifyPopupOpen(true);
+    setPollIdToDelete(pollId);
+  }
+
+  const closeVerifyDeletePopup = () => {
+    setIsVerifyPopupOpen(false)
+    setPollIdToDelete("");
+  }
+
+  const onDeletePoll = async () => {
+    if(pollIdToDelete !== "")
+    {
+      console.log("deleting poll");
+      await deletePoll(pollIdToDelete, user?.userId, groupId)
+      .then((data) => {
+        deletePollFromPollsList(data.pollId);
+      }).catch((error) => {
+        console.log("Unable to delete poll: ", pollIdToDelete);
+        setError(error);
+      });
+
+      closeVerifyDeletePopup();
+    }
+  }
+
+  const deletePollFromPollsList = (pollId: string) => {
+    setPolls(polls?.filter((poll) => poll.pollId !== pollId));
+  }
 
   if (isLoading) {
     return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
@@ -119,9 +152,11 @@ export default function FeedContent() {
             deadline={poll.deadline}
             votingItems={poll.votingItems}
             isSpecificGroup={!!groupId}
+            showVerifyDeletePopup={showVerifyDeletePopup}
           />
         ))}
       </div>
+      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={onDeletePoll} onClose={closeVerifyDeletePopup}></VerifyPopup>)}
     </div>
   );
 }

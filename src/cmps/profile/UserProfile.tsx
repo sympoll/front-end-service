@@ -1,7 +1,11 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserData } from "../../models/UserData.model";
-import { capitalizeWords, fetchUserData } from "../../services/user.profile.service";
+import {
+  capitalizeWords,
+  fetchUserData,
+  saveUserDescription
+} from "../../services/user.profile.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { getTimePassed } from "../../services/poll.service";
 import ContentPageMessage from "../content-page/messege/ContentPageMessage";
@@ -21,13 +25,15 @@ export default function UserProfile() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
   const [isEditingDescription, setIsEditingDescription] = useState<boolean>(false);
   const [descriptionText, setDescriptionText] = useState<string>("");
 
-  const navigate = useNavigate();
   const defaultDescription = "It looks like this user hasn’t shared a profile description yet.";
+  const resetUserDescriptionText = () =>
+    setDescriptionText(userData ? userData.description || defaultDescription : defaultDescription);
 
   useEffect(() => {
     setIsLoading(true);
@@ -106,18 +112,45 @@ export default function UserProfile() {
   const onEditDescription = () => {
     toggleEditDescriptionMenu();
 
+    // Check if clicked on edit button or exit button
     if (isEditingDescription) {
       setIsEditingDescription(false);
-      setDescriptionText(
-        userData ? userData.description || defaultDescription : defaultDescription
-      );
+      resetUserDescriptionText();
     } else {
       setIsEditingDescription(true);
+
+      fetchUserData(userId)
+        .then((data) => {
+          console.log("Fetched user data for user with ID: ", userId, data);
+          setUserData(data);
+          setDescriptionText(data.description || defaultDescription);
+          setIsLoading(false);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch user with ID " + userId);
+          setErrorMessage("User with ID '" + userId + "' does not exist...");
+          setIsLoading(false);
+        });
     }
   };
 
   const onSaveDescription = () => {
-    setIsEditingDescription(false);
+    if (!userId) {
+      throw new Error("Error fetching user ID param");
+    }
+
+    saveUserDescription(userId, descriptionText)
+      .then((data) => {
+        console.log("Saved user description for user with ID: ", userId, data);
+        setDescriptionText(descriptionText);
+        setIsEditingDescription(false);
+      })
+      .catch((error) => {
+        console.log("Unable to save user description for user with ID " + userId);
+        setErrorMessage("Unable to save user description for user with ID " + userId);
+        resetUserDescriptionText();
+        setIsEditingDescription(false);
+      });
   };
 
   const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {

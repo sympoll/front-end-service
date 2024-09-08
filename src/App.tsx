@@ -5,16 +5,24 @@ import ContentPage from "./pages/ContentPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoute from "./cmps/route/ProtectedRoute";
 import KeycloakLoginPage from "./pages/KeycloakLoginPage";
+import { useUser } from "./context/UserContext";
+import { useEffect } from "react";
 
 export default function App() {
+  const { user } = useUser();
+
   return (
-    // can add silent login here to auto try to sign in, and if not previously signed in within a certain time, auto redirect to the landing page
     // TODO: add reset account page
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        {/* If the user is logged in, redirect to /feed; otherwise, show the landing page */}
+        <Route path="/" element={user ? <Navigate to="/feed" replace /> : <LandingPage />} />
+
+        {/* Login and Reset Account pages */}
         <Route path="/login" element={<KeycloakLoginPage />} />
         <Route path="/reset-account" element={<NotFoundPage />} />
+
+        {/* Handle any undefined routes */}
         <Route path="/*" element={<NotFoundPage />} />
 
         {/* Protected routes */}

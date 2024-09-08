@@ -1,12 +1,78 @@
-/* Fade from 0 opacity to 1 opacity */
-@mixin fadeIn($duration: 0.5s, $timingFunction: ease-in-out) {
+/* Fade from 0 opacity to 1 opacity with a delay */
+@mixin fadeIn($duration: 0.5s, $timingFunction: ease-in-out, $delay: 0s) {
   @keyframes fadeIn {
     from {
       opacity: 0;
+      visibility: hidden;
     }
     to {
       opacity: 1;
+      visibility: visible;
     }
   }
-  animation: fadeIn $duration $timingFunction forwards;
+  opacity: 0; /* Ensure it's hidden before animation starts */
+  visibility: hidden;
+  animation: fadeIn $duration $timingFunction $delay forwards;
+}
+
+@mixin backInDown($duration: 1s, $timingFunction: ease-in-out, $delay: 0s) {
+  @keyframes backInDown {
+    0% {
+      transform: translateY(-1200px) scale(0.7);
+      opacity: 0.7;
+      visibility: hidden;
+    }
+    80% {
+      transform: translateY(0px) scale(0.7);
+      opacity: 0.7;
+      visibility: visible;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  opacity: 0; /* Ensure it's hidden before animation starts */
+  visibility: hidden;
+  animation: backInDown $duration $timingFunction $delay forwards;
+}
+
+@mixin fadeInUp($duration: 1s, $startingPosition: 100%, $timingFunction: ease-in-out, $delay: 0s) {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, $startingPosition, 0);
+      visibility: hidden;
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      visibility: visible;
+    }
+  }
+
+  opacity: 0;
+  visibility: hidden;
+  animation: fadeInUp $duration $timingFunction $delay forwards;
+}
+
+@mixin fadeInDown($duration: 1s, $timingFunction: ease-in-out, $delay: 0s) {
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -100%, 0);
+      visibility: hidden;
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+      visibility: visible;
+    }
+  }
+
+  opacity: 0;
+  visibility: hidden;
+  animation: fadeInDown $duration $timingFunction $delay forwards;
 }

@@ -1,51 +1,51 @@
-.not-found-page-container { 
-    @include center;
-    display: flex;
-    flex-direction: column;
-    background: white;
-    font-family: $errorFont;
-    height: 100vh;
+.not-found-page-container {
+  @include center;
+  display: flex;
+  flex-direction: column;
+  background: white;
+  font-family: $errorFont;
+  height: 100vh;
 }
 
 .not-found-page-container Button {
-    margin: 20px;
+  margin: 20px;
 }
 
 .not-found-page-title-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-image: url(/src/assets/imgs/404NotFoundGif.gif);
-    background-repeat: no-repeat;
-    background-position: center;
-    background-position-y: -32px;
-    height: 400px;
-    width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-image: url(/imgs/gif/404NotFoundGif.gif);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-y: -32px;
+  height: 400px;
+  width: 100vw;
 }
 
 .not-found-page-title0 {
-    display: flex;
-    margin-top: -10px;
-    font-size:100px;
- }
-
- .not-found-page-title1 {
-    margin-top: -14px;
-    font-size: 20px;
- }
-
- .not-found-page-content{ 
-    @include center;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    padding-top: 10px;
+  display: flex;
+  margin-top: -10px;
+  font-size: 100px;
 }
- 
+
+.not-found-page-title1 {
+  margin-top: -14px;
+  font-size: 20px;
+}
+
+.not-found-page-content {
+  @include center;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 10px;
+}
+
 .not-found-page-content-item0 {
-    font-size:30px;
+  font-size: 30px;
 }
 
 .not-found-page-content-item1 {
-    font-size: 16px;
+  font-size: 16px;
 }

@@ -19,8 +19,7 @@ async function sendVoteRequest(
     const response = await axios({
       method: method,
       url: voteServiceUrl,
-      data: voteRequestPayload,
-      withCredentials: true
+      data: voteRequestPayload
     });
 
     return response.data;

@@ -1,4 +1,11 @@
-import React, { createContext, ReactNode, useEffect, useState, useContext } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useEffect,
+  useState,
+  useContext,
+  useCallback
+} from "react";
 import keycloak, { initKeycloak } from "../services/keycloak.service";
 import Keycloak, { KeycloakTokenParsed } from "keycloak-js";
 import { invokeSignUp } from "../services/signup.service";
@@ -39,7 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const { user, setUser } = useUser(); // Destructure setUser from useUser hook
 
   // onAuthSuccess function to handle authentication success
-  const onAuthSuccess = async () => {
+  const onAuthSuccess = useCallback(async () => {
     const parsedToken: ParsedToken | undefined = keycloak?.tokenParsed;
 
     if (parsedToken) {
@@ -71,7 +78,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } else {
       console.error("Missing username or email in the token");
     }
-  };
+  }, [setUser]);
 
   // Extract enableAuth environment variable
   const enableAuth = import.meta.env.VITE_ENABLE_AUTH === "auth-enabled";

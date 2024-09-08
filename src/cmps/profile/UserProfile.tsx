@@ -71,7 +71,6 @@ export default function UserProfile() {
       })
       .catch((error) => {
         console.log("Unable to fetch user's profile picture");
-        setErrorMessage("Unable to fetch user's profile picture");
       });
 
       fetchPicture(userData?.profileBannerUrl)
@@ -81,7 +80,6 @@ export default function UserProfile() {
       })
       .catch((error) => {
         console.log("Unable to fetch user's banner picture");
-        setErrorMessage("Unable to fetch user's banner picture");
       });
 
       setCanSetPictures(false);

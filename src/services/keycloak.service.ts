@@ -19,9 +19,10 @@ export const initKeycloak = (onAuthSuccess: () => void): Promise<boolean> => {
   if (!initPromise) {
     initPromise = keycloak
       .init({
-        onLoad: "check-sso", // Or 'login-required' based on your use case
+        onLoad: "check-sso",
         checkLoginIframe: false,
-        silentCheckSsoRedirectUri: window.location.origin + "/silent-check-sso.html"
+        silentCheckSsoRedirectUri: window.location.origin + "/silent-check-sso.html",
+        enableLogging: true
       })
       .then((authenticated) => {
         if (authenticated) {

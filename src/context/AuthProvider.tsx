@@ -128,7 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (authenticated && initialized && keycloak) {
       keycloak
         .logout({
-          redirectUri: "http://localhost:8080/"
+          redirectUri: "http://localhost/"
         })
         .catch((error) => {
           console.error("Failed to log out:", error);

@@ -169,6 +169,9 @@ export default function UserProfile() {
       .then((data) => {
         console.log("Saved user description for user with ID: ", userId, data);
         setDescriptionText(descriptionText);
+        setUserData(
+          (prevUserData) => prevUserData && { ...prevUserData, description: descriptionText }
+        );
         setIsEditingDescription(false);
       })
       .catch((error) => {

@@ -250,6 +250,9 @@ export default function GroupInfo() {
       .then((data) => {
         console.log("Saved group description for group with ID: ", groupId, data);
         setDescriptionText(descriptionText);
+        setGroupData(
+          (prevGroupData) => prevGroupData && { ...prevGroupData, description: descriptionText }
+        );
         setIsEditingDescription(false);
       })
       .catch((error) => {

@@ -1,6 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Poll from "./poll/Poll";
-import { deletePoll, fetchAllUserGroupsPolls, fetchPollsByGroupId } from "../../services/poll.service";
+import {
+  deletePoll,
+  fetchAllUserGroupsPolls,
+  fetchPollsByGroupId
+} from "../../services/poll.service";
 import { PollData } from "../../models/PollData.model";
 import FeedLoadingAnimation from "../global/LoadingAnimation";
 import ContentPageErrorMessage from "../content-page/messege/ContentPageErrorMessage";
@@ -20,6 +24,7 @@ export default function FeedContent() {
   const { registerForUpdate } = useUpdateContext(); // Access context
   const { user } = useUser();
   const [pollIdToDelete, setPollIdToDelete] = useState<string>("");
+  const [isCreatePollFormVisible, setIsCreatePollFormVisible] = useState(false);
 
   const cmpName = "FEED ";
 
@@ -42,7 +47,7 @@ export default function FeedContent() {
 
       setIsLoading(false);
       removeErrorFromFeed();
-      setPolls(fetchedPolls); 
+      setPolls(fetchedPolls);
     } catch (err) {
       if (err instanceof Error) {
         console.error(cmpName + err.message);
@@ -78,32 +83,32 @@ export default function FeedContent() {
   const showVerifyDeletePopup = (pollId: string) => {
     setIsVerifyPopupOpen(true);
     setPollIdToDelete(pollId);
-  }
+  };
 
   const closeVerifyDeletePopup = () => {
-    setIsVerifyPopupOpen(false)
+    setIsVerifyPopupOpen(false);
     setPollIdToDelete("");
-  }
+  };
 
   const onDeletePoll = async () => {
-    if(pollIdToDelete !== "")
-    {
+    if (pollIdToDelete !== "") {
       console.log("deleting poll");
       await deletePoll(pollIdToDelete, user?.userId, groupId)
-      .then((data) => {
-        deletePollFromPollsList(data.pollId);
-      }).catch((error) => {
-        console.log("Unable to delete poll: ", pollIdToDelete);
-        setError(error);
-      });
+        .then((data) => {
+          deletePollFromPollsList(data.pollId);
+        })
+        .catch((error) => {
+          console.log("Unable to delete poll: ", pollIdToDelete);
+          setError(error);
+        });
 
       closeVerifyDeletePopup();
     }
-  }
+  };
 
   const deletePollFromPollsList = (pollId: string) => {
     setPolls(polls?.filter((poll) => poll.pollId !== pollId));
-  }
+  };
 
   if (isLoading) {
     return <FeedLoadingAnimation message="Feed is loading" dots="off" />;
@@ -116,14 +121,23 @@ export default function FeedContent() {
   if (polls.length === 0) {
     return (
       <div className="feed-container">
-        {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
-        <ContentPageMessage
-          msgText={
-            groupId
-              ? "No polls are currently available for this group. Please check back later or contact the group administrator for more information."
-              : "No polls are currently available for your groups. Please check back later or contact a group administrator for more information."
-          }
-        />
+        {groupId && (
+          <FeedBar
+            addNewPoll={addNewPoll}
+            groupId={groupId}
+            isCreatePollFormVisible={isCreatePollFormVisible}
+            setIsCreatePollFormVisible={setIsCreatePollFormVisible}
+          />
+        )}
+        {!isCreatePollFormVisible && (
+          <ContentPageMessage
+            msgText={
+              groupId
+                ? "No polls are currently available for this group. Please check back later or contact the group administrator for more information."
+                : "No polls are currently available for your groups. Please check back later or contact a group administrator for more information."
+            }
+          />
+        )}
       </div>
     );
   }
@@ -131,7 +145,14 @@ export default function FeedContent() {
   return (
     <div className="feed-container">
       <div className="feed-header">
-        {groupId && <FeedBar addNewPoll={addNewPoll} groupId={groupId} />}
+        {groupId && (
+          <FeedBar
+            addNewPoll={addNewPoll}
+            groupId={groupId}
+            isCreatePollFormVisible={isCreatePollFormVisible}
+            setIsCreatePollFormVisible={setIsCreatePollFormVisible}
+          />
+        )}
       </div>
       <div className="feed-content-container">
         {polls.map((poll) => (
@@ -156,7 +177,13 @@ export default function FeedContent() {
           />
         ))}
       </div>
-      {isVerifyPopupOpen && (<VerifyPopup headlineMessage="delete the poll?" OnClickYes={onDeletePoll} onClose={closeVerifyDeletePopup}></VerifyPopup>)}
+      {isVerifyPopupOpen && (
+        <VerifyPopup
+          headlineMessage="delete the poll?"
+          OnClickYes={onDeletePoll}
+          onClose={closeVerifyDeletePopup}
+        ></VerifyPopup>
+      )}
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function MembersSidebarItem({
       <div id="members-sidebar-item-icon">
         <ProfilePicture
           size="20px"
-          imageUrl={profilePictureUrl ? profilePictureUrl : defaultProfilePictureUrl}
+          imageUrl={profilePictureUrl}
         />
       </div>
       <div id="members-sidebar-item-name">{name}</div>

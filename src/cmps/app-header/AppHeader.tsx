@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUpdateContext } from "../../context/UpdateContext";
+import { useAuth } from "../../context/AuthProvider";
+
 import refreshImage from "/imgs/button/refresh.png";
 
 export default function AppHeader() {

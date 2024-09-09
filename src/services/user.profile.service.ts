@@ -19,3 +19,26 @@ export async function fetchUserData(userId: string | undefined): Promise<UserDat
     throw throwAxiosErr(err);
   }
 }
+
+export async function saveUserDescription(userId: string, descriptionText: string) {
+  console.log("Uploading user description for user with ID: " + userId);
+  
+  try {
+    const response = await axios.post(
+      userServiceUrl + import.meta.env.VITE_USER_SERVICE_DESCRIPTION,
+      { userId: userId, description: descriptionText }
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error("Error uploading user description for user with ID: " + userId + ".");
+    throw throwAxiosErr(err);
+  }
+}
+
+export function capitalizeWords(input: string): string {
+  return input
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}

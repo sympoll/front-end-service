@@ -26,6 +26,7 @@ import { useUser } from "../../../context/UserContext";
 import DeletePollButton from "../../global/DeletePollButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
+import { fetchPicture } from "../../../services/media.service";
 
 interface PollProps {
   pollId: string;
@@ -186,9 +187,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={
-                  creatorProfilePictureUrl ? creatorProfilePictureUrl : defaultProfilePictureUrl
-                }
+                imageUrl={creatorProfilePictureUrl}
                 altText={creatorName + "'s profile picture"}
                 onClick={navigateToCreatorProfile}
               ></ProfilePicture>
@@ -213,9 +212,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={
-                  groupProfilePictureUrl ? groupProfilePictureUrl : defaultGroupProfilePictureUrl
-                }
+                imageUrl={groupProfilePictureUrl}
                 altText={creatorName + "'s profile picture"}
                 onClick={navigateToGroupProfile}
               ></ProfilePicture>

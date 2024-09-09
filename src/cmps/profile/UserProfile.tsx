@@ -77,32 +77,31 @@ export default function UserProfile() {
         console.log("Unable to fetch groups of user with ID " + userId);
         setErrorMessage("Unable to fetch groups of user with ID " + userId);
       });
-      
   }, [userId]);
 
   useEffect(() => {
-    if(canSetPictures){
+    if (canSetPictures) {
       fetchPicture(userData?.profilePictureUrl)
-      .then((data) => {
-        console.log("Fetched user's profile picture");
-        setProfileImageSrc(data ?? defaultProfilePictureUrl);
-      })
-      .catch((error) => {
-        console.log("Unable to fetch user's profile picture");
-      });
+        .then((data) => {
+          console.log("Fetched user's profile picture");
+          setProfileImageSrc(data ?? defaultProfilePictureUrl);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch user's profile picture");
+        });
 
       fetchPicture(userData?.profileBannerUrl)
-      .then((data) => {
-        console.log("Fetched user's bannner picture");
-        setBannerImageSrc(data ?? defaultProfileBannerUrl);
-      })
-      .catch((error) => {
-        console.log("Unable to fetch user's banner picture");
-      });
+        .then((data) => {
+          console.log("Fetched user's bannner picture");
+          setBannerImageSrc(data ?? defaultProfileBannerUrl);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch user's banner picture");
+        });
 
       setCanSetPictures(false);
     }
-  }, [canSetPictures])
+  }, [canSetPictures]);
 
   const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     console.log("User profile picture was added, uploading...");
@@ -158,19 +157,6 @@ export default function UserProfile() {
       resetUserDescriptionText();
     } else {
       setIsEditingDescription(true);
-
-      fetchUserData(userId)
-        .then((data) => {
-          console.log("Fetched user data for user with ID: ", userId, data);
-          setUserData(data);
-          setDescriptionText(data.description || defaultDescription);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.log("Unable to fetch user with ID " + userId);
-          setErrorMessage("User with ID '" + userId + "' does not exist...");
-          setIsLoading(false);
-        });
     }
   };
 
@@ -183,6 +169,9 @@ export default function UserProfile() {
       .then((data) => {
         console.log("Saved user description for user with ID: ", userId, data);
         setDescriptionText(descriptionText);
+        setUserData(
+          (prevUserData) => prevUserData && { ...prevUserData, description: descriptionText }
+        );
         setIsEditingDescription(false);
       })
       .catch((error) => {
@@ -198,14 +187,14 @@ export default function UserProfile() {
   };
 
   const toggleProfilePictureMenu = () => {
-    if(userId === user?.userId){
-      setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);  
+    if (userId === user?.userId) {
+      setIsProfilePictureMenuVisible(!isProfilePictureMenuVisible);
     }
   };
 
   const toggleProfileBannerMenu = () => {
-    if(userId === user?.userId){
-      setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);  
+    if (userId === user?.userId) {
+      setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
     }
   };
 
@@ -230,11 +219,7 @@ export default function UserProfile() {
       <div className="user-profile__header">
         <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
-            <img
-              src={bannerImageSrc}
-              alt="Banner"
-              className="user-profile__banner-img"
-            />
+            <img src={bannerImageSrc} alt="Banner" className="user-profile__banner-img" />
           </div>
           {isProfileBannerMenuVisible && (
             <div className="user-profile__profile-banner-menu">
@@ -260,11 +245,7 @@ export default function UserProfile() {
             onClick={toggleProfilePictureMenu}
           >
             <div>
-              <img
-                src={profileImageSrc}
-                alt="Profile"
-                className="user-profile__profile-img"
-              />
+              <img src={profileImageSrc} alt="Profile" className="user-profile__profile-img" />
             </div>
             {isProfilePictureMenuVisible && (
               <div className="user-profile__profile-picture-menu">

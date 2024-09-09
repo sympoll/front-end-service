@@ -5,7 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteGroupById,
   fetchGroupData,
-  removeMemberFromGroup
+  removeMemberFromGroup,
+  saveGroupDescription
 } from "../../services/group.service";
 import { GroupData } from "../../models/GroupData.model";
 import { getTimePassed } from "../../services/poll.service";
@@ -22,6 +23,7 @@ import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
 import { fetchPicture, uploadGroupProfileImage } from "../../services/media.service";
 import { useUser } from "../../context/UserContext";
+import EditDescriptionIcon from "@mui/icons-material/MoreVert";
 
 export default function GroupInfo() {
   const navigate = useNavigate();
@@ -44,6 +46,7 @@ export default function GroupInfo() {
 
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
+  const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
 
   const [canSetPictures, setCanSetPictures] = useState(false);
   const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
@@ -57,8 +60,18 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
+  const [isUserHasPermissionToEditDescription, setIsUserHasPermissionToEditDescription] =
+    useState<boolean>(false);
+
   const [timePassed, setTimePassed] = useState<string>();
   const userData = fetchUserData(userId);
+  const [descriptionText, setDescriptionText] = useState<string>("");
+  const defaultDescription = "It looks like this group hasn’t set a description yet.";
+  const resetUserDescriptionText = () =>
+    setDescriptionText(
+      groupData ? groupData.description || defaultDescription : defaultDescription
+    );
+  const [isEditingDescription, setIsEditingDescription] = useState<boolean>(false);
 
   // Styling configurations:
   const commandBarButtonsWidth = "100px";
@@ -74,6 +87,7 @@ export default function GroupInfo() {
         .then((data) => {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
+          setDescriptionText(data.description || defaultDescription);
           setCanSetPictures(true);
           setIsLoading(false);
         })
@@ -100,28 +114,28 @@ export default function GroupInfo() {
   }, [members]);
 
   useEffect(() => {
-    if(canSetPictures){
+    if (canSetPictures) {
       fetchPicture(groupData?.profilePictureUrl)
-      .then((data) => {
-        console.log("Fetched group's profile picture");
-        setProfileImageSrc(data ?? defaultProfilePictureUrl);
-      })
-      .catch((error) => {
-        console.log("Unable to fetch group's profile picture");
-      });
+        .then((data) => {
+          console.log("Fetched group's profile picture");
+          setProfileImageSrc(data ?? defaultProfilePictureUrl);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch group's profile picture");
+        });
 
       fetchPicture(groupData?.profileBannerUrl)
-      .then((data) => {
-        console.log("Fetched group's bannner picture");
-        setBannerImageSrc(data ?? defaultProfileBannerUrl);
-      })
-      .catch((error) => {
-        console.log("Unable to fetch group's banner picture");
-      });
+        .then((data) => {
+          console.log("Fetched group's bannner picture");
+          setBannerImageSrc(data ?? defaultProfileBannerUrl);
+        })
+        .catch((error) => {
+          console.log("Unable to fetch group's banner picture");
+        });
 
       setCanSetPictures(false);
     }
-  }, [canSetPictures])
+  }, [canSetPictures]);
 
   const fetchUserPermissionsInCommandBar = () => {
     console.log("Fetching user permissions in group");
@@ -132,11 +146,13 @@ export default function GroupInfo() {
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(true);
       setIsUserHasPermissionToModRoles(true);
+      setIsUserHasPermissionToEditDescription(true);
     } else if (userRole === UserRoleName.MODERATOR) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(false);
       setIsUserHasPermissionToModRoles(false);
+      setIsUserHasPermissionToEditDescription(false);
     }
   };
 
@@ -213,6 +229,41 @@ export default function GroupInfo() {
     }
   };
 
+  const onEditDescription = () => {
+    toggleEditDescriptionMenu();
+
+    // Check if clicked on edit button or exit button
+    if (isEditingDescription) {
+      setIsEditingDescription(false);
+      resetUserDescriptionText();
+    } else {
+      setIsEditingDescription(true);
+    }
+  };
+
+  const onSaveDescription = () => {
+    if (!groupId) {
+      throw new Error("Error fetching group ID param");
+    }
+
+    saveGroupDescription(groupId, descriptionText)
+      .then((data) => {
+        console.log("Saved group description for group with ID: ", groupId, data);
+        setDescriptionText(descriptionText);
+        setIsEditingDescription(false);
+      })
+      .catch((error) => {
+        console.log("Unable to save group description for group with ID " + groupId);
+        setErrorMessage("Unable to save group description for group with ID " + groupId);
+        resetUserDescriptionText();
+        setIsEditingDescription(false);
+      });
+  };
+
+  const handleDescriptionChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setDescriptionText(event.target.value);
+  };
+
   const onExitGroupClick = () => {
     setIsExitVerifyPopupOpen(true);
   };
@@ -239,6 +290,10 @@ export default function GroupInfo() {
 
   const toggleProfileBannerMenu = () => {
     setIsProfileBannerMenuVisible(!isProfileBannerMenuVisible);
+  };
+
+  const toggleEditDescriptionMenu = () => {
+    setIsEditDescriptionMenuVisible(!isEditDescriptionMenuVisible);
   };
 
   if (errorMessage) {
@@ -272,11 +327,7 @@ export default function GroupInfo() {
           }
         >
           <div>
-            <img
-              src={bannerImageSrc}
-              alt="Banner"
-              className="group-info__banner-img"
-            />
+            <img src={bannerImageSrc} alt="Banner" className="group-info__banner-img" />
           </div>
           {isProfileBannerMenuVisible && (
             <div className="group-info__profile-banner-menu">
@@ -309,11 +360,7 @@ export default function GroupInfo() {
             }
           >
             <div>
-              <img
-                src={profileImageSrc}
-                alt="Profile"
-                className="group-info__profile-img"
-              />
+              <img src={profileImageSrc} alt="Profile" className="group-info__profile-img" />
             </div>
             {isProfilePictureMenuVisible && (
               <div className="group-info__profile-picture-menu">
@@ -424,10 +471,32 @@ export default function GroupInfo() {
         />
       )}
       <div className="group-info__info-container">
-        <div className="group-info__description">
+        <div className="group-info__description-container">
+          {isUserHasPermissionToEditDescription && (
+            <EditDescriptionIcon
+              className="group-info__edit-description-button"
+              onClick={toggleEditDescriptionMenu}
+            />
+          )}
+          {isEditDescriptionMenuVisible && (
+            <div className="group-info__edit-description-menu">
+              <button onClick={onEditDescription}>{isEditingDescription ? "Exit" : "Edit"}</button>
+            </div>
+          )}
           <h3>Description:</h3>
           <br />
-          {groupData?.description}
+          {isEditingDescription ? (
+            <div className="group-info__edit-description-container">
+              <textarea
+                value={descriptionText}
+                onChange={handleDescriptionChange}
+                className="group-info__edit-description-input"
+              />
+              <button onClick={onSaveDescription}>Save</button>
+            </div>
+          ) : (
+            <p>{descriptionText}</p>
+          )}
         </div>
         <div className="group-info__group-info">
           <h3>Info:</h3>

@@ -254,3 +254,19 @@ export async function deleteUserRole(
     throw throwAxiosErr(err);
   }
 }
+
+export async function saveGroupDescription(groupId: string, descriptionText: string) {
+  console.log("Uploading group description for group with ID: " + groupId);
+  
+  try {
+    const response = await axios.post(
+      groupServiceUrl + import.meta.env.VITE_GROUP_SERVICE_DESCRIPTION,
+      { groupId: groupId, description: descriptionText }
+    );
+
+    return response.data;
+  } catch (err) {
+    console.error("Error uploading group description for group with ID: " + groupId + ".");
+    throw throwAxiosErr(err);
+  }
+}

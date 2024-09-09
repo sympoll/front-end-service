@@ -62,6 +62,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           userId: signedUpUser.userId, // Assuming the response contains userId
           username: signedUpUser.username,
           email: signedUpUser.email,
+          description: signedUpUser.description,
           profilePictureUrl: signedUpUser.profilePictureUrl,
           profileBannerUrl: signedUpUser.profileBannerUrl,
           timeCreated: signedUpUser.timeCreated
@@ -105,6 +106,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             userId: signedUpUser.userId, // Assuming the response contains userId
             username: signedUpUser.username,
             email: signedUpUser.email,
+            description: signedUpUser.description,
             profilePictureUrl: signedUpUser.profilePictureUrl,
             profileBannerUrl: signedUpUser.profileBannerUrl,
             timeCreated: signedUpUser.timeCreated
@@ -126,7 +128,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (authenticated && initialized && keycloak) {
       keycloak
         .logout({
-          redirectUri: 'http://localhost:8080/'
+          redirectUri: "http://localhost:8080/"
         })
         .catch((error) => {
           console.error("Failed to log out:", error);
@@ -134,15 +136,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         .finally(() => {
           setAuthenticated(false);
         });
-  
     } else if (!initialized) {
       console.warn("Keycloak is not initialized yet.");
     }
-  }
+  };
 
   // Return the AuthContext.Provider with the necessary values
   return (
-    <AuthContext.Provider value={{ keycloak: keycloakInstance, authenticated, initialized, onLogout }}>
+    <AuthContext.Provider
+      value={{ keycloak: keycloakInstance, authenticated, initialized, onLogout }}
+    >
       {children}
     </AuthContext.Provider>
   );

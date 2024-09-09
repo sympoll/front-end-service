@@ -119,3 +119,18 @@ Default Roles:
 
 3. `Member`: 
 * Exit the group
+
+<br/>
+
+## Deployment
+### 1. Clone and Run Locally:    
+step 1 - Clone the project.   
+step 2 - Run ```npm install``` to install all dependancies.   
+step 3 - Run ```npm run dev``` to run the app localy.   
+step 4 - Access the application through [```http://localhost:8080```](http://localhost:8080).
+
+### 2. Run Through the Kubernetes Cluster:   
+step 1 - Clone the Kubernetes configuration files from [```https://github.com/sympoll/manifests```](https://github.com/sympoll/manifests).   
+step 2 - Apply the configuration files, more info in the manifests repository.   
+step 3 - Start Minikube and run tunnel.   
+step 4 - Access the application through  [```http://localhost```](http://localhost).   

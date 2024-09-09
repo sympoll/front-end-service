@@ -48,7 +48,8 @@
 <div align="center">
   <h3> Landing Page & Login </h3>
   <p>
-    The welcome page of the app. From this page the user may choose to sign-in or sign-up to start using the app.
+    The welcome page of the app. <br/>
+    From this page the user may choose to sign-in or sign-up to start using the app.
   </p>
   <img src="https://github.com/user-attachments/assets/ffbc784b-c1a2-4c94-9d64-27320027914f" />
   <br />

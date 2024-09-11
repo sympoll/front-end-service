@@ -16,38 +16,57 @@ interface ContentPageProps {
 }
 
 export default function ContentPage({ content }: ContentPageProps) {
-  const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
   const { registerForUpdate } = useUpdateContext();
 
+  const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
+
+  /* ----------- Fetch logged in user data ----------- */
+  // const { user } = useUser();
+
+  // Update logged in user's data when the userId changes.
+  // useEffect(() => {
+  //   updateLoggedInUser();
+  // }, [user?.userId]);
+
+  // const updateLoggedInUser = useCallback(async () => {
+  //   setLoading(true);
+
+  //   if (user) {
+  //     fetchUserData(user?.userId)
+  //       .then((userData) => {
+  //         setLoggedInUser(userData);
+  //         setLoading(false);
+  //       })
+  //       .catch((err) => {
+  //         setError(`Error fetching user data for user ID: ${user?.userId}. Error: ${err}`);
+  //         setLoading(false);
+  //       });
+  //   }
+  // }, [user?.userId]);
+
+  // useEffect(() => {
+  //   const unregister = registerForUpdate(updateLoggedInUser);
+  //   return () => {
+  //     unregister();
+  //   };
+  // }, [registerForUpdate, updateLoggedInUser]);
+  /* --------------------------------------- */
+  /* ----------- Fetch demo data ----------- */
+  const loggedInUserDemoDataId = import.meta.env.VITE_DEBUG_USER_ID;
   useEffect(() => {
-    updateLoggedInUser();
-  }, [user?.userId]);
-
-  const updateLoggedInUser = useCallback(async () => {
-    setLoading(true);
-
-    if (user) {
-      fetchUserData(user?.userId)
-        .then((userData) => {
-          setLoggedInUser(userData);
-          setLoading(false);
-        })
-        .catch((err) => {
-          setError(`Error fetching user data for user ID: ${user?.userId}. Error: ${err}`);
-          setLoading(false);
-        });
-    }
-  }, [user?.userId]);
-
-  useEffect(() => {
-    const unregister = registerForUpdate(updateLoggedInUser);
-    return () => {
-      unregister();
-    };
-  }, [registerForUpdate, updateLoggedInUser]);
+    fetchUserData(loggedInUserDemoDataId)
+      .then((userData) => {
+        setLoggedInUser(userData);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(`Error fetching user data for user ID: ${loggedInUserDemoDataId}. Error: ${err}`);
+        setLoading(false);
+      });
+  }, [loggedInUserDemoDataId]);
+  /* --------------------------------------- */
 
   if (loading) {
     return <LoadingAnimation message="Loading User Data" dots="off" />;

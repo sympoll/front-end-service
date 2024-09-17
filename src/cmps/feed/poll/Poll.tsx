@@ -171,9 +171,11 @@ export default function Poll({
     }
   };
 
-  const onDeletePollButtonClick = () => {
+  const onDeletePollClick = () => {
     showVerifyDeletePopup(pollId);
   };
+
+  const onEditPollClick = () => {};
 
   return (
     <section className="poll-container">
@@ -197,7 +199,12 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && <PollOptionsButton onClick={onDeletePollButtonClick} />}
+                {isUserCanDeletePoll && (
+                  <PollOptionsButton
+                    editPollOnClick={onEditPollClick}
+                    deletePollOnClick={onDeletePollClick}
+                  />
+                )}
               </div>
             </div>
             <div className="poll-info-title__row2">

@@ -9,7 +9,6 @@ import {
 import ErrorPopup from "../../popup/ErrorPopup";
 import {
   countCheckedItems,
-  deletePoll,
   getProgress,
   getTimePassed,
   getTimeToDeadline,
@@ -20,13 +19,10 @@ import {
   shouldPreventProgressUpdate
 } from "../../../services/poll.service";
 import ProfilePicture from "../../global/ProfilePicture";
-import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
-import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import { useUser } from "../../../context/UserContext";
-import DeletePollButton from "../../global/DeletePollButton";
+import PollOptionsButton from "./PollOptionsButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
-import { fetchPicture } from "../../../services/media.service";
 
 interface PollProps {
   pollId: string;
@@ -63,7 +59,7 @@ export default function Poll({
   deadline,
   votingItems,
   isSpecificGroup,
-  showVerifyDeletePopup,
+  showVerifyDeletePopup
 }: PollProps) {
   const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
@@ -75,8 +71,8 @@ export default function Poll({
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
-  
-  const {members, getMemberRole} = useMembers();
+
+  const { members, getMemberRole } = useMembers();
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
@@ -92,7 +88,7 @@ export default function Poll({
   useEffect(() => {
     console.log("fetching permission for delete");
     fetchPermissionToDeletePoll();
-  },[members])
+  }, [members]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -166,8 +162,8 @@ export default function Poll({
   }
 
   const fetchPermissionToDeletePoll = () => {
-    if(isSpecificGroup){
-      if(creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN){
+    if (isSpecificGroup) {
+      if (creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN) {
         setIsUserCanDeletePoll(true);
       } else {
         setIsUserCanDeletePoll(false);
@@ -176,8 +172,8 @@ export default function Poll({
   };
 
   const onDeletePollButtonClick = () => {
-    showVerifyDeletePopup(pollId)
-  }
+    showVerifyDeletePopup(pollId);
+  };
 
   return (
     <section className="poll-container">
@@ -201,7 +197,7 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePollButtonClick} />)}
+                {isUserCanDeletePoll && <PollOptionsButton onClick={onDeletePollButtonClick} />}
               </div>
             </div>
             <div className="poll-info-title__row2">

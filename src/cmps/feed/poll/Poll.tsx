@@ -25,6 +25,7 @@ import PollOptionsButton from "./PollOptionsButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
 import { PollData } from "../../../models/PollData.model";
+import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 
 interface PollProps {
   initialPollData: PollData;
@@ -237,7 +238,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={pollData.creatorProfilePictureUrl}
+                imageUrl={pollData.creatorProfilePictureUrl ?? defaultProfilePictureUrl}
                 altText={pollData.creatorName + "'s profile picture"}
                 onClick={navigateToCreatorProfile}
               ></ProfilePicture>
@@ -276,7 +277,7 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={pollData.groupProfilePictureUrl}
+                imageUrl={pollData.groupProfilePictureUrl ?? defaultProfilePictureUrl}
                 altText={pollData.creatorName + "'s profile picture"}
                 onClick={navigateToGroupProfile}
               ></ProfilePicture>

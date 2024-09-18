@@ -4,7 +4,7 @@ interface VotingCheckboxProps {
   votingItemId: number;
   isChecked: boolean;
   handleNewProgress: Function;
-  showErrorPopup: () => void;
+  showErrorPopup: (message: string) => void;
 }
 
 export default function VotingCheckbox({
@@ -18,7 +18,7 @@ export default function VotingCheckbox({
 
   const handleCheckboxChange = () => {
     if (!handleNewProgress(votingItemId, !isChecked)) {
-      showErrorPopup();
+      showErrorPopup("Already reached the number of votes limit");
 
       if (animationCooldown) return; // Animation did not complete, wait for the cooldown to end
 

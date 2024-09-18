@@ -158,20 +158,7 @@ export default function FeedContent() {
         {polls.map((poll) => (
           <Poll
             key={poll.pollId}
-            pollId={poll.pollId}
-            title={poll.title}
-            description={poll.description}
-            nofAnswersAllowed={poll.nofAnswersAllowed}
-            creatorId={poll.creatorId}
-            creatorName={poll.creatorName}
-            creatorProfilePictureUrl={poll.creatorProfilePictureUrl}
-            groupId={poll.groupId}
-            groupName={poll.groupName}
-            groupProfilePictureUrl={poll.groupProfilePictureUrl}
-            timeCreated={poll.timeCreated}
-            timeUpdated={poll.timeUpdated}
-            deadline={poll.deadline}
-            votingItems={poll.votingItems}
+            initialPollData={poll}
             isSpecificGroup={!!groupId}
             showVerifyDeletePopup={showVerifyDeletePopup}
           />
@@ -179,7 +166,7 @@ export default function FeedContent() {
       </div>
       {isVerifyPopupOpen && (
         <VerifyPopup
-          headlineMessage="delete the poll?"
+          headlineMessage="delete the poll"
           OnClickYes={onDeletePoll}
           onClose={closeVerifyDeletePopup}
         ></VerifyPopup>

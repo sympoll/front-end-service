@@ -10,7 +10,6 @@
 @import "basics/CustomButton";
 @import "basics/CloseButton";
 @import "basics/LoadingAnimation";
-@import "basics/DeletePollButton";
 
 // ** Effects **
 @import "effects/ripple-loading";
@@ -38,11 +37,12 @@
 @import "cmps/content-page/message/ContentPageMessage";
 
 // * Feed *
-@import "cmps/feed/VotingCheckbox";
-@import "cmps/feed/VotingBar";
-@import "cmps/feed/VotingItem";
+@import "cmps/feed/poll/VotingCheckbox";
+@import "cmps/feed/poll/VotingBar";
+@import "cmps/feed/poll/VotingItem";
+@import "cmps/feed/poll/PollOptionsButton.scss";
 @import "cmps/feed/FeedContent";
-@import "cmps/feed/Poll";
+@import "cmps/feed/poll/Poll";
 @import "cmps/feed/CreatePollForm";
 @import "cmps/feed/FeedBar";
 

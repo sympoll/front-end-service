@@ -20,7 +20,7 @@ export default function ContentPage({ content }: ContentPageProps) {
   const [error, setError] = useState<string | null>(null);
   const { registerForUpdate } = useUpdateContext();
 
-  const [loggedInUser, setLoggedInUser] = useState<UserData | null>(null);
+  const { user: loggedInUser, setUser: setLoggedInUser } = useUser();
 
   /* ----------- Fetch logged in user data ----------- */
   // const { user } = useUser();

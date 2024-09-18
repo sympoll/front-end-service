@@ -11,15 +11,15 @@ import "./config/axiosConfig";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <UserProvider>
-      <AuthProvider>
-        <UpdateProvider>
-          <GroupsProvider>
-            <MembersProvider>
-              <App />
-            </MembersProvider>
-          </GroupsProvider>
-        </UpdateProvider>
-      </AuthProvider>
+      {/* <AuthProvider> */}
+      <UpdateProvider>
+        <GroupsProvider>
+          <MembersProvider>
+            <App />
+          </MembersProvider>
+        </GroupsProvider>
+      </UpdateProvider>
+      {/* </AuthProvider> */}
     </UserProvider>
   </React.StrictMode>
 );

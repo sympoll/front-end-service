@@ -38,11 +38,8 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
   }, [menuRef]);
 
   return (
-    <div className="sidebar-user-info-container">
-      <ProfilePicture
-        imageUrl={userData.profilePictureUrl}
-        onClick={onUsernameClick}
-      />
+    <div className="sidebar-user-info-container" ref={menuRef}>
+      <ProfilePicture imageUrl={userData.profilePictureUrl} onClick={onUsernameClick} />
       <div className="sidebar-user-info-data">
         <p className="sidebar-user-info-data__username" onClick={onUsernameClick}>
           {userData.username}
@@ -50,7 +47,7 @@ export default function SidebarUserInfo({ userData }: SidebarUserInfoProps) {
         <p>{userData.email}</p>
       </div>
       {isUserInfoMenuVisible && (
-        <div className="sidebar-user-info-menu" ref={menuRef}>
+        <div className="sidebar-user-info-menu">
           <button onClick={navigateToUserProfile}>Profile</button>
           <button onClick={onLogout}>Logout</button>
         </div>

@@ -9,7 +9,6 @@ import {
 import ErrorPopup from "../../popup/ErrorPopup";
 import {
   countCheckedItems,
-  deletePoll,
   getProgress,
   getTimePassed,
   getTimeToDeadline,
@@ -17,16 +16,14 @@ import {
   getUpdatedVoteCounts,
   isSingleChoice,
   sendRequestToVoteService,
-  shouldPreventProgressUpdate
+  shouldPreventProgressUpdate,
+  updatePoll
 } from "../../../services/poll.service";
 import ProfilePicture from "../../global/ProfilePicture";
-import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
-import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import { useUser } from "../../../context/UserContext";
-import DeletePollButton from "../../global/DeletePollButton";
+import PollOptionsButton from "./PollOptionsButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
-import { fetchPicture } from "../../../services/media.service";
 
 interface PollProps {
   pollId: string;
@@ -63,9 +60,8 @@ export default function Poll({
   deadline,
   votingItems,
   isSpecificGroup,
-  showVerifyDeletePopup,
+  showVerifyDeletePopup
 }: PollProps) {
-  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
   const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
@@ -75,24 +71,23 @@ export default function Poll({
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
-  
-  const {members, getMemberRole} = useMembers();
+  const [isEditingPoll, setIsEditingPoll] = useState(false);
+
+  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const { user } = useUser();
+  const { members, getMemberRole } = useMembers();
+
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
-  const { user } = useUser();
 
-  const closeErrorPopup = () => {
-    setIsErrorPopupVisible(false);
-  };
-  const showErrorPopup = () => {
-    setIsErrorPopupVisible(true);
-  };
+  const [pollTitleValue, setPollTitleValue] = useState(title);
+  const [pollDescriptionValue, setPollDescriptionValue] = useState(description);
 
   useEffect(() => {
     console.log("fetching permission for delete");
     fetchPermissionToDeletePoll();
-  },[members])
+  }, [members]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -166,8 +161,8 @@ export default function Poll({
   }
 
   const fetchPermissionToDeletePoll = () => {
-    if(isSpecificGroup){
-      if(creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN){
+    if (isSpecificGroup) {
+      if (creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN) {
         setIsUserCanDeletePoll(true);
       } else {
         setIsUserCanDeletePoll(false);
@@ -175,11 +170,58 @@ export default function Poll({
     }
   };
 
-  const onDeletePollButtonClick = () => {
-    showVerifyDeletePopup(pollId)
-  }
+  const resetPollTitleValue = () => {
+    setPollTitleValue(title);
+  };
+  const resetPollDescriptionValue = () => {
+    setPollDescriptionValue(description);
+  };
+  const resetPollDetails = () => {
+    resetPollTitleValue();
+    resetPollDescriptionValue();
+  };
+
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
+
+  const togglePollEdit = () => {
+    setIsEditingPoll(!isEditingPoll);
+  };
+
+  const onDeletePollClick = () => {
+    showVerifyDeletePopup(pollId);
+  };
+
+  const onEditPollClick = () => {
+    togglePollEdit();
+
+    resetPollTitleValue();
+    resetPollDescriptionValue();
+  };
+
+  const onSavePollClick = () => {
+    updatePoll(pollId, creatorId, groupId, pollTitleValue, pollDescriptionValue)
+      .then((data) => {
+        console.log("Updated poll details for poll with ID: ", pollId, data);
+      })
+      .catch((error) => {
+        console.log("Unable to save poll details for poll with ID " + pollId);
+        resetPollDetails();
+      });
+    togglePollEdit();
+  };
+
+  const onExitEditClick = () => {
+    resetPollDetails();
+    togglePollEdit();
+  };
 
   return (
+    // Display input fields for the poll's details, currently editing
     <section className="poll-container">
       {
         // Display Group info only on all groups tab
@@ -201,7 +243,19 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (<DeletePollButton onClick={onDeletePollButtonClick} />)}
+                {isUserCanDeletePoll && isEditingPoll && (
+                  <PollOptionsButton
+                    savePollOnClick={onSavePollClick}
+                    exitEditOnClick={onExitEditClick}
+                    deletePollOnClick={onDeletePollClick}
+                  />
+                )}
+                {isUserCanDeletePoll && !isEditingPoll && (
+                  <PollOptionsButton
+                    editPollOnClick={onEditPollClick}
+                    deletePollOnClick={onDeletePollClick}
+                  />
+                )}
               </div>
             </div>
             <div className="poll-info-title__row2">
@@ -235,15 +289,32 @@ export default function Poll({
                 </div>
               </div>
             </div>
-
             <div className="poll-info-title__row2">
               <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
           </div>
         )
       }
-      <div className="poll-title">{title}</div>
-      <div className="poll-description">{description}</div>
+      {isEditingPoll ? (
+        <div className="poll-details-container">
+          <input
+            type="text"
+            value={pollTitleValue}
+            onChange={(e) => setPollTitleValue(e.target.value)}
+            className="poll-title-input"
+          />
+          <textarea
+            value={pollDescriptionValue}
+            onChange={(e) => setPollDescriptionValue(e.target.value)}
+            className="poll-description-input"
+          />
+        </div>
+      ) : (
+        <div className="poll-details-container">
+          <div className="poll-title">{pollTitleValue}</div>
+          <div className="poll-description">{pollDescriptionValue}</div>
+        </div>
+      )}
       <div className="poll-voting-container">
         <div className="poll-voting-choice-messege">
           {isSingleChoice(nofAnswersAllowed)

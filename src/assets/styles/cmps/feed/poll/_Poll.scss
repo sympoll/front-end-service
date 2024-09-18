@@ -9,6 +9,33 @@
   font-weight: bold;
 }
 
+.poll-details-container {
+  @include flex-column;
+  gap: 6px;
+  $inputPadding: 2px;
+
+  .poll-title-input {
+    font-weight: bold;
+    background: none;
+    border: 1px solid $mainFontColor;
+    background-color: $mainBgColor0;
+    font-size: $mainFontSize;
+    font-family: $mainFont;
+    padding: $inputPadding;
+  }
+
+  .poll-description-input {
+    resize: vertical;
+    max-height: 200px;
+    min-height: 40px;
+    border: 1px solid $mainFontColor;
+    background-color: $mainBgColor0;
+    font-size: $mainFontSize;
+    font-family: $mainFont;
+    padding: $inputPadding;
+  }
+}
+
 .poll-description {
   display: block;
 }
@@ -122,10 +149,10 @@
     }
   }
 
-    &__delete-button{
-      margin-left: auto;
-      margin-bottom: auto;
-    }
+  &__delete-button {
+    margin-left: auto;
+    margin-bottom: auto;
+  }
 }
 
 .poll-info-title-separator {

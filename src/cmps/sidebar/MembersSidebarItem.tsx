@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfilePicture from "../global/ProfilePicture";
-import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 
 interface MembersSidebarItemProps {
   name: string;

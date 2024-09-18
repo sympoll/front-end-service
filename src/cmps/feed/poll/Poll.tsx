@@ -24,65 +24,47 @@ import { useUser } from "../../../context/UserContext";
 import PollOptionsButton from "./PollOptionsButton";
 import { useMembers } from "../../../context/MemebersContext";
 import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
+import { PollData } from "../../../models/PollData.model";
 
 interface PollProps {
-  pollId: string;
-  title: string;
-  description: string;
-  nofAnswersAllowed: number;
-  creatorId: string;
-  creatorName: string;
-  creatorProfilePictureUrl: string;
-  groupId: string;
-  groupName: string;
-  groupProfilePictureUrl: string;
-  timeCreated: string;
-  timeUpdated: string;
-  deadline: string;
-  votingItems: VotingItemData[];
+  initialPollData: PollData;
   isSpecificGroup: boolean;
   showVerifyDeletePopup: (pollId: string) => void;
 }
 
 export default function Poll({
-  pollId,
-  title,
-  description,
-  nofAnswersAllowed,
-  creatorId,
-  creatorName,
-  creatorProfilePictureUrl,
-  groupId,
-  groupName,
-  groupProfilePictureUrl,
-  timeCreated,
-  timeUpdated,
-  deadline,
-  votingItems,
+  initialPollData,
   isSpecificGroup,
   showVerifyDeletePopup
 }: PollProps) {
+  const [pollData, setPollData] = useState(initialPollData);
+
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
-  const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
-  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
+  const [errorPopupMessage, setErrorPopupMessage] = useState<string>();
+
+  const [timePassed, setTimePassed] = useState(getTimePassed(pollData.timeCreated));
   const [isCheckedStates, setIsCheckedStates] = useState<VotingItemIsChecked[]>(
-    votingItems.map((vItem) => ({
+    pollData.votingItems.map((vItem) => ({
       votingItemId: vItem.votingItemId,
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
+
+  const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
   const [isEditingPoll, setIsEditingPoll] = useState(false);
 
-  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(pollData.votingItems);
   const { user } = useUser();
   const { members, getMemberRole } = useMembers();
 
   const navigate = useNavigate();
-  const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
-  const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
+  const navigateToCreatorProfile = () => navigate(`/${pollData.creatorId}`);
+  const navigateToGroupProfile = () => navigate(`/group/${pollData.groupId}`);
 
-  const [pollTitleValue, setPollTitleValue] = useState(title);
-  const [pollDescriptionValue, setPollDescriptionValue] = useState(description);
+  const [pollTitleValue, setPollTitleValue] = useState(pollData.title);
+  const [pollDescriptionValue, setPollDescriptionValue] = useState(pollData.description);
+
+  const POLL_TITLE_MIN_LENGTH = 4;
 
   useEffect(() => {
     console.log("fetching permission for delete");
@@ -91,11 +73,11 @@ export default function Poll({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTimePassed(getTimePassed(timeCreated));
+      setTimePassed(getTimePassed(pollData.timeCreated));
     }, 1000); // Update every second
 
     return () => clearInterval(interval); // Cleanup the interval on component unmount
-  }, [timeCreated]);
+  }, [pollData.timeCreated]);
 
   const [progresses, setProgresses] = useState<VotingItemProgress[]>(
     votingItemsData.map((vItemData) => ({
@@ -120,14 +102,14 @@ export default function Poll({
     if (
       shouldPreventProgressUpdate(
         inputIsInc,
-        isSingleChoice(nofAnswersAllowed),
-        nofAnswersAllowed,
+        isSingleChoice(pollData.nofAnswersAllowed),
+        pollData.nofAnswersAllowed,
         countCheckedItems(isCheckedStates)
       )
     )
       return false;
 
-    if (isSingleChoice(nofAnswersAllowed) && inputIsInc) {
+    if (isSingleChoice(pollData.nofAnswersAllowed) && inputIsInc) {
       const previouslySelectedItem = isCheckedStates.find((item) => item.isChecked);
       if (previouslySelectedItem) {
         sendRequestToVoteService(false, previouslySelectedItem.votingItemId, user?.userId);
@@ -141,7 +123,7 @@ export default function Poll({
         inputIsInc,
         votingItemsData,
         isCheckedStates,
-        isSingleChoice(nofAnswersAllowed)
+        isSingleChoice(pollData.nofAnswersAllowed)
       )
     );
     setVotingItemsData(
@@ -150,7 +132,7 @@ export default function Poll({
         inputIsInc,
         votingItemsData,
         isCheckedStates,
-        isSingleChoice(nofAnswersAllowed)
+        isSingleChoice(pollData.nofAnswersAllowed)
       )
     );
 
@@ -162,7 +144,10 @@ export default function Poll({
 
   const fetchPermissionToDeletePoll = () => {
     if (isSpecificGroup) {
-      if (creatorId === user?.userId || getMemberRole(user?.userId) === UserRoleName.ADMIN) {
+      if (
+        pollData.creatorId === user?.userId ||
+        getMemberRole(user?.userId) === UserRoleName.ADMIN
+      ) {
         setIsUserCanDeletePoll(true);
       } else {
         setIsUserCanDeletePoll(false);
@@ -171,10 +156,10 @@ export default function Poll({
   };
 
   const resetPollTitleValue = () => {
-    setPollTitleValue(title);
+    setPollTitleValue(pollData.title);
   };
   const resetPollDescriptionValue = () => {
-    setPollDescriptionValue(description);
+    setPollDescriptionValue(pollData.description);
   };
   const resetPollDetails = () => {
     resetPollTitleValue();
@@ -184,7 +169,8 @@ export default function Poll({
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
   };
-  const showErrorPopup = () => {
+  const showErrorPopup = (message: string) => {
+    setErrorPopupMessage(message);
     setIsErrorPopupVisible(true);
   };
 
@@ -193,7 +179,7 @@ export default function Poll({
   };
 
   const onDeletePollClick = () => {
-    showVerifyDeletePopup(pollId);
+    showVerifyDeletePopup(pollData.pollId);
   };
 
   const onEditPollClick = () => {
@@ -204,12 +190,34 @@ export default function Poll({
   };
 
   const onSavePollClick = () => {
-    updatePoll(pollId, creatorId, groupId, pollTitleValue, pollDescriptionValue)
+    if (pollTitleValue.length < POLL_TITLE_MIN_LENGTH) {
+      showErrorPopup("Poll title should have at least " + POLL_TITLE_MIN_LENGTH + " characters!");
+      return;
+    }
+
+    updatePoll(
+      pollData.pollId,
+      pollData.creatorId,
+      pollData.groupId,
+      pollTitleValue,
+      pollDescriptionValue
+    )
       .then((data) => {
-        console.log("Updated poll details for poll with ID: ", pollId, data);
+        console.log("Updated poll details for poll with ID: ", pollData.pollId, data);
+        // Update the localy stored poll data
+        setPollData(
+          (prevPollData) =>
+            prevPollData && {
+              ...prevPollData,
+              title: pollTitleValue,
+              description: pollDescriptionValue
+            }
+        );
       })
       .catch((error) => {
-        console.log("Unable to save poll details for poll with ID " + pollId);
+        console.log(
+          "Unable to save poll details for poll with ID " + pollData.pollId + ". Error: " + error
+        );
         resetPollDetails();
       });
     togglePollEdit();
@@ -229,8 +237,8 @@ export default function Poll({
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={creatorProfilePictureUrl}
-                altText={creatorName + "'s profile picture"}
+                imageUrl={pollData.creatorProfilePictureUrl}
+                altText={pollData.creatorName + "'s profile picture"}
                 onClick={navigateToCreatorProfile}
               ></ProfilePicture>
               <div>
@@ -238,7 +246,7 @@ export default function Poll({
                   className="poll-info-title__specific-group__creator-name"
                   onClick={navigateToCreatorProfile}
                 >
-                  {creatorName}
+                  {pollData.creatorName}
                 </div>
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
@@ -259,15 +267,17 @@ export default function Poll({
               </div>
             </div>
             <div className="poll-info-title__row2">
-              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
+              <div className="poll-deadline">
+                {"Deadline is in " + getTimeToDeadline(pollData.deadline)}
+              </div>
             </div>
           </div>
         ) : (
           <div className="poll-info-title">
             <div className="poll-info-title__row1">
               <ProfilePicture
-                imageUrl={groupProfilePictureUrl}
-                altText={creatorName + "'s profile picture"}
+                imageUrl={pollData.groupProfilePictureUrl}
+                altText={pollData.creatorName + "'s profile picture"}
                 onClick={navigateToGroupProfile}
               ></ProfilePicture>
               <div className="poll-info-title__all-groups__titles-container">
@@ -275,14 +285,14 @@ export default function Poll({
                   className="poll-info-title__all-groups__group-name"
                   onClick={navigateToGroupProfile}
                 >
-                  {groupName}
+                  {pollData.groupName}
                 </div>
                 <div className="poll-info-title__all-groups__creator-name-container">
                   <div
                     className="poll-info-title__all-groups__creator-name"
                     onClick={navigateToCreatorProfile}
                   >
-                    {creatorName}
+                    {pollData.creatorName}
                   </div>
                   <div className="poll-info-title-separator">•</div>
                   <div className="poll-info-title__all-groups__time-passed">{timePassed}</div>
@@ -290,7 +300,9 @@ export default function Poll({
               </div>
             </div>
             <div className="poll-info-title__row2">
-              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
+              <div className="poll-deadline">
+                {"Deadline is in " + getTimeToDeadline(pollData.deadline)}
+              </div>
             </div>
           </div>
         )
@@ -317,13 +329,13 @@ export default function Poll({
       )}
       <div className="poll-voting-container">
         <div className="poll-voting-choice-messege">
-          {isSingleChoice(nofAnswersAllowed)
+          {isSingleChoice(pollData.nofAnswersAllowed)
             ? "Select one"
-            : "Select up to " + nofAnswersAllowed + " voting options"}
+            : "Select up to " + pollData.nofAnswersAllowed + " voting options"}
         </div>
         {
           // Add voting items to the poll
-          votingItems.map((vItem) => (
+          pollData.votingItems.map((vItem) => (
             <VotingItem
               key={vItem.votingItemId}
               votingItemID={vItem.votingItemId}
@@ -348,7 +360,7 @@ export default function Poll({
       <p className="poll-error-message">
         {isErrorPopupVisible && (
           <ErrorPopup
-            message="Already reached the limit of votes!"
+            message={errorPopupMessage ?? "Encountered an unhandeled error!"}
             closeErrorPopup={closeErrorPopup}
           />
         )}

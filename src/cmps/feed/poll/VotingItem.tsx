@@ -8,7 +8,7 @@ interface VotingItemProps {
   progress: number;
   isChecked: boolean;
   handleNewProgress: Function;
-  showErrorPopup: () => void;
+  showErrorPopup: (message: string) => void;
 }
 export default function VotingItem({
   votingItemID,

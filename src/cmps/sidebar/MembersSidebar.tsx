@@ -1,11 +1,11 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import MembersSidebarItem from "./MembersSidebarItem";
 import { useParams } from "react-router-dom";
-import { GroupMember } from "../../models/GroupMember.model";
 import { fetchGroupMembers } from "../../services/group.service";
 import LoadingAnimation from "../global/LoadingAnimation";
 import { useUpdateContext } from "../../context/UpdateContext";
 import { useMembers } from "../../context/MemebersContext";
+import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 
 export default function MembersSidebar() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -71,7 +71,7 @@ export default function MembersSidebar() {
             <MembersSidebarItem
               key={member.userData.userId}
               name={member.userData.username}
-              profilePictureUrl={member.userData.profilePictureUrl}
+              profilePictureUrl={member.userData.profilePictureUrl ?? defaultProfilePictureUrl}
               path={"/" + member.userData.userId}
               role={member.roleName}
             />

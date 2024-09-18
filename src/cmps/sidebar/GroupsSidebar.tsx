@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import GroupsSidebarItem from "./GroupsSidebarItem";
-import GroupsIcon from "@mui/icons-material/Groups";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import UserInfoSidebarItem from "./SidebarUserInfo";
 import CreateGroupButton from "../global/CreateGroupButton";
@@ -10,6 +9,7 @@ import { useUpdateContext } from "../../context/UpdateContext";
 import { fetchUserGroups } from "../../services/group.service";
 import { useGroups } from "../../context/GroupsContext";
 import { UserData } from "../../models/UserData.model";
+import defaultGroupProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 
 interface GroupsSidebarProps {
   userData: UserData;
@@ -56,7 +56,7 @@ export default function GroupsSidebar({ userData }: GroupsSidebarProps) {
     <div className="groups-sidebar-container">
       <UserInfoSidebarItem userData={userData} />
       <ul className="groups-sidebar-groups-list">
-        <GroupsSidebarItem title="All Groups" Icon={FormatListBulletedIcon} path="/feed" />
+        <GroupsSidebarItem title="All Groups" iconSvg={FormatListBulletedIcon} path="/feed" />
         {isLoading ? (
           <LoadingAnimation message="Loading groups" messageFontSize="16px" ripple="off" />
         ) : (
@@ -64,8 +64,8 @@ export default function GroupsSidebar({ userData }: GroupsSidebarProps) {
             <GroupsSidebarItem
               key={group.groupId}
               title={group.groupName}
-              Icon={GroupsIcon}
               path={"/feed/" + group.groupId}
+              profilePictureUrl={group.profilePictureUrl ?? defaultGroupProfilePictureUrl}
             />
           ))
         )}

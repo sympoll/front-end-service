@@ -246,8 +246,9 @@ export async function sendRequestToVoteService(
   }
 }
 
+// Delete a poll by the given poll ID, user ID and group ID in which the poll exists
 export async function deletePoll(pollId:string, userId:string | undefined, groupId:string | undefined) : Promise<PollData> {
-  console.log(cmpName, "Sending request to delete poll '" + pollId + "'");
+  console.log(cmpName, "Sending request to delete poll with ID: '" + pollId + "'");
   const pollDeleteRequestPayload ={
     pollId: pollId,
     userId: userId,
@@ -264,7 +265,31 @@ export async function deletePoll(pollId:string, userId:string | undefined, group
     
     return response.data;
   } catch(err) {
-    console.error(cmpName, "Error deleting poll: '" + pollId + "' error info: " + err);
+    console.error(cmpName, "Error deleting poll with ID: '" + pollId + "' error info: " + err);
+    throw throwAxiosErr(err);;
+  }
+}
+
+// Update poll's details
+export async function updatePoll(pollId:string, userId:string | undefined, groupId:string | undefined, pollTitle?:string, pollDescription?:string) {
+  console.log(cmpName, "Sending request to update the details of the poll with ID: '" + pollId + "'");
+  const pollUpdateRequestPayload ={
+    pollId: pollId,
+    userId: userId,
+    groupId: groupId,
+    title: pollTitle,
+    description: pollDescription
+};
+
+  try {
+    const response = await axios.post(
+      pollServiceUrl + import.meta.env.VITE_POLL_SERVICE_UPDATE_POLL,
+      pollUpdateRequestPayload
+    );
+    
+    return response.data;
+  } catch(err) {
+    console.error(cmpName, "Error updating poll with ID: '" + pollId + "' error info: " + err);
     throw throwAxiosErr(err);;
   }
 }

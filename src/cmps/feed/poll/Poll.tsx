@@ -16,7 +16,8 @@ import {
   getUpdatedVoteCounts,
   isSingleChoice,
   sendRequestToVoteService,
-  shouldPreventProgressUpdate
+  shouldPreventProgressUpdate,
+  updatePoll
 } from "../../../services/poll.service";
 import ProfilePicture from "../../global/ProfilePicture";
 import { useUser } from "../../../context/UserContext";
@@ -175,6 +176,10 @@ export default function Poll({
   const resetPollDescriptionValue = () => {
     setPollDescriptionValue(description);
   };
+  const resetPollDetails = () => {
+    resetPollTitleValue();
+    resetPollDescriptionValue();
+  };
 
   const closeErrorPopup = () => {
     setIsErrorPopupVisible(false);
@@ -199,11 +204,23 @@ export default function Poll({
   };
 
   const onSavePollClick = () => {
-    // Save logic here
+    updatePoll(pollId, creatorId, groupId, pollTitleValue, pollDescriptionValue)
+      .then((data) => {
+        console.log("Updated poll details for poll with ID: ", pollId, data);
+      })
+      .catch((error) => {
+        console.log("Unable to save poll details for poll with ID " + pollId);
+        resetPollDetails();
+      });
     togglePollEdit();
   };
 
-  return isEditingPoll ? (
+  const onExitEditClick = () => {
+    resetPollDetails();
+    togglePollEdit();
+  };
+
+  return (
     // Display input fields for the poll's details, currently editing
     <section className="poll-container">
       {
@@ -226,9 +243,16 @@ export default function Poll({
                 <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
               </div>
               <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (
+                {isUserCanDeletePoll && isEditingPoll && (
                   <PollOptionsButton
                     savePollOnClick={onSavePollClick}
+                    exitEditOnClick={onExitEditClick}
+                    deletePollOnClick={onDeletePollClick}
+                  />
+                )}
+                {isUserCanDeletePoll && !isEditingPoll && (
+                  <PollOptionsButton
+                    editPollOnClick={onEditPollClick}
                     deletePollOnClick={onDeletePollClick}
                   />
                 )}
@@ -265,7 +289,6 @@ export default function Poll({
                 </div>
               </div>
             </div>
-
             <div className="poll-info-title__row2">
               <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
             </div>
@@ -288,8 +311,8 @@ export default function Poll({
         </div>
       ) : (
         <div className="poll-details-container">
-          <div className="poll-title">{title}</div>
-          <div className="poll-description">{description}</div>
+          <div className="poll-title">{pollTitleValue}</div>
+          <div className="poll-description">{pollDescriptionValue}</div>
         </div>
       )}
       <div className="poll-voting-container">
@@ -330,119 +353,6 @@ export default function Poll({
           />
         )}
       </p>
-    </section>
-  ) : (
-    // Display the polls details, currently not editing
-    <section className="poll-container">
-      {
-        // Display Group info only on all groups tab
-        isSpecificGroup ? (
-          <div className="poll-info-title">
-            <div className="poll-info-title__row1">
-              <ProfilePicture
-                imageUrl={creatorProfilePictureUrl}
-                altText={creatorName + "'s profile picture"}
-                onClick={navigateToCreatorProfile}
-              ></ProfilePicture>
-              <div>
-                <div
-                  className="poll-info-title__specific-group__creator-name"
-                  onClick={navigateToCreatorProfile}
-                >
-                  {creatorName}
-                </div>
-                <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
-              </div>
-              <div className="poll-info-title__delete-button">
-                {isUserCanDeletePoll && (
-                  <PollOptionsButton
-                    editPollOnClick={onEditPollClick}
-                    deletePollOnClick={onDeletePollClick}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="poll-info-title__row2">
-              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
-            </div>
-          </div>
-        ) : (
-          <div className="poll-info-title">
-            <div className="poll-info-title__row1">
-              <ProfilePicture
-                imageUrl={groupProfilePictureUrl}
-                altText={creatorName + "'s profile picture"}
-                onClick={navigateToGroupProfile}
-              ></ProfilePicture>
-              <div className="poll-info-title__all-groups__titles-container">
-                <div
-                  className="poll-info-title__all-groups__group-name"
-                  onClick={navigateToGroupProfile}
-                >
-                  {groupName}
-                </div>
-                <div className="poll-info-title__all-groups__creator-name-container">
-                  <div
-                    className="poll-info-title__all-groups__creator-name"
-                    onClick={navigateToCreatorProfile}
-                  >
-                    {creatorName}
-                  </div>
-                  <div className="poll-info-title-separator">•</div>
-                  <div className="poll-info-title__all-groups__time-passed">{timePassed}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="poll-info-title__row2">
-              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
-            </div>
-          </div>
-        )
-      }
-      <div className="poll-details-container">
-        <div className="poll-title">{title}</div>
-        <div className="poll-description">{description}</div>
-        <div className="poll-voting-container">
-          <div className="poll-voting-choice-messege">
-            {isSingleChoice(nofAnswersAllowed)
-              ? "Select one"
-              : "Select up to " + nofAnswersAllowed + " voting options"}
-          </div>
-          {
-            // Add voting items to the poll
-            votingItems.map((vItem) => (
-              <VotingItem
-                key={vItem.votingItemId}
-                votingItemID={vItem.votingItemId}
-                description={vItem.description}
-                voteCount={
-                  votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
-                    ?.voteCount || 0
-                }
-                progress={
-                  progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress ||
-                  0
-                }
-                isChecked={
-                  isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
-                    ?.isChecked || false
-                }
-                handleNewProgress={handleNewProgress}
-                showErrorPopup={showErrorPopup}
-              />
-            ))
-          }
-        </div>
-        <p className="poll-error-message">
-          {isErrorPopupVisible && (
-            <ErrorPopup
-              message="Already reached the limit of votes!"
-              closeErrorPopup={closeErrorPopup}
-            />
-          )}
-        </p>
-      </div>
     </section>
   );
 }

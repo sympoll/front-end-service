@@ -4,12 +4,14 @@ import { useEffect, useRef, useState } from "react";
 interface PollOptionsButtonProps {
   editPollOnClick?: () => void;
   savePollOnClick?: () => void;
+  exitEditOnClick?: () => void;
   deletePollOnClick: () => void;
 }
 
 export default function PollOptionsButton({
   editPollOnClick,
   savePollOnClick,
+  exitEditOnClick,
   deletePollOnClick
 }: PollOptionsButtonProps) {
   const [isPollOptionsMenuVisible, setIsPollOptionsMenuVisible] = useState(false);
@@ -47,6 +49,13 @@ export default function PollOptionsButton({
     }
   };
 
+  const handleExitButtonClick = () => {
+    if (exitEditOnClick) {
+      exitEditOnClick();
+      toggleOptionsMenuOnClick();
+    }
+  };
+
   return (
     <div className="poll-options-container" ref={menuRef}>
       <div className="poll-options-button">
@@ -54,9 +63,10 @@ export default function PollOptionsButton({
       </div>
       {isPollOptionsMenuVisible && (
         <div className="poll-options-menu">
-          {editPollOnClick && <button onClick={handleEditButtonClick}>Edit</button>}
-          {savePollOnClick && <button onClick={handleSaveButtonClick}>Save</button>}
-          <button onClick={deletePollOnClick}>Delete</button>
+          {editPollOnClick && <button onClick={handleEditButtonClick}>Edit Poll</button>}
+          {savePollOnClick && <button onClick={handleSaveButtonClick}>Save Poll</button>}
+          {exitEditOnClick && <button onClick={handleExitButtonClick}>Exit Editing</button>}
+          <button onClick={deletePollOnClick}>Delete Poll</button>
         </div>
       )}
     </div>

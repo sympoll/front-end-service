@@ -2,12 +2,14 @@ import OptionsIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useRef, useState } from "react";
 
 interface PollOptionsButtonProps {
-  editPollOnClick: () => void;
+  editPollOnClick?: () => void;
+  savePollOnClick?: () => void;
   deletePollOnClick: () => void;
 }
 
 export default function PollOptionsButton({
   editPollOnClick,
+  savePollOnClick,
   deletePollOnClick
 }: PollOptionsButtonProps) {
   const [isPollOptionsMenuVisible, setIsPollOptionsMenuVisible] = useState(false);
@@ -31,6 +33,20 @@ export default function PollOptionsButton({
     };
   }, [menuRef]);
 
+  const handleEditButtonClick = () => {
+    if (editPollOnClick) {
+      editPollOnClick();
+      toggleOptionsMenuOnClick();
+    }
+  };
+
+  const handleSaveButtonClick = () => {
+    if (savePollOnClick) {
+      savePollOnClick();
+      toggleOptionsMenuOnClick();
+    }
+  };
+
   return (
     <div className="poll-options-container" ref={menuRef}>
       <div className="poll-options-button">
@@ -38,7 +54,8 @@ export default function PollOptionsButton({
       </div>
       {isPollOptionsMenuVisible && (
         <div className="poll-options-menu">
-          <button onClick={editPollOnClick}>Edit</button>
+          {editPollOnClick && <button onClick={handleEditButtonClick}>Edit</button>}
+          {savePollOnClick && <button onClick={handleSaveButtonClick}>Save</button>}
           <button onClick={deletePollOnClick}>Delete</button>
         </div>
       )}

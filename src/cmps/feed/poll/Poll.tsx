@@ -61,7 +61,6 @@ export default function Poll({
   isSpecificGroup,
   showVerifyDeletePopup
 }: PollProps) {
-  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
   const [timePassed, setTimePassed] = useState(getTimePassed(timeCreated));
   const [isUserCanDeletePoll, setIsUserCanDeletePoll] = useState(false);
@@ -71,19 +70,18 @@ export default function Poll({
       isChecked: vItem.checked // Set isChecked based on the 'chosen' property
     }))
   );
+  const [isEditingPoll, setIsEditingPoll] = useState(false);
 
+  const [votingItemsData, setVotingItemsData] = useState<VotingItemData[]>(votingItems);
+  const { user } = useUser();
   const { members, getMemberRole } = useMembers();
+
   const navigate = useNavigate();
   const navigateToCreatorProfile = () => navigate(`/${creatorId}`);
   const navigateToGroupProfile = () => navigate(`/group/${groupId}`);
-  const { user } = useUser();
 
-  const closeErrorPopup = () => {
-    setIsErrorPopupVisible(false);
-  };
-  const showErrorPopup = () => {
-    setIsErrorPopupVisible(true);
-  };
+  const [pollTitleValue, setPollTitleValue] = useState(title);
+  const [pollDescriptionValue, setPollDescriptionValue] = useState(description);
 
   useEffect(() => {
     console.log("fetching permission for delete");
@@ -171,13 +169,170 @@ export default function Poll({
     }
   };
 
+  const resetPollTitleValue = () => {
+    setPollTitleValue(title);
+  };
+  const resetPollDescriptionValue = () => {
+    setPollDescriptionValue(description);
+  };
+
+  const closeErrorPopup = () => {
+    setIsErrorPopupVisible(false);
+  };
+  const showErrorPopup = () => {
+    setIsErrorPopupVisible(true);
+  };
+
+  const togglePollEdit = () => {
+    setIsEditingPoll(!isEditingPoll);
+  };
+
   const onDeletePollClick = () => {
     showVerifyDeletePopup(pollId);
   };
 
-  const onEditPollClick = () => {};
+  const onEditPollClick = () => {
+    togglePollEdit();
 
-  return (
+    resetPollTitleValue();
+    resetPollDescriptionValue();
+  };
+
+  const onSavePollClick = () => {
+    // Save logic here
+    togglePollEdit();
+  };
+
+  return isEditingPoll ? (
+    // Display input fields for the poll's details, currently editing
+    <section className="poll-container">
+      {
+        // Display Group info only on all groups tab
+        isSpecificGroup ? (
+          <div className="poll-info-title">
+            <div className="poll-info-title__row1">
+              <ProfilePicture
+                imageUrl={creatorProfilePictureUrl}
+                altText={creatorName + "'s profile picture"}
+                onClick={navigateToCreatorProfile}
+              ></ProfilePicture>
+              <div>
+                <div
+                  className="poll-info-title__specific-group__creator-name"
+                  onClick={navigateToCreatorProfile}
+                >
+                  {creatorName}
+                </div>
+                <div className="poll-info-title__specific-group__time-passed">{timePassed}</div>
+              </div>
+              <div className="poll-info-title__delete-button">
+                {isUserCanDeletePoll && (
+                  <PollOptionsButton
+                    savePollOnClick={onSavePollClick}
+                    deletePollOnClick={onDeletePollClick}
+                  />
+                )}
+              </div>
+            </div>
+            <div className="poll-info-title__row2">
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
+            </div>
+          </div>
+        ) : (
+          <div className="poll-info-title">
+            <div className="poll-info-title__row1">
+              <ProfilePicture
+                imageUrl={groupProfilePictureUrl}
+                altText={creatorName + "'s profile picture"}
+                onClick={navigateToGroupProfile}
+              ></ProfilePicture>
+              <div className="poll-info-title__all-groups__titles-container">
+                <div
+                  className="poll-info-title__all-groups__group-name"
+                  onClick={navigateToGroupProfile}
+                >
+                  {groupName}
+                </div>
+                <div className="poll-info-title__all-groups__creator-name-container">
+                  <div
+                    className="poll-info-title__all-groups__creator-name"
+                    onClick={navigateToCreatorProfile}
+                  >
+                    {creatorName}
+                  </div>
+                  <div className="poll-info-title-separator">•</div>
+                  <div className="poll-info-title__all-groups__time-passed">{timePassed}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="poll-info-title__row2">
+              <div className="poll-deadline">{"Deadline is in " + getTimeToDeadline(deadline)}</div>
+            </div>
+          </div>
+        )
+      }
+      {isEditingPoll ? (
+        <div className="poll-details-container">
+          <input
+            type="text"
+            value={pollTitleValue}
+            onChange={(e) => setPollTitleValue(e.target.value)}
+            className="poll-title-input"
+          />
+          <textarea
+            value={pollDescriptionValue}
+            onChange={(e) => setPollDescriptionValue(e.target.value)}
+            className="poll-description-input"
+          />
+        </div>
+      ) : (
+        <div className="poll-details-container">
+          <div className="poll-title">{title}</div>
+          <div className="poll-description">{description}</div>
+        </div>
+      )}
+      <div className="poll-voting-container">
+        <div className="poll-voting-choice-messege">
+          {isSingleChoice(nofAnswersAllowed)
+            ? "Select one"
+            : "Select up to " + nofAnswersAllowed + " voting options"}
+        </div>
+        {
+          // Add voting items to the poll
+          votingItems.map((vItem) => (
+            <VotingItem
+              key={vItem.votingItemId}
+              votingItemID={vItem.votingItemId}
+              description={vItem.description}
+              voteCount={
+                votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                  ?.voteCount || 0
+              }
+              progress={
+                progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
+              }
+              isChecked={
+                isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                  ?.isChecked || false
+              }
+              handleNewProgress={handleNewProgress}
+              showErrorPopup={showErrorPopup}
+            />
+          ))
+        }
+      </div>
+      <p className="poll-error-message">
+        {isErrorPopupVisible && (
+          <ErrorPopup
+            message="Already reached the limit of votes!"
+            closeErrorPopup={closeErrorPopup}
+          />
+        )}
+      </p>
+    </section>
+  ) : (
+    // Display the polls details, currently not editing
     <section className="poll-container">
       {
         // Display Group info only on all groups tab
@@ -245,46 +400,49 @@ export default function Poll({
           </div>
         )
       }
-      <div className="poll-title">{title}</div>
-      <div className="poll-description">{description}</div>
-      <div className="poll-voting-container">
-        <div className="poll-voting-choice-messege">
-          {isSingleChoice(nofAnswersAllowed)
-            ? "Select one"
-            : "Select up to " + nofAnswersAllowed + " voting options"}
+      <div className="poll-details-container">
+        <div className="poll-title">{title}</div>
+        <div className="poll-description">{description}</div>
+        <div className="poll-voting-container">
+          <div className="poll-voting-choice-messege">
+            {isSingleChoice(nofAnswersAllowed)
+              ? "Select one"
+              : "Select up to " + nofAnswersAllowed + " voting options"}
+          </div>
+          {
+            // Add voting items to the poll
+            votingItems.map((vItem) => (
+              <VotingItem
+                key={vItem.votingItemId}
+                votingItemID={vItem.votingItemId}
+                description={vItem.description}
+                voteCount={
+                  votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
+                    ?.voteCount || 0
+                }
+                progress={
+                  progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress ||
+                  0
+                }
+                isChecked={
+                  isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
+                    ?.isChecked || false
+                }
+                handleNewProgress={handleNewProgress}
+                showErrorPopup={showErrorPopup}
+              />
+            ))
+          }
         </div>
-        {
-          // Add voting items to the poll
-          votingItems.map((vItem) => (
-            <VotingItem
-              key={vItem.votingItemId}
-              votingItemID={vItem.votingItemId}
-              description={vItem.description}
-              voteCount={
-                votingItemsData.find((vItemData) => vItemData.votingItemId === vItem.votingItemId)
-                  ?.voteCount || 0
-              }
-              progress={
-                progresses.find((pItem) => pItem.votingItemId === vItem.votingItemId)?.progress || 0
-              }
-              isChecked={
-                isCheckedStates.find((cItem) => cItem.votingItemId === vItem.votingItemId)
-                  ?.isChecked || false
-              }
-              handleNewProgress={handleNewProgress}
-              showErrorPopup={showErrorPopup}
+        <p className="poll-error-message">
+          {isErrorPopupVisible && (
+            <ErrorPopup
+              message="Already reached the limit of votes!"
+              closeErrorPopup={closeErrorPopup}
             />
-          ))
-        }
+          )}
+        </p>
       </div>
-      <p className="poll-error-message">
-        {isErrorPopupVisible && (
-          <ErrorPopup
-            message="Already reached the limit of votes!"
-            closeErrorPopup={closeErrorPopup}
-          />
-        )}
-      </p>
     </section>
   );
 }

@@ -25,11 +25,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    cursor: pointer;
-    background-color: transparent;
-    border-radius: 10px;
     border: none;
     box-shadow: none;
+    background-color: white;
+    border-radius: 10px;
   }
 
   &__banner-img {
@@ -45,6 +44,10 @@
     border: none; // Make sure there's no border applied
     padding: 0;
     margin: 0;
+  }
+
+  &__banner-img.highlightable {
+    cursor: pointer;
 
     &:hover {
       opacity: 0.9;
@@ -88,7 +91,6 @@
     width: 120px;
     height: 120px;
     margin-left: 30px;
-    cursor: pointer;
     background-color: white;
     border-radius: 50%;
   }
@@ -106,9 +108,13 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     object-fit: cover;
     transition: opacity 0.3s;
+  }
+
+  &__profile-img.highlightable {
+    cursor: pointer;
 
     &:hover {
-      opacity: 0.9;
+      opacity: 0.8;
     }
   }
 

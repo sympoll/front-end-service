@@ -27,7 +27,7 @@ export default function ShowGroupMembersPopupItem({
       <ProfilePicture
         imageUrl={profilePictureUrl ?? defaultProfilePicture}
         onClick={navigateToUserProfile}
-        size="50px"
+        size="40px"
       />
       <div className="show-group-members-popup-item__username">{username}</div>
       {roleName != "Member" && (

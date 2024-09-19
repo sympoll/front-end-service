@@ -1,29 +1,30 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import LoadingAnimation from "../global/LoadingAnimation";
-import CustomButton from "../global/CustomButton";
+import LoadingAnimation from "../../global/LoadingAnimation";
+import CustomButton from "../../global/CustomButton";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   deleteGroupById,
   fetchGroupData,
   removeMemberFromGroup,
   saveGroupDescription
-} from "../../services/group.service";
-import { GroupData } from "../../models/GroupData.model";
-import { getTimePassed } from "../../services/poll.service";
-import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { useGroups } from "../../context/GroupsContext";
-import AddMemberPopup from "../popup/AddMemberPopup";
-import RemoveMemberPopup from "../popup/RemoveMemberPopup";
-import ModifyRolesPopup from "../popup/ModifyRolesPopup";
-import { useMembers } from "../../context/MemebersContext";
-import VerifyPopup from "../popup/VerifyPopup";
-import { UserRoleName } from "../../models/enum/UserRoleName.enum";
-import { fetchUserData } from "../../services/user.profile.service";
+} from "../../../services/group.service";
+import { GroupData } from "../../../models/GroupData.model";
+import { getTimePassed } from "../../../services/poll.service";
+import ContentPageMessage from "../../content-page/messege/ContentPageMessage";
+import { useGroups } from "../../../context/GroupsContext";
+import AddMemberPopup from "../../popup/AddMemberPopup";
+import RemoveMemberPopup from "../../popup/RemoveMemberPopup";
+import ModifyRolesPopup from "../../popup/ModifyRolesPopup";
+import { useMembers } from "../../../context/MemebersContext";
+import VerifyPopup from "../../popup/VerifyPopup";
+import { UserRoleName } from "../../../models/enum/UserRoleName.enum";
+import { fetchUserData } from "../../../services/user.profile.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-group-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
-import { fetchPicture, uploadGroupProfileImage } from "../../services/media.service";
-import { useUser } from "../../context/UserContext";
+import { uploadGroupProfileImage } from "../../../services/media.service";
+import { useUser } from "../../../context/UserContext";
 import EditDescriptionIcon from "@mui/icons-material/MoreVert";
+import GroupProfileInfoBox from "./GroupProfileInfoBox";
 
 export default function GroupInfo() {
   const navigate = useNavigate();
@@ -48,10 +49,6 @@ export default function GroupInfo() {
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
   const [isEditDescriptionMenuVisible, setIsEditDescriptionMenuVisible] = useState<boolean>(false);
 
-  const [canSetPictures, setCanSetPictures] = useState(false);
-  const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
-  const [bannerImageSrc, setBannerImageSrc] = useState<string>(defaultProfileBannerUrl);
-
   const [isUserHasPermissionToAddMember, setIsUserHasPermissionToAddMember] =
     useState<boolean>(false);
   const [isUserHasPermissionToRmvMember, setIsUserHasPermissionToRmvMember] =
@@ -60,7 +57,7 @@ export default function GroupInfo() {
     useState<boolean>(false);
   const [isUserHasPermissionToModRoles, setIsUserHasPermissionToModRoles] =
     useState<boolean>(false);
-  const [isUserHasPermissionToEditDescription, setIsUserHasPermissionToEditDescription] =
+  const [isUserHasPermissionToEditGroupProfile, setIsUserHasPermissionToEditGroupProfile] =
     useState<boolean>(false);
 
   const [timePassed, setTimePassed] = useState<string>();
@@ -88,7 +85,6 @@ export default function GroupInfo() {
           console.log("Fetched group data for group with ID: ", groupId, data);
           setGroupData(data);
           setDescriptionText(data.description || defaultDescription);
-          setCanSetPictures(true);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -113,30 +109,6 @@ export default function GroupInfo() {
     fetchUserPermissionsInCommandBar();
   }, [members]);
 
-  useEffect(() => {
-    if (canSetPictures) {
-      fetchPicture(groupData?.profilePictureUrl)
-        .then((data) => {
-          console.log("Fetched group's profile picture");
-          setProfileImageSrc(data ?? defaultProfilePictureUrl);
-        })
-        .catch((error) => {
-          console.log("Unable to fetch group's profile picture");
-        });
-
-      fetchPicture(groupData?.profileBannerUrl)
-        .then((data) => {
-          console.log("Fetched group's bannner picture");
-          setBannerImageSrc(data ?? defaultProfileBannerUrl);
-        })
-        .catch((error) => {
-          console.log("Unable to fetch group's banner picture");
-        });
-
-      setCanSetPictures(false);
-    }
-  }, [canSetPictures]);
-
   const fetchUserPermissionsInCommandBar = () => {
     console.log("Fetching user permissions in group");
     const userRole = getMemberRole(userId);
@@ -146,13 +118,13 @@ export default function GroupInfo() {
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(true);
       setIsUserHasPermissionToModRoles(true);
-      setIsUserHasPermissionToEditDescription(true);
+      setIsUserHasPermissionToEditGroupProfile(true);
     } else if (userRole === UserRoleName.MODERATOR) {
       setIsUserHasPermissionToAddMember(true);
       setIsUserHasPermissionToRmvMember(true);
       setIsUserHasPermissionToRmvGroup(false);
       setIsUserHasPermissionToModRoles(false);
-      setIsUserHasPermissionToEditDescription(false);
+      setIsUserHasPermissionToEditGroupProfile(false);
     }
   };
 
@@ -203,7 +175,6 @@ export default function GroupInfo() {
             (prevGroupData) =>
               prevGroupData && { ...prevGroupData, profilePictureUrl: response.imageUrl }
           );
-          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload group profile picture: ", error);
         }
@@ -219,7 +190,6 @@ export default function GroupInfo() {
             (prevGroupData) =>
               prevGroupData && { ...prevGroupData, profileBannerUrl: response.imageUrl }
           );
-          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload group profile banner: ", error);
         }
@@ -316,10 +286,10 @@ export default function GroupInfo() {
   }
 
   return (
-    <div className="group-info">
-      <div className="group-info__header">
+    <div className="group-profile">
+      <div className="group-profile__header">
         <div
-          className="group-info__profile-banner-container"
+          className="group-profile__profile-banner-container"
           onClick={
             getMemberRole(userId) === UserRoleName.ADMIN ? toggleProfileBannerMenu : undefined
           }
@@ -330,10 +300,16 @@ export default function GroupInfo() {
           }
         >
           <div>
-            <img src={bannerImageSrc} alt="Banner" className="group-info__banner-img" />
+            <img
+              src={groupData.profileBannerUrl ?? defaultProfileBannerUrl}
+              alt="Banner"
+              className={`group-profile__banner-img ${
+                isUserHasPermissionToEditGroupProfile ? "highlightable" : ""
+              }`}
+            />
           </div>
           {isProfileBannerMenuVisible && (
-            <div className="group-info__profile-banner-menu">
+            <div className="group-profile__profile-banner-menu">
               <button
                 onClick={() => document.getElementById("profile-banner-upload-input")?.click()}
               >
@@ -346,13 +322,13 @@ export default function GroupInfo() {
             type="file"
             accept="image/*"
             title=""
-            className="group-info__upload-profile-banner-input"
+            className="group-profile__upload-profile-banner-input"
             onChange={handleProfileImageUpload}
           />
         </div>
-        <div className="group-info__details">
+        <div className="group-profile__details">
           <div
-            className="group-info__profile-picture-container"
+            className="group-profile__profile-picture-container"
             onClick={
               getMemberRole(userId) === UserRoleName.ADMIN ? toggleProfilePictureMenu : undefined
             }
@@ -363,10 +339,16 @@ export default function GroupInfo() {
             }
           >
             <div>
-              <img src={profileImageSrc} alt="Profile" className="group-info__profile-img" />
+              <img
+                src={groupData.profilePictureUrl ?? defaultProfilePictureUrl}
+                alt="Profile"
+                className={`group-profile__profile-img ${
+                  isUserHasPermissionToEditGroupProfile ? "highlightable" : ""
+                }`}
+              />
             </div>
             {isProfilePictureMenuVisible && (
-              <div className="group-info__profile-picture-menu">
+              <div className="group-profile__profile-picture-menu">
                 <button
                   onClick={() => document.getElementById("profile-picture-upload-input")?.click()}
                 >
@@ -379,17 +361,17 @@ export default function GroupInfo() {
               type="file"
               accept="image/*"
               title=""
-              className="group-info__upload-profile-picture-input"
+              className="group-profile__upload-profile-picture-input"
               onChange={handleProfileImageUpload}
             />
           </div>
-          <div className="group-info__title">
-            <h1 className="group-info__group-name">{groupData.groupName}</h1>
+          <div className="group-profile__title">
+            <h1 className="group-profile__group-name">{groupData.groupName}</h1>
           </div>
         </div>
-        <hr className="group-info__divider" />
+        <hr className="group-profile__divider" />
       </div>
-      <div className="group-info__commands-bar">
+      <div className="group-profile__commands-bar">
         {isUserHasPermissionToAddMember && (
           <CustomButton
             onClick={onAddMemberClick}
@@ -473,27 +455,27 @@ export default function GroupInfo() {
           onClose={() => setIsDeleteVerifyPopupOpen(false)}
         />
       )}
-      <div className="group-info__info-container">
-        <div className="group-info__description-container">
-          {isUserHasPermissionToEditDescription && (
+      <div className="group-profile__info-container">
+        <div className="group-profile__description-container">
+          {isUserHasPermissionToEditGroupProfile && (
             <EditDescriptionIcon
-              className="group-info__edit-description-button"
+              className="group-profile__edit-description-button"
               onClick={toggleEditDescriptionMenu}
             />
           )}
           {isEditDescriptionMenuVisible && (
-            <div className="group-info__edit-description-menu">
+            <div className="group-profile__edit-description-menu">
               <button onClick={onEditDescription}>{isEditingDescription ? "Exit" : "Edit"}</button>
             </div>
           )}
           <h3>Description:</h3>
           <br />
           {isEditingDescription ? (
-            <div className="group-info__edit-description-container">
+            <div className="group-profile__edit-description-container">
               <textarea
                 value={descriptionText}
                 onChange={handleDescriptionChange}
-                className="group-info__edit-description-input"
+                className="group-profile__edit-description-input"
               />
               <button onClick={onSaveDescription}>Save</button>
             </div>
@@ -501,12 +483,13 @@ export default function GroupInfo() {
             <p>{descriptionText}</p>
           )}
         </div>
-        <div className="group-info__group-info">
-          <h3>Info:</h3>
-          <br />
-          <h4 className="group-info__group-info__label">Created:</h4>
-          {timePassed} <br /> <br />
-          <h4 className="group-info__group-info__label">Group ID:</h4> {groupData?.groupId}
+        <div className="group-profile__group-info">
+          <GroupProfileInfoBox
+            groupId={groupData.groupId}
+            groupName={groupData.groupName}
+            timePassed={timePassed}
+            members={members}
+          />
         </div>
       </div>
     </div>

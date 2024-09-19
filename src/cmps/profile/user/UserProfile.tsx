@@ -1,22 +1,22 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { UserData } from "../../models/UserData.model";
+import { UserData } from "../../../models/UserData.model";
 import {
   capitalizeWords,
   fetchUserData,
   saveUserDescription
-} from "../../services/user.profile.service";
-import LoadingAnimation from "../global/LoadingAnimation";
-import { getTimePassed } from "../../services/poll.service";
-import ContentPageMessage from "../content-page/messege/ContentPageMessage";
-import { fetchPicture, uploadUserProfileImage } from "../../services/media.service";
+} from "../../../services/user.profile.service";
+import LoadingAnimation from "../../global/LoadingAnimation";
+import { getTimePassed } from "../../../services/poll.service";
+import ContentPageMessage from "../../content-page/messege/ContentPageMessage";
+import { uploadUserProfileImage } from "../../../services/media.service";
 import defaultProfilePictureUrl from "/imgs/profile/blank-profile-picture.jpg";
 import defaultProfileBannerUrl from "/imgs/profile/blank-profile-banner.jpg";
-import ProfilePicture from "../global/ProfilePicture";
-import { fetchUserGroups } from "../../services/group.service";
-import { GroupData } from "../../models/GroupData.model";
+import ProfilePicture from "../../global/ProfilePicture";
+import { fetchUserGroups } from "../../../services/group.service";
+import { GroupData } from "../../../models/GroupData.model";
 import EditDescriptionIcon from "@mui/icons-material/MoreVert";
-import { useUser } from "../../context/UserContext";
+import { useUser } from "../../../context/UserContext";
 
 export default function UserProfile() {
   const { userId } = useParams();
@@ -30,9 +30,6 @@ export default function UserProfile() {
 
   const [isProfilePictureMenuVisible, setIsProfilePictureMenuVisible] = useState<boolean>(false);
   const [isProfileBannerMenuVisible, setIsProfileBannerMenuVisible] = useState<boolean>(false);
-  const [canSetPictures, setCanSetPictures] = useState(false);
-  const [profileImageSrc, setProfileImageSrc] = useState<string>(defaultProfilePictureUrl);
-  const [bannerImageSrc, setBannerImageSrc] = useState<string>(defaultProfileBannerUrl);
   const { user } = useUser();
 
   const navigate = useNavigate();
@@ -45,7 +42,7 @@ export default function UserProfile() {
   const resetUserDescriptionText = () =>
     setDescriptionText(userData ? userData.description || defaultDescription : defaultDescription);
 
-  const isProfileOfLoggedInUser = () => loggedInUser?.userId === userId;
+  const isProfileOfLoggedInUser = loggedInUser?.userId === userId;
 
   useEffect(() => {
     setIsLoading(true);
@@ -59,7 +56,6 @@ export default function UserProfile() {
         console.log("Fetched user data for user with ID: ", userId, data);
         setUserData(data);
         setDescriptionText(data.description || defaultDescription);
-        setCanSetPictures(true);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -78,30 +74,6 @@ export default function UserProfile() {
         setErrorMessage("Unable to fetch groups of user with ID " + userId);
       });
   }, [userId]);
-
-  useEffect(() => {
-    if (canSetPictures) {
-      fetchPicture(userData?.profilePictureUrl)
-        .then((data) => {
-          console.log("Fetched user's profile picture");
-          setProfileImageSrc(data ?? defaultProfilePictureUrl);
-        })
-        .catch((error) => {
-          console.log("Unable to fetch user's profile picture");
-        });
-
-      fetchPicture(userData?.profileBannerUrl)
-        .then((data) => {
-          console.log("Fetched user's bannner picture");
-          setBannerImageSrc(data ?? defaultProfileBannerUrl);
-        })
-        .catch((error) => {
-          console.log("Unable to fetch user's banner picture");
-        });
-
-      setCanSetPictures(false);
-    }
-  }, [canSetPictures]);
 
   const handleProfileImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     console.log("User profile picture was added, uploading...");
@@ -122,7 +94,6 @@ export default function UserProfile() {
             (prevUserData) =>
               prevUserData && { ...prevUserData, profilePictureUrl: response.imageUrl }
           );
-          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload user profile picture: ", error);
         }
@@ -138,7 +109,6 @@ export default function UserProfile() {
             (prevUserData) =>
               prevUserData && { ...prevUserData, profileBannerUrl: response.imageUrl }
           );
-          setCanSetPictures(true);
         } catch (error) {
           console.error("Failed to upload user profile banner: ", error);
         }
@@ -219,7 +189,13 @@ export default function UserProfile() {
       <div className="user-profile__header">
         <div className="user-profile__profile-banner-container" onClick={toggleProfileBannerMenu}>
           <div>
-            <img src={bannerImageSrc} alt="Banner" className="user-profile__banner-img" />
+            <img
+              src={userData.profileBannerUrl ?? defaultProfileBannerUrl}
+              alt="Banner"
+              className={`user-profile__banner-img ${
+                isProfileOfLoggedInUser ? "highlightable" : ""
+              }`}
+            />
           </div>
           {isProfileBannerMenuVisible && (
             <div className="user-profile__profile-banner-menu">
@@ -245,7 +221,13 @@ export default function UserProfile() {
             onClick={toggleProfilePictureMenu}
           >
             <div>
-              <img src={profileImageSrc} alt="Profile" className="user-profile__profile-img" />
+              <img
+                src={userData.profilePictureUrl ?? defaultProfilePictureUrl}
+                alt="Profile"
+                className={`user-profile__profile-img ${
+                  isProfileOfLoggedInUser ? "highlightable" : ""
+                }`}
+              />
             </div>
             {isProfilePictureMenuVisible && (
               <div className="user-profile__profile-picture-menu">
@@ -276,7 +258,7 @@ export default function UserProfile() {
         <div className="user-profile__content-container">
           <div className="user-profile__content-container__row1">
             <div className="user-profile__description-container">
-              {isProfileOfLoggedInUser() && (
+              {isProfileOfLoggedInUser && (
                 <EditDescriptionIcon
                   className="user-profile__edit-description-button"
                   onClick={toggleEditDescriptionMenu}

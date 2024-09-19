@@ -49,10 +49,13 @@
 // * User Profile *
 @import "cmps/user-profile/UserProfile";
 
-// * Group Info *
-@import "cmps/group-info/GroupInfo";
+// * Group Profile *
+@import "cmps/group-info/GroupProfile";
+@import "cmps/group-info/GroupProfileInfoBox";
 
 // * Popup *
+@import "cmps/popup/show-group-members-popup/ShowGroupMembersPopup";
+@import "cmps/popup/show-group-members-popup/ShowGroupMembersPopupItem";
 @import "cmps/popup/create-group-popup/CreateGroupPopup";
 @import "cmps/popup/add-member-popup/AddMemberPopup";
 @import "cmps/popup/remove-member-popup/RemoveMemberPopup";

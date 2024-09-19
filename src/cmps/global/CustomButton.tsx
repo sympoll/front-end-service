@@ -8,7 +8,9 @@ interface BtnProps {
   disabled?: boolean;
   theme?: "dark" | "light" | "warning";
   width?: string;
+  height?: string;
   bgColor?: string;
+  fontSize?: string;
 }
 
 export default function btn({
@@ -19,7 +21,9 @@ export default function btn({
   disabled = false,
   theme = "light",
   width,
-  bgColor
+  height,
+  bgColor,
+  fontSize
 }: BtnProps) {
   return (
     <button
@@ -28,7 +32,12 @@ export default function btn({
       type={type}
       id={name}
       disabled={disabled}
-      style={{ width: width, backgroundColor: bgColor }}
+      style={{
+        width: width,
+        height: height ?? "40px",
+        backgroundColor: bgColor,
+        fontSize: fontSize
+      }}
     >
       {children}
     </button>

@@ -11,6 +11,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 20px;
   overflow: hidden;
+  color: $profileFontColor;
 
   &__header {
     position: relative;
@@ -25,11 +26,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    cursor: pointer;
-    background-color: transparent;
-    border-radius: 10px;
     border: none;
     box-shadow: none;
+    background-color: white;
+    border-radius: 10px;
   }
 
   &__banner-img {
@@ -45,6 +45,10 @@
     border: none; // Make sure there's no border applied
     padding: 0;
     margin: 0;
+  }
+
+  &__banner-img.highlightable {
+    cursor: pointer;
 
     &:hover {
       opacity: 0.9;
@@ -71,7 +75,7 @@
     button {
       background: none;
       border: none;
-      color: #4b3832;
+      color: $profileFontColor;
       font-weight: bold;
       font-size: 12px;
       cursor: pointer;
@@ -88,7 +92,6 @@
     width: 120px;
     height: 120px;
     margin-left: 30px;
-    cursor: pointer;
     background-color: white;
     border-radius: 50%;
   }
@@ -106,9 +109,13 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     object-fit: cover;
     transition: opacity 0.3s;
+  }
+
+  &__profile-img.highlightable {
+    cursor: pointer;
 
     &:hover {
-      opacity: 0.9;
+      opacity: 0.8;
     }
   }
 
@@ -130,7 +137,7 @@
     button {
       background: none;
       border: none;
-      color: #4b3832;
+      color: $profileFontColor;
       font-weight: bold;
       font-size: 12px;
       cursor: pointer;
@@ -176,12 +183,10 @@
     font-size: 32px;
     font-weight: bold;
     margin: 0;
-    color: #4b3832;
   }
 
   &__email {
     font-size: 18px;
-    color: #4b3832;
     margin: 5px 0;
   }
 
@@ -204,7 +209,7 @@
 
   &__description-container {
     @include flex-column;
-    padding: 14px;
+    padding: $profileBoxPadding;
     background: $mainColor-light0;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -220,18 +225,6 @@
     gap: 6px;
     height: 100%;
 
-    .user-profile__edit-description-input {
-      flex-grow: 1;
-      padding: 6px;
-      border-radius: 5px;
-      border: 1px solid $mainFontColor;
-      background-color: $mainBgColor0;
-      font-size: $mainFontSize;
-      font-family: $mainFont;
-      min-width: 0;
-      resize: vertical;
-    }
-
     button {
       background-color: $mainColor-dark0;
       color: white;
@@ -246,6 +239,18 @@
         background-color: darken($mainColor-dark0, 10%);
       }
     }
+  }
+
+  &__edit-description-input {
+    flex-grow: 1;
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid $mainFontColor;
+    background-color: $mainBgColor0;
+    font-size: $mainFontSize;
+    font-family: $mainFont;
+    min-width: 0;
+    resize: vertical;
   }
 
   &__edit-description-button {
@@ -277,7 +282,7 @@
     button {
       background: none;
       border: none;
-      color: #4b3832;
+      color: $profileFontColor;
       font-weight: bold;
       font-size: 13px;
       cursor: pointer;
@@ -293,11 +298,10 @@
   }
 
   &__user-info {
-    padding: 20px;
+    padding: $profileBoxPadding;
     background: $mainColor-light0;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    color: #4b3832;
     flex-basis: 40%;
 
     &__label {
@@ -310,7 +314,6 @@
     background: $mainColor-light0;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    color: #4b3832;
     flex-basis: 60%;
     width: 100%;
     min-width: 100%;

@@ -51,7 +51,7 @@ export default function App() {
           }
         />
         <Route
-          path="/group/:profileGroupId"
+          path="/group/:groupId"
           element={
             <ProtectedRoute>
               <ContentPage content="group-info" />

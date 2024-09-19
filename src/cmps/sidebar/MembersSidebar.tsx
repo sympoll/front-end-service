@@ -36,8 +36,10 @@ export default function MembersSidebar() {
         setIsLoading(false);
       }
     } else {
-      setIsShowingAllGroups(true);
-      setMembers(undefined);
+      if (!userId) {
+        setIsShowingAllGroups(true);
+        setMembers([]);
+      }
     }
   }, [groupId, userId]);
 

@@ -191,7 +191,7 @@
 
   &__description-container {
     @include flex-column;
-    padding: 14px;
+    padding: $profileBoxPadding;
     background: $mainColor-light0;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -207,18 +207,6 @@
     gap: 6px;
     height: 100%;
 
-    .group-info__edit-description-input {
-      flex-grow: 1;
-      padding: 6px;
-      border-radius: 5px;
-      border: 1px solid $mainFontColor;
-      background-color: $mainBgColor0;
-      font-size: $mainFontSize;
-      font-family: $mainFont;
-      min-width: 0;
-      resize: vertical;
-    }
-
     button {
       background-color: $mainColor-dark0;
       color: white;
@@ -233,6 +221,18 @@
         background-color: darken($mainColor-dark0, 10%);
       }
     }
+  }
+
+  &__edit-description-input {
+    flex-grow: 1;
+    padding: 6px;
+    border-radius: 5px;
+    border: 1px solid $mainFontColor;
+    background-color: $mainBgColor0;
+    font-size: $mainFontSize;
+    font-family: $mainFont;
+    min-width: 0;
+    resize: vertical;
   }
 
   &__edit-description-button {

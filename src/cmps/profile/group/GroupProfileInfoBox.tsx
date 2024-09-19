@@ -27,7 +27,7 @@ export default function GroupProfileInfoBox({
 
   return (
     <div>
-      <h3>Info:</h3>
+      <h3 className="group-profile__group-info__title">Info:</h3>
       <div className="group-profile__group-info__items">
         {timePassed && (
           <div>

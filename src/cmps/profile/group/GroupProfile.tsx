@@ -29,7 +29,7 @@ import GroupProfileInfoBox from "./GroupProfileInfoBox";
 export default function GroupInfo() {
   const navigate = useNavigate();
 
-  const { groupId } = useParams();
+  const { profileGroupId } = useParams();
   const { setGroups } = useGroups();
   const { members, getMemberRole } = useMembers();
   const [groupData, setGroupData] = useState<GroupData>();
@@ -78,22 +78,22 @@ export default function GroupInfo() {
   const roleButtonsColor = "#148c14";
 
   useEffect(() => {
-    if (groupId) {
+    if (profileGroupId) {
       setIsLoading(true);
-      fetchGroupData(groupId)
+      fetchGroupData(profileGroupId)
         .then((data) => {
-          console.log("Fetched group data for group with ID: ", groupId, data);
+          console.log("Fetched group data for group with ID: ", profileGroupId, data);
           setGroupData(data);
           setDescriptionText(data.description || defaultDescription);
           setIsLoading(false);
         })
         .catch((error) => {
-          console.log("Unable to fetch group data with ID " + groupId);
+          console.log("Unable to fetch group data with ID " + profileGroupId);
           setErrorMessage(error);
           setIsLoading(false);
         });
     }
-  }, [groupId]);
+  }, [profileGroupId]);
 
   useEffect(() => {
     if (groupData) {
@@ -129,28 +129,32 @@ export default function GroupInfo() {
   };
 
   const exitGroup = () => {
-    if (groupId) {
-      removeMemberFromGroup(groupId, userId)
+    if (profileGroupId) {
+      removeMemberFromGroup(profileGroupId, userId)
         .then(() => {
-          setGroups((prevGroups) => prevGroups?.filter((group) => group.groupId !== groupId));
+          setGroups((prevGroups) =>
+            prevGroups?.filter((group) => group.groupId !== profileGroupId)
+          );
           navigate("/feed");
         })
         .catch((error) => {
-          console.log("Unable to leave group data with ID " + groupId);
+          console.log("Unable to leave group data with ID " + profileGroupId);
           setErrorMessage(String(error));
         });
     }
   };
 
   const deleteGroup = () => {
-    if (groupId) {
-      deleteGroupById(groupId)
+    if (profileGroupId) {
+      deleteGroupById(profileGroupId)
         .then(() => {
-          setGroups((prevGroups) => prevGroups?.filter((group) => group.groupId !== groupId));
+          setGroups((prevGroups) =>
+            prevGroups?.filter((group) => group.groupId !== profileGroupId)
+          );
           navigate("/feed");
         })
         .catch((error) => {
-          console.log("Unable to delete the group with ID " + groupId);
+          console.log("Unable to delete the group with ID " + profileGroupId);
           setErrorMessage(String(error));
         });
     }
@@ -160,7 +164,7 @@ export default function GroupInfo() {
     console.log("Group profile picture was added, uploading...");
     const file = event.target.files?.[0];
 
-    if (file && groupId) {
+    if (file && profileGroupId) {
       const targetId = event.target.id;
 
       if (targetId === "profile-picture-upload-input") {
@@ -168,7 +172,7 @@ export default function GroupInfo() {
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadGroupProfileImage(groupId, file, "profile picture");
+          const response = await uploadGroupProfileImage(profileGroupId, file, "profile picture");
 
           // Update the local group data to include the newly uploaded profile picture
           setGroupData(
@@ -183,7 +187,7 @@ export default function GroupInfo() {
 
         try {
           console.log("uploading file: " + file?.name);
-          const response = await uploadGroupProfileImage(groupId, file, "profile banner");
+          const response = await uploadGroupProfileImage(profileGroupId, file, "profile banner");
 
           // Update the local user data to include the newly uploaded profile banner
           setGroupData(
@@ -212,13 +216,13 @@ export default function GroupInfo() {
   };
 
   const onSaveDescription = () => {
-    if (!groupId) {
+    if (!profileGroupId) {
       throw new Error("Error fetching group ID param");
     }
 
-    saveGroupDescription(groupId, descriptionText)
+    saveGroupDescription(profileGroupId, descriptionText)
       .then((data) => {
-        console.log("Saved group description for group with ID: ", groupId, data);
+        console.log("Saved group description for group with ID: ", profileGroupId, data);
         setDescriptionText(descriptionText);
         setGroupData(
           (prevGroupData) => prevGroupData && { ...prevGroupData, description: descriptionText }
@@ -226,8 +230,8 @@ export default function GroupInfo() {
         setIsEditingDescription(false);
       })
       .catch((error) => {
-        console.log("Unable to save group description for group with ID " + groupId);
-        setErrorMessage("Unable to save group description for group with ID " + groupId);
+        console.log("Unable to save group description for group with ID " + profileGroupId);
+        setErrorMessage("Unable to save group description for group with ID " + profileGroupId);
         resetUserDescriptionText();
         setIsEditingDescription(false);
       });
@@ -431,19 +435,19 @@ export default function GroupInfo() {
           onClose={() => setIsExitVerifyPopupOpen(false)}
         />
       )}
-      {isAddMemberPopupOpen && groupId && (
-        <AddMemberPopup groupId={groupId} onClose={() => setIsAddMemberPopupOpen(false)} />
+      {isAddMemberPopupOpen && profileGroupId && (
+        <AddMemberPopup groupId={profileGroupId} onClose={() => setIsAddMemberPopupOpen(false)} />
       )}
-      {isRemoveMemberPopupOpen && groupId && (
+      {isRemoveMemberPopupOpen && profileGroupId && (
         <RemoveMemberPopup
-          groupId={groupId}
+          groupId={profileGroupId}
           userId={userId}
           onClose={() => setIsRemoveMemberPopupOpen(false)}
         />
       )}
-      {isModifyRolesPopupOpen && groupId && (
+      {isModifyRolesPopupOpen && profileGroupId && (
         <ModifyRolesPopup
-          groupId={groupId}
+          groupId={profileGroupId}
           userId={userId}
           onClose={() => setIsModifyRolesPopupOpen(false)}
         />

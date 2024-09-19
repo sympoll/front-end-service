@@ -23,13 +23,13 @@ export default function ShowGroupMembersPopupItem({
   };
 
   return (
-    <li className="show-group-members-popup-item">
+    <li className="show-group-members-popup-item" onClick={navigateToUserProfile}>
       <ProfilePicture
         imageUrl={profilePictureUrl ?? defaultProfilePicture}
         onClick={navigateToUserProfile}
         size="50px"
       />
-      <div className="show-group-members-popup-item__username" onClick={navigateToUserProfile}>{username}</div>
+      <div className="show-group-members-popup-item__username">{username}</div>
       {roleName != "Member" && (
         <div className="show-group-members-popup-item__role">{roleName}</div>
       )}

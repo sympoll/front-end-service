@@ -45,7 +45,7 @@ export default function GroupProfileInfoBox({
           <div>
             <h4 className="group-profile__group-info__label">Group Members:</h4>
             <p className="group-profile__group-info__members">
-              {"Number of group members: " + members.length}
+              {"There are " + members.length + " group members in the group."}
             </p>
             <CustomButton
               onClick={handleShowMembersClick}
